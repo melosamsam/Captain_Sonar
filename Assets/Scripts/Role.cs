@@ -9,13 +9,18 @@ public abstract class Role : MonoBehaviour
     /// </summary>
     public string Description { get; protected set; }
 
+    protected bool _actionDone;
+
     /// <summary>
     /// This represents whether the Role has finished their turn
     /// </summary>
-    public bool ActionDone { get; protected set; }
+    public virtual bool ActionDone {
+        get { return _actionDone; } 
+        protected set { _actionDone = value; }
+    }
 
 
     public abstract void PerformRoleAction();
 
-    public abstract string SetDescription();
+    protected abstract void SetDescription();
 }
