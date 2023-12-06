@@ -76,13 +76,13 @@ public class Captain : Role
     #region Public methods
 
     /// <summary>
-    /// Activate the selected Gauge if it ready
+    /// Activates the selected system if it is ready
     /// </summary>
     /// <param name="system">Name of the system to activate</param>
-    public void ActivateGauge(string system)
+    public void ActivateSystem(string system)
     {
-        // if (Gauge.Type == "Special") || (Gauge.Type == "Offensive")
-        //  if (Gauge.IsReady)
+        // if (System.Type == "Special") || (System.Type == "Offensive")
+        //  if (System.IsReady)
         Debug.Log($"{system} activated.");
         ActionDone = true;
     }

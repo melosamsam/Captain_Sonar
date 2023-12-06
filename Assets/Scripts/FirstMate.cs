@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class FirstMate : Role
 {
+    #region Unity methods
+
     // Awake is called when an enabled script instance is being loaded
     private void Awake()
     {
@@ -15,6 +17,8 @@ public class FirstMate : Role
     {
         PerformRoleAction();
     }
+
+    #endregion
 
     #region To override
 
@@ -45,24 +49,35 @@ public class FirstMate : Role
     #endregion
 
     #region Public methods
-    public void ActivateGauge(string system)
+
+    /// <summary>
+    /// Activates the selected system if it is ready
+    /// </summary>
+    /// <param name="system">Name of the system to activate</param>
+    public void ActivateSystem(string system)
     {
-        // if (Gauge.IsFull)
+        // if (System.IsReady)
+        
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="system">Name of the system which gauge must be filled</param>
+    public void FillGauge(string system)
+    {
+        // if (!System.IsReady)
 
     }
 
-    public void FillGauge(string gauge)
-    {
-        // if (!Gauge.IsFull)
-
-    }
     #endregion
 
     #region Private methods
+
     void ToggleUI()
     {
 
     }
-    #endregion
 
+    #endregion
 }
