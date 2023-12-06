@@ -6,8 +6,13 @@ using UnityEngine.UI;
 
 public class Captain : Role
 {
+
+    #region Attributes
     public enum Direction { North, East, South, West, None }
     public Direction ChosenCourse { get; private set; }
+    #endregion
+
+    #region Properties
     public override bool ActionDone { 
         get => base.ActionDone;
         protected set
@@ -19,8 +24,9 @@ public class Captain : Role
             }
         }
     }
+    #endregion
 
-
+    #region Unity methods
     // Awake is called when an enabled script instance is being loaded
     private void Awake()
     {
@@ -38,6 +44,17 @@ public class Captain : Role
     {
         
     }
+    #endregion
+
+    #region To override
+
+    /// <summary>
+    /// Method called when the turn of the Captain finishes or ends.
+    /// </summary>
+    protected override void OnActionStatusChanged()
+    {
+        ToggleUI();
+    }
 
     public override void PerformRoleAction()
     {
@@ -54,6 +71,10 @@ public class Captain : Role
             ;
     }
 
+    #endregion
+
+    #region Public methods
+
     /// <summary>
     /// Activate the selected Gauge if it ready
     /// </summary>
@@ -66,13 +87,6 @@ public class Captain : Role
         ActionDone = true;
     }
 
-    /// <summary>
-    /// Method called when the turn of the Captain finishes or ends.
-    /// </summary>
-    void OnActionStatusChanged()
-    {
-        ToggleUI();
-    }
 
     /// <summary>
     /// Updates the Captain's given course to direct the whereabouts of the submarine.
@@ -127,10 +141,13 @@ public class Captain : Role
         Debug.Log($"Action done: {ActionDone}");
     }
 
+    #endregion
+
+    #region Private methods
     /// <summary>
     /// Method enabling/disabling the UI elements used to perform role actions according to whether the turn is done or not.
     /// </summary>
-    public void ToggleUI()
+    void ToggleUI()
     {
         GameObject actions = GameObject.Find("Actions");
         Button[] ui = actions.GetComponentsInChildren<Button>();
@@ -139,4 +156,6 @@ public class Captain : Role
             button.enabled = !ActionDone;
         }
     }
+    #endregion
+
 }

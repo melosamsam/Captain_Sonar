@@ -16,11 +16,20 @@ public abstract class Role : MonoBehaviour
     /// </summary>
     public virtual bool ActionDone {
         get { return _actionDone; } 
-        protected set { _actionDone = value; }
+        protected set 
+        { 
+            if (_actionDone != value)
+            {
+                _actionDone = value;
+                OnActionStatusChanged();
+            }
+        }
     }
 
 
     public abstract void PerformRoleAction();
 
     protected abstract void SetDescription();
+
+    protected abstract void OnActionStatusChanged();
 }
