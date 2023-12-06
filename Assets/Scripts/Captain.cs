@@ -55,6 +55,18 @@ public class Captain : Role
     }
 
     /// <summary>
+    /// Activate the selected Gauge if it ready
+    /// </summary>
+    /// <param name="system">Name of the system to activate</param>
+    public void ActivateGauge(string system)
+    {
+        // if (Gauge.Type == "Special") || (Gauge.Type == "Offensive")
+        //  if (Gauge.IsReady)
+        Debug.Log($"{system} activated.");
+        ActionDone = true;
+    }
+
+    /// <summary>
     /// Method called when the turn of the Captain finishes or ends.
     /// </summary>
     void OnActionStatusChanged()
