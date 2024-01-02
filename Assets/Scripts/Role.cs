@@ -4,12 +4,18 @@ using UnityEngine;
 
 public abstract class Role : MonoBehaviour
 {
+    #region Attributes
+
+    protected bool _actionDone;
+
+    #endregion
+
+    #region Properties
+
     /// <summary>
     /// This property represents the description of the specific Role
     /// </summary>
     public string Description { get; protected set; }
-
-    protected bool _actionDone;
 
     /// <summary>
     /// This represents whether the Role has finished their turn
@@ -26,10 +32,15 @@ public abstract class Role : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Methods
 
     public abstract void PerformRoleAction();
 
     protected abstract void SetDescription();
 
     protected abstract void OnActionStatusChanged();
+
+    #endregion
 }
