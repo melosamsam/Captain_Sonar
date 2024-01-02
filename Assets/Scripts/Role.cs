@@ -13,11 +13,6 @@ public abstract class Role : MonoBehaviour
     #region Properties
 
     /// <summary>
-    /// This property represents the description of the specific Role
-    /// </summary>
-    public string Description { get; protected set; }
-
-    /// <summary>
     /// This represents whether the Role has finished their turn
     /// </summary>
     public virtual bool ActionDone {
@@ -31,6 +26,16 @@ public abstract class Role : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    /// This property represents the description of the specific Role
+    /// </summary>
+    public string Description { get; protected set; }
+
+    /// <summary>
+    /// The name of the Role
+    /// </summary>
+    public string Name { get; protected set; }
 
     #endregion
 

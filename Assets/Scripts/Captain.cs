@@ -65,6 +65,7 @@ public class Captain : Role
 
     protected override void SetDescription()
     {
+        Name = "Captain";
         Description =
             "The captain is the central element of the entire crew.\n" +
             "In addition to being responsible for the trajectory taken by the submarine, they must be the link between all other posts."

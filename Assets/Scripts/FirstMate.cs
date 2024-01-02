@@ -36,6 +36,7 @@ public class FirstMate : Role
 
     protected override void SetDescription()
     {
+        Name = "First Mate";
         Description =
             "The First Mate is responsible for filling the gauges of the submarine's systems;\n" +
             "- weapons,\n" +
