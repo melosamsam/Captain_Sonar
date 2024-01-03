@@ -8,9 +8,10 @@ public class Player : MonoBehaviour
     #region Attributes
 
     private GameObject _submarine; // to replace with "Submarine" when implemented
-    private Role _playerRole;
+    private Role _playerRole; // change to a List when the lobby is implemented
 
     [SerializeField] private string _playerName; // serialized for testing mostly
+    [SerializeField] private string _playerRoleName; // serialized for testing mostly
     [SerializeField] private TMP_Text _playerInfo;
 
     public bool IsMicOpen;
@@ -47,7 +48,7 @@ public class Player : MonoBehaviour
     // Awake is called when an enabled script instance is being loaded
     private void Awake()
     {
-        AssignRole("captain");
+        AssignRole(_playerRoleName.ToLower());
 
         _playerInfo.text = _playerName + "\n" +
             "Bubulles'\n" +
@@ -74,6 +75,10 @@ public class Player : MonoBehaviour
             case "first mate":
                 _playerRole = gameObject.AddComponent<FirstMate>();
                 break;
+
+            case "engineer":
+                _playerRole = gameObject.AddComponent<Engineer>();
+                break;
         }
     }
 
@@ -91,7 +96,11 @@ public class Player : MonoBehaviour
     /// <summary>
     /// Removes an assigned role to the player, used mostly in the lobby, while the team members are still debating on which role they want
     /// </summary>
-    public void RemoveRole() { _playerRole = null; }
+    public void RemoveRole() 
+    { 
+        _playerRole = null;
+        Destroy(gameObject.GetComponent<Role>());
+    }
 
     /// <summary>
     /// Disables/enables the usage of the microphone, to communicate with its team
