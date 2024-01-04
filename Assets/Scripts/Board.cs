@@ -20,7 +20,7 @@ public class Board : Object
     }
     static void Initialize_FirstMateCard()
     {
-        //Créer les systèmes et jauges avant 
+        //Créer les systèmes et jauges avant
     }
     static void initialize_engineer(string gameMode)
     {
