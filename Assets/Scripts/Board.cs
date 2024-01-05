@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Media;
 using System.Security;
 using UnityEngine;
 
@@ -21,11 +22,18 @@ public class Board : Object
     static void Initialize_FirstMateCard()
     {
         //Créer les systèmes et jauges avant
+        Systems mine = new Systems(mine);
+        Systems torpedo = new Systems(torpedo);
+        Systems drone = new Systems(drone);
+        Systems sonar = new Systems(sonar);
+        Systems silence = new Systems(silence);
+        Systems scenario = new Systems(scenario);
     }
     static void initialize_engineer(string gameMode)
     {
         //Créer les élements (radioactivité,…) avant
         //Le gameMode influe que pour faire surface je crois, ce serait bien de trouver autre chose qu'entourer le bateau parce que c'est pas pratique avec la souris
+
     }
     static void initialize_SeeThrough()
     {
