@@ -70,6 +70,7 @@ public class Systems : MonoBehaviour
     }
     #endregion
 
+    /*
     //pas sur qu'on a un systeme en parametre mais plutot qu'on devraut utiliser celui-ci
     static bool CheckJauge(Systems chosensystem)
     {
@@ -161,7 +162,7 @@ public class Systems : MonoBehaviour
 
         }
 
-    }
+    } */
 
 
     // Start is called before the first frame update
