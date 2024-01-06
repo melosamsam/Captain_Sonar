@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Media;
+//using System.Media;
 using System.Security;
 using UnityEngine;
 
@@ -19,6 +19,7 @@ public class Board : Object
     {
         //Avoir une database des maps avec iles avant
     }
+    /*
     static void Initialize_FirstMateCard()
     {
         //Créer les systèmes et jauges avant
@@ -28,7 +29,7 @@ public class Board : Object
         Systems sonar = new Systems(sonar);
         Systems silence = new Systems(silence);
         Systems scenario = new Systems(scenario);
-    }
+    }*/
     static void initialize_engineer(string gameMode)
     {
         //Créer les élements (radioactivité,…) avant
