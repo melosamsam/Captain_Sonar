@@ -5,38 +5,61 @@ using System.Security;
 using UnityEngine;
 
 public class Board : Object
-{    
+{
+    #region Attributes
     public string boardName;
-    public string gameMode;
+    public bool realTime; //True if realtime, false if turn by turn
+    #endregion
 
-    public Board (string boardName, string gameMode)
+    #region Get
+    public string GetNameBoard() { return boardName; }
+    public bool GetGameMode() { return realTime; }
+    #endregion
+
+    #region Set
+    public void SetNameBoard(string name) { boardName = name; }
+    public void SetGameMode(bool mode) { realTime = mode; }
+    #endregion
+
+    #region Constructor
+    public Board (string boardName, bool realTime)
     {
         this.boardName = boardName;
-        this.gameMode=gameMode;
+        this.realTime = realTime;
+        if (boardName == "captain")
+        {
+            //Initialize_captainmap(realTime, chosenMap)
+            //chosenMap choisi dans le script du jeu (main)
+        }
+        else if (boardName == "firstMate") Initialize_firstMateBoard();
+        else if (boardName == "engineer") Initialize_engineerBoard(realTime);
+        else if (boardName=="detector")
+        {
+            Initialize_SeeThrough();
+            //Initialize_captainmap(realTime, chosenMap)
+            //chosenMap choisi dans le script du jeu (main)
+        }
     }
+    #endregion
 
-    static void Initialize_captainmap(string gameMode, int chosenMap)
+    //sert à distribuer la carte / initialiser le visuel
+    static void Initialize_captainmap(int chosenMap, bool gameMode)
     {
         //Avoir une database des maps avec iles avant
+        Map currentMap = new Map(chosenMap, gameMode);
     }
-    /*
-    static void Initialize_FirstMateCard()
+    static void Initialize_firstMateBoard()
     {
         //Créer les systèmes et jauges avant
-        Systems mine = new Systems(mine);
-        Systems torpedo = new Systems(torpedo);
-        Systems drone = new Systems(drone);
-        Systems sonar = new Systems(sonar);
-        Systems silence = new Systems(silence);
-        Systems scenario = new Systems(scenario);
-    }*/
-    static void initialize_engineer(string gameMode)
+        //sert à distribuer la carte / initialiser le visuel
+    }
+    static void Initialize_engineerBoard(bool gameMode)
     {
         //Créer les élements (radioactivité,…) avant
         //Le gameMode influe que pour faire surface je crois, ce serait bien de trouver autre chose qu'entourer le bateau parce que c'est pas pratique avec la souris
 
     }
-    static void initialize_SeeThrough()
+    static void Initialize_SeeThrough()
     {
         //Dimension x4 taille de la map ou juste très grand 
         //Avec même quadrillage que map, option d’effacement/dessin/...

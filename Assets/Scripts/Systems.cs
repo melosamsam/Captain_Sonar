@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.Timeline;
@@ -70,7 +71,7 @@ public class Systems : MonoBehaviour
     }
     #endregion
 
-    /*
+    
     //pas sur qu'on a un systeme en parametre mais plutot qu'on devraut utiliser celui-ci
     static bool CheckJauge(Systems chosensystem)
     {
@@ -83,21 +84,24 @@ public class Systems : MonoBehaviour
     }
 
     //a completer
-    static bool No_Failure(string color)
+    //!!! Voir si static est nécessaire pour ces fonctions !!!
+
+    bool No_Failure(string color)
     {
         bool result = true;
-        //if mecano pas okay 
-        //bool result=false;
-
-        //bool tout n'est pas ok ?
-        //empêche joueur d'activer le system
+        //if mecano okay 
+        if (ColourSystem==color && Failure)
+        {
+            result = false; 
+            //empêche joueur d'activer le system
+        }
         return result;
     }
 
     //creer class position nan ?
     //mauvaise manipulation de position
     //pas sur qu'on a un systeme en parametre mais plutot qu'on devraut utiliser celui-ci
-    static Position initialize_Mine(Position pos, Systems mine)
+    Position initialize_Mine(Position pos, Systems mine)
     {
         Position retour = new Position(-1, -1);
         if (CheckJauge(mine) && No_Failure("red"))
@@ -111,7 +115,7 @@ public class Systems : MonoBehaviour
         return retour;
     }
 
-    static bool Torpedo(Position pos, Systems torpedo)
+    bool Torpedo(Position pos, Systems torpedo)
     {
         bool impact = false;
         if (CheckJauge(torpedo) && No_Failure("red"))
@@ -135,7 +139,7 @@ public class Systems : MonoBehaviour
         return activated;
     }
 
-    static void Activate_Silence(Systems silence)
+    void Activate_Silence(Systems silence)
     {
         if(CheckJauge(silence) && No_Failure("yellow")){
             //Faire un move (entre 0 et 4 unidirectionnel) je pense pas c’est à nous de gérer et plutôt on appelle une autre fonction de déplacement
@@ -144,7 +148,7 @@ public class Systems : MonoBehaviour
         }
     }
 
-    static void info_sonar(Systems sonar) 
+    void Sonar(Systems sonar) 
     {
         if(CheckJauge(sonar) && No_Failure("green"))
         {
@@ -153,7 +157,7 @@ public class Systems : MonoBehaviour
         }
     }
 
-    static bool Drone(Systems drone) 
+    bool Drone(Systems drone) 
     {
         bool used = false;
         if (CheckJauge(drone) && No_Failure("green"))
@@ -166,7 +170,7 @@ public class Systems : MonoBehaviour
         }
         return used; 
 
-    } */
+    } 
 
 
     // Start is called before the first frame update

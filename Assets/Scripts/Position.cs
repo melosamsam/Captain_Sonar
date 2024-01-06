@@ -5,8 +5,8 @@ using UnityEngine;
 public class Position : MonoBehaviour
 {
     #region attributs
-    private int x;
-    private int y;
+    public int x;
+    public int y;
     #endregion
 
     #region Get
