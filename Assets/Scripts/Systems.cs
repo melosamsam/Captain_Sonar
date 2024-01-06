@@ -99,7 +99,7 @@ public class Systems : MonoBehaviour
     //pas sur qu'on a un systeme en parametre mais plutot qu'on devraut utiliser celui-ci
     static Position initialize_Mine(Position pos, Systems mine)
     {
-        Position retour = (-1, -1);
+        Position retour = new Position(-1, -1);
         if (CheckJauge(mine) && No_Failure("red"))
         {
             //alerte opponents mine was dropped 
@@ -111,10 +111,10 @@ public class Systems : MonoBehaviour
         return retour;
     }
 
-    static bool Torpedo(Position pos)
+    static bool Torpedo(Position pos, Systems torpedo)
     {
         bool impact = false;
-        if (CheckJauge(mine) && No_Failure("red"))
+        if (CheckJauge(torpedo) && No_Failure("red"))
         {
             //Position de lancement de la torpille (range de dépôt)
             //Marquer la position sur la map équipe dépôt
@@ -127,22 +127,24 @@ public class Systems : MonoBehaviour
 
     static bool Activate_Red(Position posimpact, Position possubgentil, Position possubennemi) 
     {
+        bool activated = false;
         //Alerte les 2 équipes de l’activation
         //Range d’explosion
         //Bool impact selon positions impact et positions des 2 submarines
         //Alerte si impact ou pas
+        return activated;
     }
 
-    static void Activate_Silence()
+    static void Activate_Silence(Systems silence)
     {
-        if(CheckJauge(silence) && No_Failure("yellow"){
+        if(CheckJauge(silence) && No_Failure("yellow")){
             //Faire un move (entre 0 et 4 unidirectionnel) je pense pas c’est à nous de gérer et plutôt on appelle une autre fonction de déplacement
             //Vider Jauge
 
         }
     }
 
-    static void info_sonar() 
+    static void info_sonar(Systems sonar) 
     {
         if(CheckJauge(sonar) && No_Failure("green"))
         {
@@ -151,9 +153,10 @@ public class Systems : MonoBehaviour
         }
     }
 
-    static bool Drone() 
+    static bool Drone(Systems drone) 
     {
-        if (CheckJauge(sonar) && No_Failure("green"))
+        bool used = false;
+        if (CheckJauge(drone) && No_Failure("green"))
         {
             //bool bon secteur deviné ? je pense pas vu que ca c’est juste eux a prendre en note si oui ou non parce que non peut les aider autant que oui
             //pas de verif que info rep bonne vu que dans chat vocal
@@ -161,6 +164,7 @@ public class Systems : MonoBehaviour
             //Vider la jauge
 
         }
+        return used; 
 
     } */
 
