@@ -2,16 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class Player : MonoBehaviour
 {
     #region Attributes
 
     private GameObject _submarine; // to replace with "Submarine" when implemented
-    private Role _playerRole; // change to a List when the lobby is implemented
+    [SerializeField] private List<Role> _playerRoles;
 
     [SerializeField] private string _playerName; // serialized for testing mostly
-    [SerializeField] private string _playerRoleName; // serialized for testing mostly
+    [SerializeField] private List<string> _playerRoleNames; // serialized for testing mostly
     [SerializeField] private TMP_Text _playerInfo;
 
     public bool IsMicOpen;
@@ -32,9 +34,9 @@ public class Player : MonoBehaviour
     #region Properties
 
     /// <summary>
-    /// The Role assigned to the player ; Captain, First Mate, Engineer or Radio Operator
+    /// The Role assigned to the player ; Captain, First Mate, Engineer and/or Radio Operator
     /// </summary>
-    public Role Role { get { return _playerRole; } }
+    public List<Role> Role { get { return _playerRoles; } }
 
     /// <summary>
     /// The name used to refer to the player throughout the game
@@ -48,7 +50,13 @@ public class Player : MonoBehaviour
     // Awake is called when an enabled script instance is being loaded
     private void Awake()
     {
-        AssignRole(_playerRoleName.ToLower());
+        _playerRoleNames = new List<string>();
+        _playerRoles = new List<Role>();
+
+        foreach (string role in _playerRoleNames)
+        {
+            AssignRole(role.FirstCharacterToUpper());
+        }
 
         _playerInfo.text = _playerName;
     }
@@ -65,20 +73,23 @@ public class Player : MonoBehaviour
     {
         switch (roleName)
         {
-            case "captain":
-                _playerRole = gameObject.AddComponent<Captain>();
+            case "Captain":
+                _playerRoles.Add(gameObject.AddComponent<Captain>());
                 break;
 
-            case "first mate":
-                _playerRole = gameObject.AddComponent<FirstMate>();
+            case "First Mate":
+                _playerRoles.Add(gameObject.AddComponent<FirstMate>());
                 break;
 
-            case "engineer":
-                _playerRole = gameObject.AddComponent<Engineer>();
+            case "Engineer":
+                _playerRoles.Add(gameObject.AddComponent<Engineer>());
                 break;
         }
+
+        _playerRoleNames.Add(roleName);
     }
 
+    /*
     /// <summary>
     /// Allows the player to perform their designated actions for their Role
     /// </summary>
@@ -89,14 +100,26 @@ public class Player : MonoBehaviour
         _playerRole.PerformRoleAction();
         Debug.Log($"{_playerName} has finished their turn.");
     }
+    */
 
     /// <summary>
     /// Removes an assigned role to the player, used mostly in the lobby, while the team members are still debating on which role they want
     /// </summary>
-    public void RemoveRole() 
-    { 
-        _playerRole = null;
-        Destroy(gameObject.GetComponent<Role>());
+    public void RemoveRole(string role) 
+    {
+        int toRemove = 0;
+        foreach (Role assignedRole in GetComponents<Role>())
+        {
+            if (role.Equals(assignedRole.Name))
+            {
+                Destroy(assignedRole);
+                break; 
+            }
+            toRemove++;
+        }
+
+        _playerRoleNames.RemoveAt(toRemove);
+        _playerRoles.RemoveAt(toRemove);
     }
 
     /// <summary>

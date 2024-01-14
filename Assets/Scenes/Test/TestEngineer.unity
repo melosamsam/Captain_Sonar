@@ -3098,7 +3098,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerName: yoshikage_kira
-  _playerRoleName: Engineer
+  _playerRoleNames: []
   _playerInfo: {fileID: 1303593091}
   IsMicOpen: 1
 --- !u!1 &1786781668
@@ -3462,7 +3462,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2017720071
 RectTransform:
   m_ObjectHideFlags: 0
