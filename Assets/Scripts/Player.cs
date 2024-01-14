@@ -50,10 +50,7 @@ public class Player : MonoBehaviour
     {
         AssignRole(_playerRoleName.ToLower());
 
-        _playerInfo.text = _playerName + "\n" +
-            "Bubulles'\n" +
-            _playerRole.Name
-            ;
+        _playerInfo.text = _playerName;
     }
 
     #endregion
