@@ -3063,6 +3063,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1721048972}
   - component: {fileID: 1721048973}
+  - component: {fileID: 1721048974}
   m_Layer: 0
   m_Name: TestPlayer
   m_TagString: Untagged
@@ -3097,10 +3098,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73e152fed110e6b478ac3dfb4687ce8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerRoles: []
   _playerName: yoshikage_kira
   _playerRoleNames: []
   _playerInfo: {fileID: 1303593091}
   IsMicOpen: 1
+--- !u!114 &1721048974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1721048970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7ee75bdc825e484081891679f65a097, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1786781668
 GameObject:
   m_ObjectHideFlags: 0

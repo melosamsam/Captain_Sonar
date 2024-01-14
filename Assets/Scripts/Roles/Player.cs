@@ -53,9 +53,10 @@ public class Player : MonoBehaviour
         _playerRoleNames = new List<string>();
         _playerRoles = new List<Role>();
 
-        foreach (string role in _playerRoleNames)
+        foreach (Role role in GetComponents<Role>())
         {
-            AssignRole(role.FirstCharacterToUpper());
+            _playerRoles.Add(role);
+            _playerRoleNames.Add(role.Name);
         }
 
         _playerInfo.text = _playerName;
