@@ -13,13 +13,13 @@ public class Captain : Role
     #endregion
 
     #region Properties
-    public override bool ActionDone { 
-        get => base.ActionDone;
+    public override bool IsTurnOver { 
+        get => base.IsTurnOver;
         protected set
         {
-            if (base.ActionDone != value)
+            if (base.IsTurnOver != value)
             {
-                base.ActionDone = value;
+                base.IsTurnOver = value;
                 OnActionStatusChanged();
             }
         }
@@ -59,7 +59,7 @@ public class Captain : Role
     public override void PerformRoleAction()
     {
         // setting the turn as not done when it just began
-        ActionDone = false;
+        IsTurnOver = false;
         Debug.Log("Captain role started\n" + Description);
     }
 
@@ -71,6 +71,20 @@ public class Captain : Role
             "In addition to being responsible for the trajectory taken by the submarine, they must be the link between all other posts."
             ;
     }
+
+    /// <summary>
+    /// Method enabling/disabling the UI elements used to perform role actions according to whether the turn is done or not.
+    /// </summary>
+    protected override void ToggleUI()
+    {
+        GameObject actions = GameObject.Find("Actions");
+        Button[] ui = actions.GetComponentsInChildren<Button>();
+        foreach (Button button in ui)
+        {
+            button.enabled = !IsTurnOver;
+        }
+    }
+
 
     #endregion
 
@@ -85,7 +99,7 @@ public class Captain : Role
         // if (System.Type == "Special") || (System.Type == "Offensive")
         //  if (System.IsReady)
         Debug.Log($"{system} activated.");
-        ActionDone = true;
+        IsTurnOver = true;
     }
 
 
@@ -118,7 +132,7 @@ public class Captain : Role
         // else, show error message and allow another input
 
         Debug.Log($"Chosen course: {ChosenCourse}");
-        ActionDone = true;
+        IsTurnOver = true;
     }
 
     /// <summary>
@@ -130,33 +144,18 @@ public class Captain : Role
         // call the Surface() method in the Submarine class
 
 
-        ActionDone = true;
+        IsTurnOver = true;
     }
 
     /// <summary>
     /// Test method to emulate a turn starting and finishing
     /// </summary>
-    public void ToggleActionDone()
+    public void ToggleIsTurnOver()
     {
-        ActionDone = !ActionDone;
-        Debug.Log($"Action done: {ActionDone}");
+        IsTurnOver = !IsTurnOver;
+        Debug.Log($"Action done: {IsTurnOver}");
     }
 
-    #endregion
-
-    #region Private methods
-    /// <summary>
-    /// Method enabling/disabling the UI elements used to perform role actions according to whether the turn is done or not.
-    /// </summary>
-    void ToggleUI()
-    {
-        GameObject actions = GameObject.Find("Actions");
-        Button[] ui = actions.GetComponentsInChildren<Button>();
-        foreach (Button button in ui)
-        {
-            button.enabled = !ActionDone;
-        }
-    }
     #endregion
 
 }

@@ -8,7 +8,7 @@ public class Engineer : Role
 
     public override void PerformRoleAction()
     {
-        ActionDone = false;
+        IsTurnOver = false;
         Debug.Log($"{Name} role started\n" + Description);
     }
 
@@ -24,6 +24,11 @@ public class Engineer : Role
             $"The {Name} is responsible for reporting any breakdowns in the submarine that appear following orders given by their Captain. \n" +
             $"Some failures neutralize the submarine systems, others can cause damage."
             ;
+    }
+
+    protected override void ToggleUI()
+    {
+        throw new System.NotImplementedException();
     }
 
     #endregion
@@ -46,15 +51,6 @@ public class Engineer : Role
     void Update()
     {
         
-    }
-
-    #endregion
-
-    #region Public methods
-
-    public void ToggleUI()
-    {
-
     }
 
     #endregion

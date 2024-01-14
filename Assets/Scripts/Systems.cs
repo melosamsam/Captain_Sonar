@@ -72,7 +72,7 @@ public class Systems : MonoBehaviour
     #endregion
 
     #region Fonctions test
-    bool CheckJauge()
+    public bool CheckJauge()
     {
         bool result = true;
         for(int i=0;i<this.QuotaJauge.Length;i++)

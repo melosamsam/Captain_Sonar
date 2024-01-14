@@ -6,7 +6,7 @@ public abstract class Role : MonoBehaviour
 {
     #region Attributes
 
-    protected bool _actionDone;
+    protected bool _isTurnOver;
 
     #endregion
 
@@ -15,13 +15,13 @@ public abstract class Role : MonoBehaviour
     /// <summary>
     /// This represents whether the Role has finished their turn
     /// </summary>
-    public virtual bool ActionDone {
-        get { return _actionDone; } 
+    public virtual bool IsTurnOver {
+        get { return _isTurnOver; } 
         protected set 
         { 
-            if (_actionDone != value)
+            if (_isTurnOver != value)
             {
-                _actionDone = value;
+                _isTurnOver = value;
                 OnActionStatusChanged();
             }
         }
@@ -41,11 +41,30 @@ public abstract class Role : MonoBehaviour
 
     #region Methods
 
+    public virtual void FinishTurn()
+    {
+        ToggleTurn();
+    }
+
     public abstract void PerformRoleAction();
 
     protected abstract void SetDescription();
 
-    protected abstract void OnActionStatusChanged();
+    protected virtual void OnActionStatusChanged()
+    {
+        ToggleUI();
+    }
+
+    protected abstract void ToggleUI();
+
+    public void ToggleTurn()
+    {
+        IsTurnOver = !IsTurnOver;
+        if (!IsTurnOver)
+            PerformRoleAction();
+        else
+            Debug.Log(Name + "'s turn is over");
+    }
 
     #endregion
 }
