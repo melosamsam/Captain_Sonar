@@ -11,10 +11,10 @@ using UnityEngine.UIElements;
 public class Systems : MonoBehaviour
 {
     #region attributs
-    private string NameSystem;
-    private string ColourSystem; //for mechanic 
-    private int[] QuotaJauge; //if jauge full, can't fill it anymore //warn opposite team if system is ready (full)
-    private bool Failure; //if mechanic circuit has crossed out colour
+    public string NameSystem;
+    public string ColourSystem; //for mechanic 
+    public int[] QuotaJauge; //if jauge full, can't fill it anymore //warn opposite team if system is ready (full)
+    public bool Failure; //if mechanic circuit has crossed out colour
     #endregion
 
     #region Get
