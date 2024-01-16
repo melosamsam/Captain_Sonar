@@ -32,11 +32,10 @@ public class Systems : MonoBehaviour
     #endregion
 
     #region Constructeurs
-    public Systems(string name)
+    void Awake()
     {
         Failure= false;
-        NameSystem = name;
-        
+        string name = NameSystem;
         
         if(name == "torpedo" || name == "mine")
         {
