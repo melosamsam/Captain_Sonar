@@ -866,8 +866,6 @@ GameObject:
   m_Component:
   - component: {fileID: 741183859}
   - component: {fileID: 741183860}
-  - component: {fileID: 741183862}
-  - component: {fileID: 741183861}
   m_Layer: 0
   m_Name: Mine System
   m_TagString: Untagged
@@ -893,8 +891,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 148.68742}
-  m_SizeDelta: {x: 316.9417, y: 229.5746}
+  m_AnchoredPosition: {x: -17.6826, y: 130.3}
+  m_SizeDelta: {x: 526.4416, y: 419.0482}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &741183860
 MonoBehaviour:
@@ -909,44 +907,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NameSystem: mine
---- !u!114 &741183861
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 741183858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &741183862
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 741183858}
-  m_CullTransparentMesh: 1
 --- !u!1 &847387551
 GameObject:
   m_ObjectHideFlags: 0
