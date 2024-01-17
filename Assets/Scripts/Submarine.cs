@@ -69,6 +69,11 @@ public class Submarine : MonoBehaviour
     /// </summary>
     public int[,] Trail { get => _trail; }
 
+    /// <summary>
+    /// Number of turns during which the submarine has been on the surface
+    /// </summary>
+    public int TurnsSurfaced { get { return _nbOfTurnsSurfaced; } set { _nbOfTurnsSurfaced = (value >= 0 && value <= 3) ? value: 0; } }
+
     #endregion
 
     #region Unity methods
