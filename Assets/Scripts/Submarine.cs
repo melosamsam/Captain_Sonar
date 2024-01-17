@@ -6,18 +6,20 @@ public class Submarine : MonoBehaviour
 {
     #region Attributes
 
-    [SerializeField] private int _maxHealth;
+    // state of submarine
     private int _health;
     private bool _isSubmerged;
-    private Captain.Direction _currentCourse;
-
-    private List<Player> _players;
-
+    [SerializeField] private int _maxHealth;
     private int _nbOfTurnsSurfaced;
 
-    private Position _currentPosition;
-
+    // state of the submarine's crew
     private string _name;
+    private List<Player> _players;
+
+    // positions of the submarine
+    private Captain.Direction _currentCourse;
+    private Position _currentPosition;
+    private int[,] _trail;
 
 
     // testing variables
@@ -25,13 +27,17 @@ public class Submarine : MonoBehaviour
 
     #endregion
 
-
     #region Properties
 
     /// <summary>
-    /// The amount of health the submarine starts the game with
+    /// The Direction the Captain has ordered the Submarine to go towards
     /// </summary>
-    public int MaxHealth { get { return _maxHealth; } set { _maxHealth = value; } }
+    public Captain.Direction CurrentCourse { get { return _currentCourse; } set { _currentCourse = value; } }
+
+    /// <summary>
+    /// Current position of the Submarine on the selected map
+    /// </summary>
+    public Position CurrentPosition { get => _currentPosition; } // readonly, moving the Submarine should only be executed within the class
 
     /// <summary>
     /// The amount of health the submarine currently has
@@ -44,9 +50,14 @@ public class Submarine : MonoBehaviour
     public bool IsSubmerged { get { return _isSubmerged; } set { _isSubmerged = value; } }
 
     /// <summary>
-    /// The Direction the Captain has ordered the Submarine to go towards
+    /// The amount of health the submarine starts the game with
     /// </summary>
-    public Captain.Direction CurrentCourse { get { return _currentCourse; } set { _currentCourse = value; } }
+    public int MaxHealth { get { return _maxHealth; } set { _maxHealth = value; } }
+
+    /// <summary>
+    /// The name the players chose to refer to their crew
+    /// </summary>
+    public string Name { get => _name; } // readonly, no reason to change the team's name mid-game
 
     /// <summary>
     /// The players constituting the Submarin's crew
@@ -54,14 +65,9 @@ public class Submarine : MonoBehaviour
     public List<Player> Players { get => _players; } // readonly, there shouldn't be any reason to change the formation of the team mid-game
 
     /// <summary>
-    /// Current position of the Submarine on the selected map
+    /// Matrix representing where the submarine has already gone within the game's Map 
     /// </summary>
-    public Position CurrentPosition { get => _currentPosition; } // readonly, moving the Submarine should only be executed within the class
-
-    /// <summary>
-    /// The name the players chose to refer to their crew
-    /// </summary>
-    public string Name { get => _name; } // readonly, no reason to change the team's name mid-game
+    public int[,] Trail { get => _trail; }
 
     #endregion
 
@@ -71,13 +77,15 @@ public class Submarine : MonoBehaviour
     void Start()
     {
         //_maxHealth = gameManager.mode == "normal" ? 1 : 4;
-        _health         = _maxHealth;
-        _isSubmerged    = true;
-        _currentCourse  = Captain.Direction.None;
+        _health             = _maxHealth;
+        _isSubmerged        = true;
+        _currentCourse      = Captain.Direction.None;
 
-        _players        = new List<Player>(); // take the players chosen from the lobby available right before
+        _players            = new List<Player>(); // take the players chosen from the lobby available right before
 
-        _nbOfTurnsSurfaced = 0;
+        _nbOfTurnsSurfaced  = 0;
+
+        _trail              = new int[_gameMap.GetMap().GetLength(0), _gameMap.GetMap().GetLength(1)];
     }
 
     // Update is called once per frame
@@ -103,7 +111,7 @@ public class Submarine : MonoBehaviour
     {
         ToggleSubmersion();
         Debug.Log($"The submarine has made surface at position ({_currentPosition.x}, {_currentPosition.y}).\n" +
-            $"The members of {_name} are unable to act during {4 - _nbOfTurnsSurfaced} turns");
+            $"The members of {_name} are unable to act during {3 - _nbOfTurnsSurfaced} turns");
     }
 
     /// <summary>
@@ -132,9 +140,8 @@ public class Submarine : MonoBehaviour
 
         if (IsPathClear(newPosition))
         {
-            _currentPosition = newPosition;
-            // or copy the map, update the position on it and then set the new map as the current map???
-            // according to current implementation of Map.cs
+            _trail[_currentPosition.x, _currentPosition.y] = 1; // mark position as past position in history of past positions
+            _currentPosition = newPosition; // then update the submarine's position
         }
     }
 
@@ -159,14 +166,7 @@ public class Submarine : MonoBehaviour
    
     private bool IsPathClear(Position positionToCheck)
     {
-        bool pathIsClear = true; // we suppose that the path is clear
-        if (_gameMap.GetMap()[positionToCheck.x, positionToCheck.y] != 0)
-        {
-            // assuming that 0 means that there is no obstacle
-            // add a condition to check that we have not already gone on this position before
-            pathIsClear = false;
-        }
-        return pathIsClear;
+        return !((_gameMap.GetMap()[positionToCheck.x, positionToCheck.y] != 0) || (_trail[positionToCheck.x, positionToCheck.y] == 1));
     }
 
     private void ToggleSubmersion()
