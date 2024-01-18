@@ -3855,7 +3855,7 @@ GameObject:
   - component: {fileID: 2073275119}
   - component: {fileID: 2073275118}
   m_Layer: 0
-  m_Name: Torpedo
+  m_Name: Torpedo_E
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4114,7 +4114,7 @@ GameObject:
   - component: {fileID: 2140004332}
   - component: {fileID: 2140004331}
   m_Layer: 0
-  m_Name: Mine
+  m_Name: Mine_W
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
 {
     #region Attributes
 
-    private GameObject _submarine; // to replace with "Submarine" when implemented
+    private Submarine _submarine; // to replace with "Submarine" when implemented
     [SerializeField] private List<Role> _playerRoles;
 
     [SerializeField] private string _playerName; // serialized for testing mostly
@@ -17,17 +17,6 @@ public class Player : MonoBehaviour
     [SerializeField] private TMP_Text _playerInfo;
 
     public bool IsMicOpen;
-
-    #endregion
-
-    #region Constructor
-
-    public Player(string playerName)
-    {
-        _playerName = playerName.Trim(' ');
-
-        IsMicOpen = false;
-    }
 
     #endregion
 
@@ -50,6 +39,10 @@ public class Player : MonoBehaviour
     // Awake is called when an enabled script instance is being loaded
     private void Awake()
     {
+        _playerName = _playerName.Trim(' ');
+
+        IsMicOpen = false;
+
         _playerRoleNames = new List<string>();
         _playerRoles = new List<Role>();
 
@@ -84,6 +77,10 @@ public class Player : MonoBehaviour
 
             case "Engineer":
                 _playerRoles.Add(gameObject.AddComponent<Engineer>());
+                break;
+
+            case "Radio Operator":
+                _playerRoles.Add(gameObject.AddComponent<RadioOperator>());
                 break;
         }
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,34 +9,35 @@ public class Captain : Role
 {
 
     #region Attributes
+
     public enum Direction { North, East, South, West, None }
-    public Direction ChosenCourse { get; private set; }
+
+    private bool _isOverlayOpen;
+    private TMP_Dropdown _systemDropdown;
+
     #endregion
 
     #region Properties
-    public override bool IsTurnOver { 
-        get => base.IsTurnOver;
-        protected set
-        {
-            if (base.IsTurnOver != value)
-            {
-                base.IsTurnOver = value;
-                OnActionStatusChanged();
-            }
-        }
-    }
+
+    public Direction ChosenCourse { get; private set; }
+  
     #endregion
 
     #region Unity methods
+
     // Awake is called when an enabled script instance is being loaded
     private void Awake()
     {
+
+
         SetDescription();
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        _systemDropdown = GameObject.Find("Systems dropdown").GetComponent<TMP_Dropdown>();
+
         PerformRoleAction();
     }
 
@@ -44,9 +46,10 @@ public class Captain : Role
     {
         
     }
+
     #endregion
 
-    #region To override
+    #region Overridden methods
 
     /// <summary>
     /// Method called when the turn of the Captain finishes or ends.
@@ -59,7 +62,7 @@ public class Captain : Role
     public override void PerformRoleAction()
     {
         // setting the turn as not done when it just began
-        IsTurnOver = false;
+        //ToggleTurn();
         Debug.Log("Captain role started\n" + Description);
     }
 
@@ -72,17 +75,23 @@ public class Captain : Role
             ;
     }
 
+    public override void FinishTurn()
+    {
+        // close the overlay if it is still opened
+        if (_isOverlayOpen) ToggleOverlay();
+
+        // then finished the turn
+        ToggleTurn();
+    }
+
     /// <summary>
     /// Method enabling/disabling the UI elements used to perform role actions according to whether the turn is done or not.
     /// </summary>
     protected override void ToggleUI()
     {
-        GameObject actions = GameObject.Find("Actions");
-        Button[] ui = actions.GetComponentsInChildren<Button>();
-        foreach (Button button in ui)
-        {
-            button.enabled = !IsTurnOver;
-        }
+        GameObject ui = GameObject.Find("Actions");
+
+        ui.transform.localScale = !IsTurnOver? Vector3.one: Vector3.zero;
     }
 
 
@@ -94,12 +103,18 @@ public class Captain : Role
     /// Activates the selected system if it is ready
     /// </summary>
     /// <param name="system">Name of the system to activate</param>
-    public void ActivateSystem(string system)
+    public void ActivateSystem()
     {
-        // if (System.Type == "Special") || (System.Type == "Offensive")
-        //  if (System.IsReady)
+        string system = "";
+        string[] systems = { "...", "Mine", "Torpedo", "Sonar", "Drone" } ;
+
+        if (_systemDropdown.value != 0)
+            system = systems[_systemDropdown.value];
+
+        // switch() for each case of chosen system
+        // verification made in Systems.cs
         Debug.Log($"{system} activated.");
-        IsTurnOver = true;
+        FinishTurn();
     }
 
 
@@ -132,7 +147,7 @@ public class Captain : Role
         // else, show error message and allow another input
 
         Debug.Log($"Chosen course: {ChosenCourse}");
-        IsTurnOver = true;
+        FinishTurn();
     }
 
     /// <summary>
@@ -144,16 +159,19 @@ public class Captain : Role
         // call the Surface() method in the Submarine class
 
 
-        IsTurnOver = true;
+        FinishTurn();
     }
 
     /// <summary>
-    /// Test method to emulate a turn starting and finishing
+    /// Opens/closes the overlay displaying more of the Captain's actions
     /// </summary>
-    public void ToggleIsTurnOver()
+    public void ToggleOverlay()
     {
-        IsTurnOver = !IsTurnOver;
-        Debug.Log($"Action done: {IsTurnOver}");
+        GameObject overlay = GameObject.Find("Overlay");
+
+        //switch the status of the overlay
+        _isOverlayOpen = !_isOverlayOpen;
+        overlay.transform.localScale = _isOverlayOpen ? Vector3.one : Vector3.zero;
     }
 
     #endregion

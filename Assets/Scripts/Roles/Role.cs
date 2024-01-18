@@ -6,7 +6,7 @@ public abstract class Role : MonoBehaviour
 {
     #region Attributes
 
-    protected bool _isTurnOver;
+    private bool _isTurnOver;
 
     #endregion
 
