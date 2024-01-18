@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RadioOperator : Role
+public class RadioDetector : Role
 {
 
     #region Overridden methods
@@ -24,7 +24,7 @@ public class RadioOperator : Role
 
     protected override void SetDescription()
     {
-        Name = "Captain";
+        Name = "Radio Detector";
         Description =
             "The captain is the central element of the entire crew.\n" +
             "In addition to being responsible for the trajectory taken by the submarine, they must be the link between all other posts."
@@ -47,7 +47,7 @@ public class RadioOperator : Role
     // Start is called before the first frame update
     void Start()
     {
-        
+        SetDescription();
     }
 
     // Update is called once per frame

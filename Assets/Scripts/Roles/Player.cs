@@ -79,8 +79,8 @@ public class Player : MonoBehaviour
                 _playerRoles.Add(gameObject.AddComponent<Engineer>());
                 break;
 
-            case "Radio Operator":
-                _playerRoles.Add(gameObject.AddComponent<RadioOperator>());
+            case "Radio Detector":
+                _playerRoles.Add(gameObject.AddComponent<RadioDetector>());
                 break;
         }
 
@@ -111,7 +111,7 @@ public class Player : MonoBehaviour
             if (role.Equals(assignedRole.Name))
             {
                 Destroy(assignedRole);
-                break; 
+                break;
             }
             toRemove++;
         }
