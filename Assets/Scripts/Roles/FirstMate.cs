@@ -75,7 +75,7 @@ public class FirstMate : Role
         Systems currentSystem = GameObject.Find(system + " System").GetComponent<Systems>();
         if (currentSystem != null )
         {
-            if (currentSystem.CheckJauge())
+            if (currentSystem.GaugeFull())
             {
                 Debug.Log($"{system} has been activated");
             }
@@ -97,7 +97,7 @@ public class FirstMate : Role
             {
                 if (!_filledGauges.Contains(system)) // if the Engineer didn't already fill that gauge during their turn
                 {
-                    if (!currentSystem.CheckJauge())
+                    if (!currentSystem.GaugeFull())
                     {
                         _filledGauges.Add(system); // mark the system as filled in our List
                         int toFill = Array.IndexOf(newGauge, 0); // get the 1st case that hasn't been filled yet

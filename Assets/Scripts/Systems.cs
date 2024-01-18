@@ -71,7 +71,7 @@ public class Systems : MonoBehaviour
     #endregion
 
     #region Fonctions test
-    public bool CheckJauge()
+    public bool GaugeFull()
     {
         bool result = true;
         for(int i=0;i<this.QuotaJauge.Length;i++)
@@ -95,16 +95,28 @@ public class Systems : MonoBehaviour
 
     #endregion
 
+    public void EmptyGauge()
+    {
+        for (int i = 0; i < this.QuotaJauge.Length; i++)
+        {
+            this.QuotaJauge[i] = 0;
+        }
+    }
+
     #region Fonctions systèmes
     Position initialize_Mine(Position pos)
     {
         Position retour = new Position(-1, -1);
-        if (CheckJauge() && No_Failure("red"))
+        if (GaugeFull() && No_Failure("red"))
         {
             //alerte opponents mine was dropped 
+                //have to wait for communication medium to be chosen
+
             //Position de dépôt de la mine(range de dépôt)
             //Marquer la position sur la map équipe dépôt
+
             //Vider Jauge
+            EmptyGauge();
 
         }
         return retour;
@@ -113,13 +125,13 @@ public class Systems : MonoBehaviour
     bool Torpedo(Position pos)
     {
         bool impact = false;
-        if (CheckJauge() && No_Failure("red"))
+        if (GaugeFull() && No_Failure("red"))
         {
             //Position de lancement de la torpille (range de dépôt)
             //Marquer la position sur la map équipe dépôt
             //Bool impact = Activate_Red (position lancement, position_submarine_Gentil, position_submarine_ennemi )
             //Vider Jauge
-
+            EmptyGauge();
         }
         return impact;
     }
@@ -136,31 +148,33 @@ public class Systems : MonoBehaviour
 
     void Activate_Silence()
     {
-        if(CheckJauge() && No_Failure("yellow")){
+        if(GaugeFull() && No_Failure("yellow")){
             //Faire un move (entre 0 et 4 unidirectionnel) je pense pas c’est à nous de gérer et plutôt on appelle une autre fonction de déplacement
             //Vider Jauge
-
+            EmptyGauge();
         }
     }
 
     void Sonar() 
     {
-        if(CheckJauge() && No_Failure("green"))
+        if(GaugeFull() && No_Failure("green"))
         {
             //Appel Fonction qui demande à l’autre équipe de choisir ses coordonnées et check si une est bonne et l’autre fausse
             //vider la jauge
+            EmptyGauge() ;
         }
     }
 
     bool Drone() 
     {
         bool used = false;
-        if (CheckJauge() && No_Failure("green"))
+        if (GaugeFull() && No_Failure("green"))
         {
             //bool bon secteur deviné ? je pense pas vu que ca c’est juste eux a prendre en note si oui ou non parce que non peut les aider autant que oui
             //pas de verif que info rep bonne vu que dans chat vocal
             //Aaah c’est vrai. Triche trop facile en fait
             //Vider la jauge
+            EmptyGauge();
 
         }
         return used; 
@@ -168,6 +182,7 @@ public class Systems : MonoBehaviour
     }
     #endregion
 
+    #region Fonctions start & update
     // Start is called before the first frame update
     void Start()
     {
@@ -179,4 +194,5 @@ public class Systems : MonoBehaviour
     {
         
     }
+    #endregion
 }
