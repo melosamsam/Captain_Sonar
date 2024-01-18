@@ -5,6 +5,13 @@ using UnityEngine;
 public class RadioDetector : Role
 {
 
+    #region Attributes
+
+    private bool _isSeeThroughOpen;
+    private GameObject _seeThrough;
+
+    #endregion
+
     #region Overridden methods
 
     /// <summary>
@@ -43,16 +50,38 @@ public class RadioDetector : Role
 
     #endregion
 
+    #region Unity methods
 
     // Start is called before the first frame update
     void Start()
     {
+        _seeThrough = GameObject.Find("See through");
+        _isSeeThroughOpen = false;
+
         SetDescription();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (_isSeeThroughOpen)
+        {
+            if (Input.GetKeyUp(KeyCode.Escape))
+            {
+                ToggleSeeThrough();
+            }
+        }
     }
+
+    #endregion
+
+    #region Methods
+
+    public void ToggleSeeThrough()
+    {
+        _isSeeThroughOpen = !_isSeeThroughOpen;
+        _seeThrough.transform.localScale = _isSeeThroughOpen ? Vector3.one : Vector3.zero;
+    }
+
+    #endregion
 }
