@@ -14,6 +14,7 @@ public class Captain : Role
 
     private bool _isOverlayOpen;
     private TMP_Dropdown _systemDropdown;
+    private List<LogItem> _logItems;
 
     #endregion
 
