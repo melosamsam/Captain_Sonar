@@ -104,9 +104,9 @@ public class Systems : MonoBehaviour
     }
 
     #region Fonctions systèmes
-    Position initialize_Mine(Position pos)
+    bool initialize_Mine(Position pos)
     {
-        Position retour = new Position(-1, -1);
+        bool retour = false;
         if (GaugeFull() && No_Failure("red"))
         {
             //alerte opponents mine was dropped 
@@ -117,6 +117,7 @@ public class Systems : MonoBehaviour
 
             //Vider Jauge
             EmptyGauge();
+            retour = true;
 
         }
         return retour;
