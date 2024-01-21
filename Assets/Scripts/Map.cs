@@ -86,6 +86,40 @@ public class Map : MonoBehaviour
                 map[7, 5] = 1;
             }
         }
+        if (numberMap == 2)
+        {
+            this.nameMap = "BRAVO-2";
+            if (realTime)
+            {
+            }
+            else
+            {
+                map[1, 8] = 1;
+                map[2, 1] = 1;
+                map[3, 6] = 1;
+                map[4, 4] = 1;
+                map[6, 6] = 1;
+                map[7, 2] = 1;
+            }
+        }
+        if (numberMap == 3)
+        {
+            this.nameMap = "CHARLIE-2";
+            if (realTime)
+            {
+            }
+            else
+            {
+                map[2, 3] = 1;
+                map[2, 4] = 1;
+                map[2, 5] = 1;
+                map[6, 1] = 1;
+                map[7, 6] = 1;
+                map[8, 6] = 1;
+                map[8, 7] = 1;
+            }
+        }
+
         else if (numberMap == 2) this.nameMap = "BRAVO-2";
         else if (numberMap == 3) this.nameMap = "CHARLIE-2";
     }

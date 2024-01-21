@@ -14,6 +14,7 @@ public class Systems : MonoBehaviour
     public string NameSystem;
     private string ColourSystem; //for mechanic 
     private int[] QuotaJauge; //if jauge full, can't fill it anymore //warn opposite team if system is ready (full)
+    //I am thinking the failure attribute shouldn't be in this class
     private bool Failure; //if mechanic circuit has crossed out colour
     #endregion
 
@@ -81,10 +82,11 @@ public class Systems : MonoBehaviour
         return result;
     }
 
-    bool No_Failure(string color)
+    bool NoFailure(string color)
     {
         bool result = true;
-        //if mecano okay 
+        //If mecano ok
+        //if (!westDial.CheckColorFailure(color) && !northDial.CheckColorFailure(color) && !southDial.CheckColorFailure(color) && !eastDial.CheckColorFailure(color))
         if (ColourSystem==color && Failure)
         {
             result = false;
@@ -103,11 +105,23 @@ public class Systems : MonoBehaviour
         }
     }
 
+    public void FillGauge()
+    {
+        if (!GaugeFull()) {
+            int i = 0;
+            while (this.QuotaJauge[i]!=0)
+            {
+                i++;
+            }
+            this.QuotaJauge[i] = 1;
+        }
+    }
+
     #region Fonctions systèmes
     bool initialize_Mine(Position pos)
     {
         bool retour = false;
-        if (GaugeFull() && No_Failure("red"))
+        if (GaugeFull() && NoFailure("red"))
         {
             //alerte opponents mine was dropped 
                 //have to wait for communication medium to be chosen
@@ -126,7 +140,7 @@ public class Systems : MonoBehaviour
     bool Torpedo(Position pos)
     {
         bool impact = false;
-        if (GaugeFull() && No_Failure("red"))
+        if (GaugeFull() && NoFailure("red"))
         {
             //Position de lancement de la torpille (range de dépôt)
             //Marquer la position sur la map équipe dépôt
@@ -149,7 +163,7 @@ public class Systems : MonoBehaviour
 
     void Activate_Silence()
     {
-        if(GaugeFull() && No_Failure("yellow")){
+        if(GaugeFull() && NoFailure("yellow")){
             //Faire un move (entre 0 et 4 unidirectionnel) je pense pas c’est à nous de gérer et plutôt on appelle une autre fonction de déplacement
             //Vider Jauge
             EmptyGauge();
@@ -158,7 +172,7 @@ public class Systems : MonoBehaviour
 
     void Sonar() 
     {
-        if(GaugeFull() && No_Failure("green"))
+        if(GaugeFull() && NoFailure("green"))
         {
             //Appel Fonction qui demande à l’autre équipe de choisir ses coordonnées et check si une est bonne et l’autre fausse
             //vider la jauge
@@ -169,7 +183,7 @@ public class Systems : MonoBehaviour
     bool Drone() 
     {
         bool used = false;
-        if (GaugeFull() && No_Failure("green"))
+        if (GaugeFull() && NoFailure("green"))
         {
             //bool bon secteur deviné ? je pense pas vu que ca c’est juste eux a prendre en note si oui ou non parce que non peut les aider autant que oui
             //pas de verif que info rep bonne vu que dans chat vocal
