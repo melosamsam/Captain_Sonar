@@ -2,13 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 //using System.Media;
 using System.Security;
+using UnityEditor;
 using UnityEngine;
 
-public class Board : Object
+public class Board : MonoBehaviour
 {
     #region Attributes
+    private const string boardPath = "Assets/UI/Boards/";
+    static private string mapName;
+
+    [SerializeField] static private GameObject captainBoardPrefab;
+    [SerializeField] static private GameObject firstMateBoardPrefab;
+    [SerializeField] static private GameObject engineerBoardPrefab;
+    [SerializeField] static private GameObject radioDetectorBoardPrefab;
+
+
     public string boardName;
     public bool realTime; //True if realtime, false if turn by turn
+    static string gameMode;
     #endregion
 
     #region Get
@@ -20,6 +31,11 @@ public class Board : Object
     public void SetNameBoard(string name) { boardName = name; }
     public void SetGameMode(bool mode) { realTime = mode; }
     #endregion
+
+    private void Awake()
+    {
+        gameMode = realTime ? "Realtime" : "Turn_by_Turn";
+    }
 
     #region Constructor
     public Board (string boardName, bool realTime)
@@ -48,6 +64,22 @@ public class Board : Object
         //Avoir une database des maps avec iles avant
         Map currentMap = new Map(chosenMap, gameMode);
     }
+
+    static public GameObject InitializeCaptainBoard(int teamNb)
+    {
+        // the board to assign to the player
+        GameObject capBoard = captainBoardPrefab;
+        string team = teamNb == 0 ? "Blue" : "Red";
+
+        // the path where the sprite is
+        string spritePath = $"{boardPath}Captain/{mapName}_Captain_{team}_{gameMode}.png";
+
+        // replace the default sprite by the correct sprite according to the game's settings and the Role
+        capBoard.GetComponent<SpriteRenderer>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
+
+        return capBoard;
+    }
+
     static void Initialize_firstMateBoard()
     {
         //Créer les systèmes et jauges avant
