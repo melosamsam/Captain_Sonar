@@ -316,17 +316,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 684662056}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &793423955 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 409484308605823733, guid: a9dff42fab6785c4891fb0ae20c60ccb, type: 3}
-  m_PrefabInstance: {fileID: 409484310098644575}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 729d187b9e5e0004c8c9ba5e2157af13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1007378963
 GameObject:
   m_ObjectHideFlags: 0
@@ -698,15 +687,15 @@ PrefabInstance:
     - target: {fileID: 409484309092515489, guid: a9dff42fab6785c4891fb0ae20c60ccb, type: 3}
       propertyPath: m_OnSelect.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 793423955}
+      objectReference: {fileID: 0}
     - target: {fileID: 409484309092515489, guid: a9dff42fab6785c4891fb0ae20c60ccb, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 793423955}
+      objectReference: {fileID: 0}
     - target: {fileID: 409484309092515489, guid: a9dff42fab6785c4891fb0ae20c60ccb, type: 3}
       propertyPath: m_OnDeselect.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 793423955}
+      objectReference: {fileID: 0}
     - target: {fileID: 409484309092515489, guid: a9dff42fab6785c4891fb0ae20c60ccb, type: 3}
       propertyPath: m_OnSelect.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -829,7 +818,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 409484310069003737, guid: a9dff42fab6785c4891fb0ae20c60ccb, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 4460426
+      value: 4641183.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000129225831345416, guid: a9dff42fab6785c4891fb0ae20c60ccb, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000129225831345416, guid: a9dff42fab6785c4891fb0ae20c60ccb, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a9dff42fab6785c4891fb0ae20c60ccb, type: 3}

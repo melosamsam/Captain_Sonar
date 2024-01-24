@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using UnityEngine;
 
 public class Submarine : MonoBehaviour
@@ -10,11 +11,12 @@ public class Submarine : MonoBehaviour
     // state of submarine
     private int _health;
     private bool _isSubmerged;
-    [SerializeField] private int _maxHealth;
+    private int _maxHealth;
     private int _nbOfTurnsSurfaced;
 
     // state of the submarine's crew
     private string _name;
+    private string _color;
     private List<Player> _players;
 
     // positions of the submarine
@@ -22,13 +24,32 @@ public class Submarine : MonoBehaviour
     private Position _currentPosition;
     private int[,] _trail;
 
+    // shared variables
+    private Map _gameMap; // taken from the GameManager or another GameObject
 
-    // testing variables
-    private Map _gameMap; // to take from the GameManager or another GameObject
+    #endregion
+
+    #region Constants
+
+    // health
+    const int NORMAL_MODE_HEALTH    = 1;
+    const int HUNT_MODE_HEALTH      = 4;
+
+    // general
+    const int TURNS_SURFACED        = 3;
+
+    // map
+    const int UNEXPLORED_POSITION   = 0;
+    const int PAST_POSITION         = 1;
 
     #endregion
 
     #region Properties
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string Color { get => _color; }
 
     /// <summary>
     /// The Direction the Captain has ordered the Submarine to go towards
@@ -82,28 +103,27 @@ public class Submarine : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //_maxHealth = gameManager.mode == "normal" ? 1 : 4;
-        _health             = _maxHealth;
+        _maxHealth          = GameManager.Instance.IsNormalMode ? NORMAL_MODE_HEALTH : HUNT_MODE_HEALTH;
+        _health             = _maxHealth; // we start the game at full health
         _isSubmerged        = true;
         _currentCourse      = Captain.Direction.None;
 
-        _players            = new List<Player>(); // take the players chosen from the lobby available right before
+        _color              = gameObject.name.Split(' ')[0];
+        _players            = GetComponentsInChildren<Player>().ToList(); // take the players chosen from the lobby available right before
 
         _nbOfTurnsSurfaced  = 0;
 
         _trail              = new int[_gameMap.GetMap().GetLength(0), _gameMap.GetMap().GetLength(1)];
+
+        _gameMap            = GameManager.Instance.MainMap;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_nbOfTurnsSurfaced >= 4)
-            ToggleSubmersion();
+        if (!(_nbOfTurnsSurfaced < TURNS_SURFACED)) ToggleSubmersion();
 
-        if (_health <= 0)
-        {
-            Die();
-        }
+        if (_health <= 0) Die();
     }
 
     #endregion
@@ -117,7 +137,7 @@ public class Submarine : MonoBehaviour
     {
         ToggleSubmersion();
         UnityEngine.Debug.Log($"The submarine has made surface at position ({_currentPosition.x}, {_currentPosition.y}).\n" +
-            $"The members of {_name} are unable to act during {3 - _nbOfTurnsSurfaced} turns");
+            $"The members of {_name} are unable to act during {TURNS_SURFACED - _nbOfTurnsSurfaced} turns");
     }
 
     /// <summary>
@@ -131,33 +151,34 @@ public class Submarine : MonoBehaviour
         switch (course)
         {
             case Captain.Direction.North:
-                newPosition.x -= 1;
+                newPosition.x--;
                 break;
             case Captain.Direction.South:
-                newPosition.x += 1;
+                newPosition.x++;
                 break;
             case Captain.Direction.East:
-                newPosition.y += 1;
+                newPosition.y++;
                 break;
             case Captain.Direction.West:
-                newPosition.y -= 1;
+                newPosition.y--;
                 break;
         }
 
         if (IsPathClear(newPosition))
         {
-            _trail[_currentPosition.x, _currentPosition.y] = 1; // mark position as past position in history of past positions
+            _trail[_currentPosition.x, _currentPosition.y] = PAST_POSITION; // mark position as past position in history of past positions
             _currentPosition = newPosition; // then update the submarine's position
         }
     }
 
     /// <summary>
-    /// Inflicts damage to the Submarine (1 damage only)
+    /// Inflicts damage to the Submarine
     /// </summary>
-    public void TakeDamage(int hits)
+    /// <param name="damage">Amount of damage to hit the Submarine</param>
+    public void TakeDamage(int damage)
     {
-        if(_health > 0) _health-=hits; // had a parameter but since the game works by inflicting 1 damage only, decided otherwise
-        UnityEngine.Debug.Log($"The submarine has just taken a damage. It can now only take {_health} more hits");
+        if (_health > 0) _health -= damage;
+        UnityEngine.Debug.Log($"The submarine has just taken {damage} damage(s). It can now only take {_health} more hits.");
     }
 
 
@@ -168,12 +189,12 @@ public class Submarine : MonoBehaviour
     private void Die()
     {
         UnityEngine.Debug.Log("The submarine has been killed");
-        // gameManager.IsGameOver = true;
+        GameManager.Instance.EndGame();
     }
    
     private bool IsPathClear(Position positionToCheck)
     {
-        return !((_gameMap.GetMap()[positionToCheck.x, positionToCheck.y] != 0) || (_trail[positionToCheck.x, positionToCheck.y] == 1));
+        return !((_gameMap.GetMap()[positionToCheck.x, positionToCheck.y] != UNEXPLORED_POSITION) || (_trail[positionToCheck.x, positionToCheck.y] == PAST_POSITION));
     }
 
     private void ToggleSubmersion()

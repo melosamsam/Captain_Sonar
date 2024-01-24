@@ -58,7 +58,6 @@ public class LogManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Escape))
                 CancelEditMode();
         }
-        // Debug.Log("Focused status: " + _inputField.isFocused);
     }
 
     #endregion
