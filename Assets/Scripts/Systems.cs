@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -118,47 +119,96 @@ public class Systems : MonoBehaviour
     }
 
     #region Fonctions systèmes
-    bool initialize_Mine(Position pos)
+    //Je crois qu'on devrait prendre le gentil submarine en paramètre
+    bool initialize_Mine(Position positionDrop, Submarine goodSubmarine)
     {
-        bool retour = false;
+        bool dropped = false;
         if (GaugeFull() && NoFailure("red"))
         {
-            //alerte opponents mine was dropped 
-                //have to wait for communication medium to be chosen
-
+            int from = goodSubmarine.CurrentPosition.x + goodSubmarine.CurrentPosition.y;
+            int chosenPosition = positionDrop.x + positionDrop.y;
             //Position de dépôt de la mine(range de dépôt)
-            //Marquer la position sur la map équipe dépôt
-
-            //Vider Jauge
-            EmptyGauge();
-            retour = true;
+            if (Math.Abs(from-chosenPosition)<=4) 
+            {
+                dropped = true;
+                EmptyGauge();
+                UnityEngine.Debug.Log("Mine was dropped."); //To both team or specified message "you dropped a mine in Position" to goodSubmarine
+                //Marquer la position sur la map équipe dépôt
+            }
+            else UnityEngine.Debug.Log("The chosen position is out of range.");
 
         }
-        return retour;
+        else UnityEngine.Debug.Log("system can\'t be used. Please check gauge and failures.");
+        return dropped;
     }
 
-    bool Torpedo(Position pos)
+    bool Torpedo(Position positionDrop, Submarine goodSubmarine, Submarine enemy)
     {
         bool impact = false;
         if (GaugeFull() && NoFailure("red"))
         {
+            int from = goodSubmarine.CurrentPosition.x + goodSubmarine.CurrentPosition.y;
+            int chosenPosition = positionDrop.x + positionDrop.y;
             //Position de lancement de la torpille (range de dépôt)
-            //Marquer la position sur la map équipe dépôt
-            //Bool impact = Activate_Red (position lancement, position_submarine_Gentil, position_submarine_ennemi )
-            //Vider Jauge
-            EmptyGauge();
+            if (Math.Abs(from- chosenPosition) <=4) 
+            {
+                impact = Activate_Red(positionDrop, goodSubmarine, enemy);
+                EmptyGauge();
+            }
+            else UnityEngine.Debug.Log("The chosen position is out of range.");
         }
+        else UnityEngine.Debug.Log("system can\'t be used. Please check gauge and failures.");
         return impact;
     }
 
-    static bool Activate_Red(Position posimpact, Position possubgentil, Position possubennemi) 
+    static bool Activate_Red(Position posimpact, Submarine goodSubmarine, Submarine enemy) 
     {
-        bool activated = false;
+        bool impact = false;
+
         //Alerte les 2 équipes de l’activation
         //Range d’explosion
-        //Bool impact selon positions impact et positions des 2 submarines
-        //Alerte si impact ou pas
-        return activated;
+
+        int to = enemy.CurrentPosition.x + enemy.CurrentPosition.y;
+        int from = goodSubmarine.CurrentPosition.x + goodSubmarine.CurrentPosition.y;
+        int chosenPosition = posimpact.x + posimpact.y;
+
+        if (posimpact==enemy.CurrentPosition)
+        {
+            enemy.TakeDamage(2);
+            impact=true;
+            UnityEngine.Debug.Log("Your aim is incredible. Enemy suffered two damages."); //To goodSubmarine
+            UnityEngine.Debug.Log("The enemy aimed right at you. You suffered two damages."); //To enemy
+        }
+        else if (Math.Abs(to- chosenPosition) <=2) 
+        {
+            enemy.TakeDamage(1);
+            impact=true;
+            UnityEngine.Debug.Log("You touched the enemy. Enemy suffered one damage."); //To goodSubmarine
+            UnityEngine.Debug.Log("The enemy managed to touch you. You suffered one damage."); //To enemy
+        }
+
+        if (posimpact == goodSubmarine.CurrentPosition)
+        {
+            goodSubmarine.TakeDamage(2);
+            impact = true;
+            UnityEngine.Debug.Log("Man... You shot yourself... You took two damages (and I think you deserve much more)."); //To goodSubmarine
+            UnityEngine.Debug.Log("Jeez that other team really be playing Among us. They took two damages from their own attack."); //To enemy
+        }
+        else if (Math.Abs(from - chosenPosition) <= 2)
+        {
+            goodSubmarine.TakeDamage(1);
+            impact = true;
+            UnityEngine.Debug.Log("Man... You shot yourself... You took one damage (and I think you deserve much more)."); //To goodSubmarine
+            UnityEngine.Debug.Log("Jeez that other team really be playing Among us. They took one damage from their own attack."); //To enemy
+        }
+
+        else
+        {
+            UnityEngine.Debug.Log("Gotta get a better aim man"); //To goodSubmarine
+            UnityEngine.Debug.Log("Lucky you, the other team needs glasses (and a brain)"); //To enemy
+        }
+
+        return impact;
     }
 
     void Activate_Silence()
@@ -180,7 +230,7 @@ public class Systems : MonoBehaviour
         }
     }
 
-    bool Drone() 
+    bool Drone(int sector, Submarine enemy) 
     {
         bool used = false;
         if (GaugeFull() && NoFailure("green"))
@@ -192,6 +242,7 @@ public class Systems : MonoBehaviour
             EmptyGauge();
 
         }
+        else UnityEngine.Debug.Log("system can\'t be used. Please check gauge and failures.");
         return used; 
 
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class Submarine : MonoBehaviour
@@ -115,7 +116,7 @@ public class Submarine : MonoBehaviour
     public void MakeSurface()
     {
         ToggleSubmersion();
-        Debug.Log($"The submarine has made surface at position ({_currentPosition.x}, {_currentPosition.y}).\n" +
+        UnityEngine.Debug.Log($"The submarine has made surface at position ({_currentPosition.x}, {_currentPosition.y}).\n" +
             $"The members of {_name} are unable to act during {3 - _nbOfTurnsSurfaced} turns");
     }
 
@@ -153,11 +154,12 @@ public class Submarine : MonoBehaviour
     /// <summary>
     /// Inflicts damage to the Submarine (1 damage only)
     /// </summary>
-    public void TakeDamage()
+    public void TakeDamage(int hits)
     {
-        if(_health > 0) _health--; // had a parameter but since the game works by inflicting 1 damage only, decided otherwise
-        Debug.Log($"The submarine has just taken a damage. It can now only take {_health} more hits");
+        if(_health > 0) _health-=hits; // had a parameter but since the game works by inflicting 1 damage only, decided otherwise
+        UnityEngine.Debug.Log($"The submarine has just taken a damage. It can now only take {_health} more hits");
     }
+
 
     #endregion
 
@@ -165,7 +167,7 @@ public class Submarine : MonoBehaviour
 
     private void Die()
     {
-        Debug.Log("The submarine has been killed");
+        UnityEngine.Debug.Log("The submarine has been killed");
         // gameManager.IsGameOver = true;
     }
    

@@ -86,7 +86,7 @@ public class Map : MonoBehaviour
                 map[7, 5] = 1;
             }
         }
-        if (numberMap == 2)
+        else if (numberMap == 2)
         {
             this.nameMap = "BRAVO-2";
             if (realTime)
@@ -102,7 +102,7 @@ public class Map : MonoBehaviour
                 map[7, 2] = 1;
             }
         }
-        if (numberMap == 3)
+        else if (numberMap == 3)
         {
             this.nameMap = "CHARLIE-2";
             if (realTime)
@@ -120,8 +120,6 @@ public class Map : MonoBehaviour
             }
         }
 
-        else if (numberMap == 2) this.nameMap = "BRAVO-2";
-        else if (numberMap == 3) this.nameMap = "CHARLIE-2";
     }
     #endregion
 
