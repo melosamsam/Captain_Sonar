@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     [SerializeField] private TMP_Text _playerInfo;
 
     public bool IsMicOpen;
+    public List<Camera> cameras;
 
     #endregion
 
