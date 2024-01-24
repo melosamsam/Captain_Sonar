@@ -50,6 +50,17 @@ public class LogManager : MonoBehaviour
         _currentLogItem = null;
     }
 
+    // Update is called every frame
+    void Update()
+    {
+        if (_editMode)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+                CancelEditMode();
+        }
+        // Debug.Log("Focused status: " + _inputField.isFocused);
+    }
+
     #endregion
 
     #region Public methods
@@ -60,10 +71,9 @@ public class LogManager : MonoBehaviour
     public void SendLogData()
     {
         if (!_editMode) AddLog();
-        else EditLog();
+        else EditLog(_inputField.text);
 
-        // clear the input field
-        _inputField.text = "";
+        ClearInputField();
     }
 
     #endregion
@@ -71,22 +81,36 @@ public class LogManager : MonoBehaviour
     #region Private methods
 
     // Adds a new log to the UI
-    private void AddLog()
+    void AddLog()
     {
         string log = _inputField.text;
         if (log.TrimEnd(' ') != "") InstantiateLog(log);
     }
 
-    // Modifies the currently selected log
-    private void EditLog()
+    // Cancels the edit mode
+    void CancelEditMode()
     {
-        _currentLogItem.Text = _inputField.text;
+        Debug.Log("Cancelled edit mode");
+        EditLog(_currentLogItem.Text);
+        ClearInputField();
+    }
+
+    // Clears the input field
+    void ClearInputField()
+    {
+        _inputField.text = "";
+    }
+
+    // Modifies the currently selected log
+    void EditLog(string text)
+    {
+        _currentLogItem.Text = text;
         _editMode = false;
         _currentLogItem = null;
     }
 
     // Instantiates a new log item with the specified text
-    private void InstantiateLog(string text)
+    void InstantiateLog(string text)
     {
         GameObject newLog = Instantiate(_logPrefab, _logContainer);
         if (newLog.TryGetComponent<LogItem>(out var logScript))
@@ -97,7 +121,7 @@ public class LogManager : MonoBehaviour
     }
 
     // Scrolls down the user interface to view the last added log item
-    private void ScrollToBottom()
+    void ScrollToBottom()
     {
         Canvas.ForceUpdateCanvases();
         _scrollRect.verticalNormalizedPosition = 0f;
