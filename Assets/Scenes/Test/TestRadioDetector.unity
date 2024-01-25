@@ -527,7 +527,7 @@ MonoBehaviour:
   _playerName: killer_queen
   _playerRoleNames: []
   _playerInfo: {fileID: 347340190}
-  IsMicOpen: 0
+  _cameras: []
 --- !u!114 &1721048974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -547,6 +547,58 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 373920456208672254, guid: 785caf15883eced4e846af5fae9cbfc8, type: 3}
+      propertyPath: m_text
+      value: Something too important to remember?
+      objectReference: {fileID: 0}
+    - target: {fileID: 1050447186886623817, guid: 785caf15883eced4e846af5fae9cbfc8, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1050447186886623817, guid: 785caf15883eced4e846af5fae9cbfc8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1050447186886623817, guid: 785caf15883eced4e846af5fae9cbfc8, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1617441056085792331, guid: 785caf15883eced4e846af5fae9cbfc8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1617441056085792331, guid: 785caf15883eced4e846af5fae9cbfc8, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1617441056085792331, guid: 785caf15883eced4e846af5fae9cbfc8, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1617441056085792331, guid: 785caf15883eced4e846af5fae9cbfc8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2646517867760710279, guid: 785caf15883eced4e846af5fae9cbfc8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6564509907333462701, guid: 785caf15883eced4e846af5fae9cbfc8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6564509907333462701, guid: 785caf15883eced4e846af5fae9cbfc8, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6564509907333462701, guid: 785caf15883eced4e846af5fae9cbfc8, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6564509907333462701, guid: 785caf15883eced4e846af5fae9cbfc8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8109199536282775573, guid: 785caf15883eced4e846af5fae9cbfc8, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -647,5 +699,9 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1721048974}
+    - target: {fileID: 8109199537512011553, guid: 785caf15883eced4e846af5fae9cbfc8, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 785caf15883eced4e846af5fae9cbfc8, type: 3}

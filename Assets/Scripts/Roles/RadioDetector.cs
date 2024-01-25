@@ -84,4 +84,35 @@ public class RadioDetector : Role
     }
 
     #endregion
+
+    public void Trace(Position pos, string direction)
+    {
+        Position retour=new Position(0,0);
+        if (direction == "N")
+        {
+            retour.x = pos.x;
+            retour.y = pos.y - 1;
+        }
+        else
+        {
+            if(direction == "S") {
+                retour.x = pos.x;
+                retour.y = pos.y + 1;
+            }
+            else
+            {
+                if(direction=="E")
+                {
+                    retour.x = pos.x + 1;
+                    retour.y = pos.y;
+                }
+                else
+                {
+                    retour.x = pos.x - 1;
+                    retour.y = pos.y;
+                }
+            }
+        }
+        //display tracé du trait correspondant avec coordo position en param et new position.
+    }
 }
