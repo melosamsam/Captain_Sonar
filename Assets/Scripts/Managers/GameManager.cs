@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
     Player _currentPlayer;
     Role _currentRole;
 
+    List<Camera> _cameras;
+
+    // game settings
     bool _isTurnBased;
     bool _isNormalMode;
     bool _isGameOver;
@@ -83,12 +86,14 @@ public class GameManager : MonoBehaviour
             Debug.LogWarning("More than one GameManager in the scene");
             return;
         }
+        InitializeGame();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        InitializeGame();
+        _cameras = FindObjectsOfType<Camera>().ToList();
+        StartGame();
     }
 
     // Update is called once per frame
@@ -98,7 +103,7 @@ public class GameManager : MonoBehaviour
         {
             if (IsTurnBased)
             {
-                // StartCoroutine(ProcessTurnByTurn());
+                StartCoroutine(ProcessTurnByTurn());
             }
         }
     }
@@ -106,6 +111,26 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Public methods
+
+    public void StartGame()
+    {
+        DistributeCameras();
+        DisableCameras();
+
+        foreach (Submarine submarine in _submarines)
+        {
+            foreach (Player player in submarine.Players)
+            {
+                player.DisplayUsername();
+                player.EnableCamera();
+            }
+        }
+
+        // randomly chooses which team starts first
+        _currentSubmarine = _submarines[Random.Range(0, 2)];
+
+        //_currentSubmarine = _submarines[0]; // starts with the blue team for testing purposes
+    }
 
     public void EndGame()
     {
@@ -117,6 +142,33 @@ public class GameManager : MonoBehaviour
 
     #region Private methods
 
+    void DisableCameras()
+    {
+        // disables all cameras available in the scene
+        foreach (Camera camera in _cameras)
+            camera.enabled = false;
+
+        Debug.Log("All cameras disabled");
+    }
+
+    void DistributeCameras()
+    {
+        foreach(Submarine submarine in _submarines)
+        {
+            foreach (Player player in submarine.Players)
+            {
+                // get cameras corresponding to the roles
+                foreach (Role role in player.gameObject.GetComponents<Role>())
+                    player.Cameras.Add(GameObject.Find($"{submarine.Color} {role.Name}").GetComponent<Camera>());
+            }
+        }
+    }
+
+    void GetPlayerFromRole()
+    {
+        _currentPlayer = _currentRole != null ? _currentRole.gameObject.GetComponent<Player>() : null;
+    }
+
     void InitiliazeBoards()
     {
 
@@ -124,7 +176,7 @@ public class GameManager : MonoBehaviour
 
     void InitializeGame()
     {
-        _submarines = new List<Submarine>();
+        _submarines = FindObjectsOfType<Submarine>().ToList();
         _currentSubmarine = null;
         _currentPlayer = null;
         _currentRole = null;
@@ -137,9 +189,10 @@ public class GameManager : MonoBehaviour
     {
         SwitchToNextRole();
         _currentRole.PerformRoleAction();
+        Debug.Log($"{_currentSubmarine.Color} team's {_currentRole.Name}, player {_currentPlayer.Name}, is playing.");
 
         // Attendre la fin du tour du rôle
-        yield return new WaitUntil(() => !_currentRole.IsTurnOver);
+        yield return new WaitUntil(() => _currentRole.IsTurnOver);
     }
 
     void SwitchToNextTeam()
@@ -156,7 +209,7 @@ public class GameManager : MonoBehaviour
     {
         if (_currentRole == null)
         {
-            _currentRole = _currentSubmarine.gameObject.GetComponentInChildren<Captain>() ;
+            _currentRole = _currentSubmarine.gameObject.GetComponentInChildren<Captain>();
         }
         else
         {
@@ -179,6 +232,8 @@ public class GameManager : MonoBehaviour
                 SwitchToNextTeam();
             }
         }
+
+        GetPlayerFromRole();
     }
 
     #endregion

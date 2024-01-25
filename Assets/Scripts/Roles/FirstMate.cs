@@ -22,7 +22,7 @@ public class FirstMate : Role
     // Start is called before the first frame update
     void Start()
     {
-        PerformRoleAction();
+        // PerformRoleAction();
     }
 
     #endregion

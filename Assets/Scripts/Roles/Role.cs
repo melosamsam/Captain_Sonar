@@ -6,7 +6,9 @@ public abstract class Role : MonoBehaviour
 {
     #region Attributes
 
-    private bool _isTurnOver;
+    private bool _isTurnOver = true;
+
+    protected Submarine _submarine;
 
     #endregion
 
@@ -60,9 +62,7 @@ public abstract class Role : MonoBehaviour
     public void ToggleTurn()
     {
         IsTurnOver = !IsTurnOver;
-        if (!IsTurnOver)
-            PerformRoleAction();
-        else
+        if (IsTurnOver)
             Debug.Log(Name + "'s turn is over");
     }
 

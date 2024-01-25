@@ -14,7 +14,6 @@ public class Captain : Role
 
     private bool _isOverlayOpen;
     private TMP_Dropdown _systemDropdown;
-    private List<LogItem> _logItems;
 
     #endregion
 
@@ -29,23 +28,27 @@ public class Captain : Role
     // Awake is called when an enabled script instance is being loaded
     private void Awake()
     {
-
-
         SetDescription();
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        _submarine = GetComponentInParent<Submarine>();
         _systemDropdown = GameObject.Find("Systems dropdown").GetComponent<TMP_Dropdown>();
-
-        PerformRoleAction();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (!IsTurnOver)
+        {
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                FinishTurn();
+            }
+        }
+
     }
 
     #endregion
@@ -63,8 +66,9 @@ public class Captain : Role
     public override void PerformRoleAction()
     {
         // setting the turn as not done when it just began
-        //ToggleTurn();
+        ToggleTurn();
         Debug.Log("Captain role started\n" + Description);
+        Debug.Log($"Turn has started?: {!IsTurnOver}");
     }
 
     protected override void SetDescription()
@@ -76,12 +80,15 @@ public class Captain : Role
             ;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public override void FinishTurn()
     {
-        // close the overlay if it is still opened
+        // closes the overlay if it is still opened
         if (_isOverlayOpen) ToggleOverlay();
 
-        // then finished the turn
+        // then finishes the turn
         ToggleTurn();
     }
 
@@ -92,7 +99,7 @@ public class Captain : Role
     {
         GameObject ui = GameObject.Find("Actions");
 
-        ui.transform.localScale = !IsTurnOver? Vector3.one: Vector3.zero;
+        ui.transform.localScale = !IsTurnOver ? Vector3.one: Vector3.zero;
     }
 
 
@@ -147,8 +154,12 @@ public class Captain : Role
         ChosenCourse = course;
         // else, show error message and allow another input
 
-        Debug.Log($"Chosen course: {ChosenCourse}");
-        FinishTurn();
+        if (_submarine.Move(ChosenCourse))
+        {
+            Debug.Log($"Chosen course: {ChosenCourse}");
+            FinishTurn();
+        }
+        else Debug.Log($"The submarine cannot go there.");
     }
 
     /// <summary>
@@ -157,8 +168,9 @@ public class Captain : Role
     public void OrderSurface()
     {
         Debug.Log("Surface ordered");
-        // call the Surface() method in the Submarine class
 
+        // call the MakeSurface() method in the Submarine class
+        _submarine.MakeSurface();
 
         FinishTurn();
     }

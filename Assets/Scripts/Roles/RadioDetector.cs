@@ -52,13 +52,16 @@ public class RadioDetector : Role
 
     #region Unity methods
 
+    private void Awake()
+    {
+        SetDescription();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         _seeThrough = GameObject.Find("See through");
         _isSeeThroughOpen = false;
-
-        SetDescription();
     }
 
     // Update is called once per frame

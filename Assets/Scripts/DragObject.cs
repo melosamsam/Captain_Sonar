@@ -15,7 +15,7 @@ public class DragObject : MonoBehaviour
 
     private void Awake()
     {
-        canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+        canvas = transform.parent.parent.GetComponent<Canvas>();
     }
 
     #endregion

@@ -8,7 +8,7 @@ using UnityEngine;
 public class Board : MonoBehaviour
 {
     #region Attributes
-    private const string boardPath = "Assets/UI/Boards/";
+    private const string BOARD_PATH = "Assets/UI/Boards/";
     static private string mapName;
 
     [SerializeField] static private GameObject captainBoardPrefab;
@@ -72,7 +72,7 @@ public class Board : MonoBehaviour
         string team = teamNb == 0 ? "Blue" : "Red";
 
         // the path where the sprite is
-        string spritePath = $"{boardPath}Captain/{mapName}_Captain_{team}_{gameMode}.png";
+        string spritePath = $"{BOARD_PATH}Captain/{mapName}_Captain_{team}_{gameMode}.png";
 
         // replace the default sprite by the correct sprite according to the game's settings and the Role
         capBoard.GetComponent<SpriteRenderer>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
