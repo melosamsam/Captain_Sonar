@@ -16,8 +16,8 @@ public class Player : MonoBehaviour
     [SerializeField] private List<string> _playerRoleNames; // serialized for testing mostly
     [SerializeField] private TMP_Text _playerInfo;
 
-    public bool IsMicOpen;
-    public List<Camera> cameras;
+    [SerializeField] private List<Camera> _cameras;
+    private Camera _currentCamera;
 
     #endregion
 
@@ -42,10 +42,9 @@ public class Player : MonoBehaviour
     {
         _playerName = _playerName.Trim(' ');
 
-        IsMicOpen = false;
-
         _playerRoleNames = new List<string>();
         _playerRoles = new List<Role>();
+        _cameras = new List<Camera>();
 
         foreach (Role role in GetComponents<Role>())
         {
@@ -54,6 +53,34 @@ public class Player : MonoBehaviour
         }
 
         _playerInfo.text = _playerName;
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        _submarine = GetComponentInParent<Submarine>();
+
+        // get cameras corresponding to the roles
+        foreach (Role role in _playerRoles)
+            _cameras.Add(GameObject.Find($"{_submarine.Color} {role.Name}").GetComponent<Camera>());
+
+        // disables all cameras available in the scene
+        foreach (Camera camera in GameObject.FindObjectsOfType<Camera>())
+            camera.enabled = false;
+
+        Debug.Log("All cameras disabled");
+
+        // enable the camera of the first role we have
+        _currentCamera = _cameras[0];
+        _currentCamera.enabled = true;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+            SwitchCamera(1);
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+            SwitchCamera(-1);
     }
 
     #endregion
@@ -88,19 +115,6 @@ public class Player : MonoBehaviour
         _playerRoleNames.Add(roleName);
     }
 
-    /*
-    /// <summary>
-    /// Allows the player to perform their designated actions for their Role
-    /// </summary>
-    public void PerformRoleAction()
-    {
-        string displayedName = _playerName[^1] == 's' ? _playerName + '\'' : _playerName + "\'s";
-        Debug.Log($"It is {displayedName} turn.");
-        _playerRole.PerformRoleAction();
-        Debug.Log($"{_playerName} has finished their turn.");
-    }
-    */
-
     /// <summary>
     /// Removes an assigned role to the player, used mostly in the lobby, while the team members are still debating on which role they want
     /// </summary>
@@ -121,23 +135,19 @@ public class Player : MonoBehaviour
         _playerRoles.RemoveAt(toRemove);
     }
 
-    /// <summary>
-    /// Disables/enables the usage of the microphone, to communicate with its team
-    /// </summary>
-    public void ToggleMic()
+
+    public void SwitchCamera(int direction)
     {
-        if (IsMicOpen) 
-        {
-            IsMicOpen = false;
-            Debug.Log("The microphone is now turned off.");
-            /* do things to close the mic and disable communication */ 
-        }
-        else 
-        {
-            IsMicOpen = true;
-            Debug.Log("The microphone is now turned on.");
-            /* do things to open the mic and enable communication */ 
-        }
+        int index = _cameras.IndexOf(_currentCamera);
+        int newIndex = index + direction;
+
+        _currentCamera.enabled = false; // deactivate current camera
+
+        if (newIndex < 0) _currentCamera = _cameras[^1];
+        else if (!(newIndex < _cameras.Count)) _currentCamera = _cameras[0];
+        else _currentCamera = _cameras[newIndex];
+
+        _currentCamera.enabled = true; // activate new camera
     }
 
     #endregion

@@ -113,9 +113,10 @@ public class Submarine : MonoBehaviour
 
         _nbOfTurnsSurfaced  = 0;
 
+        _gameMap            = GameManager.Instance.MainMap;
+
         _trail              = new int[_gameMap.GetMap().GetLength(0), _gameMap.GetMap().GetLength(1)];
 
-        _gameMap            = GameManager.Instance.MainMap;
     }
 
     // Update is called once per frame

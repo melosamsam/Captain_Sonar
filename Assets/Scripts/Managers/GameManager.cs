@@ -98,7 +98,7 @@ public class GameManager : MonoBehaviour
         {
             if (IsTurnBased)
             {
-                StartCoroutine(ProcessTurnByTurn());
+                // StartCoroutine(ProcessTurnByTurn());
             }
         }
     }
