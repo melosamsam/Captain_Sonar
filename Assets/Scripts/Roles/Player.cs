@@ -9,12 +9,11 @@ public class Player : MonoBehaviour
 {
     #region Attributes
 
-    private Submarine _submarine; // to replace with "Submarine" when implemented
+    private Submarine _submarine;
     [SerializeField] private List<Role> _playerRoles;
 
     [SerializeField] private string _playerName; // serialized for testing mostly
     [SerializeField] private List<string> _playerRoleNames; // serialized for testing mostly
-    [SerializeField] private TMP_Text _playerInfo;
 
     [SerializeField] private List<Camera> _cameras;
     private Camera _currentCamera;
@@ -22,6 +21,8 @@ public class Player : MonoBehaviour
     #endregion
 
     #region Properties
+
+    public List<Camera> Cameras { get { return _cameras; } }
 
     /// <summary>
     /// The Role assigned to the player ; Captain, First Mate, Engineer and/or Radio Operator
@@ -51,36 +52,23 @@ public class Player : MonoBehaviour
             _playerRoles.Add(role);
             _playerRoleNames.Add(role.Name);
         }
-
-        _playerInfo.text = _playerName;
     }
 
     // Start is called before the first frame update
     void Start()
     {
         _submarine = GetComponentInParent<Submarine>();
-
-        // get cameras corresponding to the roles
-        foreach (Role role in _playerRoles)
-            _cameras.Add(GameObject.Find($"{_submarine.Color} {role.Name}").GetComponent<Camera>());
-
-        // disables all cameras available in the scene
-        foreach (Camera camera in GameObject.FindObjectsOfType<Camera>())
-            camera.enabled = false;
-
-        Debug.Log("All cameras disabled");
-
-        // enable the camera of the first role we have
-        _currentCamera = _cameras[0];
-        _currentCamera.enabled = true;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-            SwitchCamera(1);
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-            SwitchCamera(-1);
+        if (_cameras.Count > 1) 
+        {
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+                SwitchCamera(1);
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+                SwitchCamera(-1);        
+        }
     }
 
     #endregion
@@ -113,6 +101,25 @@ public class Player : MonoBehaviour
         }
 
         _playerRoleNames.Add(roleName);
+    }
+
+    public void DisplayUsername()
+    {
+        foreach (Camera cam in _cameras)
+        {
+            GameObject board = cam.transform.GetChild(0).gameObject;
+            GameObject playerInfo = board.transform.Find("Player Info").gameObject;
+            TMP_Text playerInfoText = playerInfo.GetComponent<TMP_Text>();
+
+            playerInfoText.text = _playerName;
+        }
+    }
+
+    public void EnableCamera()
+    {
+        // enable the camera of the first role we have
+        _currentCamera = _cameras[0];
+        _currentCamera.enabled = true;
     }
 
     /// <summary>

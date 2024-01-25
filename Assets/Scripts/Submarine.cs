@@ -11,13 +11,13 @@ public class Submarine : MonoBehaviour
     // state of submarine
     private int _health;
     private bool _isSubmerged;
-    private int _maxHealth;
+    [SerializeField] private int _maxHealth;
     private int _nbOfTurnsSurfaced;
 
     // state of the submarine's crew
     private string _name;
     private string _color;
-    private List<Player> _players;
+    [SerializeField] private List<Player> _players;
 
     // positions of the submarine
     private Captain.Direction _currentCourse;
@@ -145,7 +145,7 @@ public class Submarine : MonoBehaviour
     /// Updates the position of the submarine of the game's Map according to the Captain's decision
     /// </summary>
     /// <param name="course">The course/direction chosen by the Captain</param>
-    public void Move(Captain.Direction course)
+    public bool Move(Captain.Direction course)
     {
         Position newPosition = _currentPosition;
 
@@ -165,11 +165,15 @@ public class Submarine : MonoBehaviour
                 break;
         }
 
-        if (IsPathClear(newPosition))
+        bool canSubmarineMove = IsPathClear(newPosition);
+
+        if (canSubmarineMove)
         {
             _trail[_currentPosition.x, _currentPosition.y] = PAST_POSITION; // mark position as past position in history of past positions
             _currentPosition = newPosition; // then update the submarine's position
         }
+
+        return canSubmarineMove;
     }
 
     /// <summary>
