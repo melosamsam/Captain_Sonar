@@ -6,12 +6,6 @@ public class Engineer : Role
 {
     #region To override
 
-    public override void PerformRoleAction()
-    {
-        IsTurnOver = false;
-        Debug.Log($"{Name} role started\n" + Description);
-    }
-
     protected override void OnActionStatusChanged()
     {
         ToggleUI();

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,6 +26,17 @@ public class FirstMate : Role
         // PerformRoleAction();
     }
 
+    private void Update()
+    {
+        if (!IsTurnOver)
+        {
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                FinishTurn();
+            }
+        }
+    }
+
     #endregion
 
     #region To override
@@ -34,12 +46,14 @@ public class FirstMate : Role
         ToggleUI();
     }
 
-    public override void PerformRoleAction()
+    public override IEnumerator PerformRoleAction()
     {
-        IsTurnOver = false; // setting the turn as not done when it just began
+        ToggleTurn(); // setting the turn as not done when it just began
         _filledGauges.Clear(); // resetting the inventory of filled gauges during last turn
 
         Debug.Log("First Mate role started\n" + Description);
+
+        yield return new WaitUntil(() => IsTurnOver);
     }
 
     protected override void SetDescription()

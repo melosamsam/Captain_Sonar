@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,7 @@ public class GameManager : MonoBehaviour
     Map _mainMap;
 
     // constants
-    readonly string[] ROLE_ORDER = { "Captain", "FirstMate", "Engineer" };
+    readonly string[] ROLE_ORDER = { "Captain", "First Mate", "Engineer" };
 
     #endregion
 
@@ -96,18 +97,6 @@ public class GameManager : MonoBehaviour
         StartGame();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (!IsGameOver)
-        {
-            if (IsTurnBased)
-            {
-                StartCoroutine(ProcessTurnByTurn());
-            }
-        }
-    }
-
     #endregion
 
     #region Public methods
@@ -127,9 +116,13 @@ public class GameManager : MonoBehaviour
         }
 
         // randomly chooses which team starts first
-        _currentSubmarine = _submarines[Random.Range(0, 2)];
+        _currentSubmarine = _submarines[UnityEngine.Random.Range(0, 2)];
 
         //_currentSubmarine = _submarines[0]; // starts with the blue team for testing purposes
+
+        _isGameOver = false;
+        if (_isTurnBased) ProcessTurnByTurn();
+        //else ProcessRealTime();
     }
 
     public void EndGame()
@@ -182,17 +175,12 @@ public class GameManager : MonoBehaviour
         _currentRole = null;
         _isTurnBased = true;
         _isNormalMode = true;
-        _isGameOver = false;
+        _isGameOver = true;
     }
 
-    IEnumerator ProcessTurnByTurn()
+    void ProcessTurnByTurn()
     {
-        SwitchToNextRole();
-        _currentRole.PerformRoleAction();
-        Debug.Log($"{_currentSubmarine.Color} team's {_currentRole.Name}, player {_currentPlayer.Name}, is playing.");
-
-        // Attendre la fin du tour du rôle
-        yield return new WaitUntil(() => _currentRole.IsTurnOver);
+        StartCoroutine(TurnByTurnCoroutine());
     }
 
     void SwitchToNextTeam()
@@ -213,18 +201,16 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            int index = ROLE_ORDER.ToList().IndexOf(_currentRole.Name);
-            if (index < ROLE_ORDER.Length)
+            int index = Array.IndexOf(ROLE_ORDER, _currentRole.Name);
+            if (index >= 0 && index < ROLE_ORDER.Length - 1)
             {
-                string nextRole = ROLE_ORDER[index++];
-                foreach (Role role in _currentSubmarine.gameObject.GetComponentsInChildren<Role>())
-                {
-                    if (role.Name == nextRole)
-                    {
-                        _currentRole = role;
-                        break;
-                    }
-                }
+                // Incrémentez l'index pour passer au prochain rôle
+                index++;
+                string nextRole = ROLE_ORDER[index];
+
+                // Cherchez le prochain rôle dans les composants enfants du sous-marin
+                Role[] roles = _currentSubmarine.gameObject.GetComponentsInChildren<Role>();
+                _currentRole = Array.Find(roles, role => role.Name == nextRole);
             }
             else
             {
@@ -234,6 +220,19 @@ public class GameManager : MonoBehaviour
         }
 
         GetPlayerFromRole();
+    }
+
+    IEnumerator TurnByTurnCoroutine()
+    {
+        while (!_isGameOver)
+        {
+            SwitchToNextRole();
+            Debug.Log($"{_currentSubmarine.Color} team's {_currentRole.Name}, player {_currentPlayer.Name}, is playing.");
+            yield return StartCoroutine(_currentRole.PerformRoleAction());
+            //StopCoroutine(_currentRole.PerformRoleAction());
+        }
+
+        Debug.Log("Game is over!");
     }
 
     #endregion

@@ -22,13 +22,6 @@ public class RadioDetector : Role
         ToggleUI();
     }
 
-    public override void PerformRoleAction()
-    {
-        // setting the turn as not done when it just began
-        ToggleTurn();
-        Debug.Log("Captain role started\n" + Description);
-    }
-
     protected override void SetDescription()
     {
         Name = "Radio Detector";

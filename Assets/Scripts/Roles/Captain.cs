@@ -63,14 +63,6 @@ public class Captain : Role
         ToggleUI();
     }
 
-    public override void PerformRoleAction()
-    {
-        // setting the turn as not done when it just began
-        ToggleTurn();
-        Debug.Log("Captain role started\n" + Description);
-        Debug.Log($"Turn has started?: {!IsTurnOver}");
-    }
-
     protected override void SetDescription()
     {
         Name = "Captain";

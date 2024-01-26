@@ -48,7 +48,14 @@ public abstract class Role : MonoBehaviour
         ToggleTurn();
     }
 
-    public abstract void PerformRoleAction();
+    public virtual IEnumerator PerformRoleAction()
+    {
+        ToggleTurn();
+        Debug.Log($"{Name} role started\n" + Description);
+        Debug.Log($"Turn has started?: {!IsTurnOver}");
+
+        yield return new WaitUntil(() => IsTurnOver);
+    }
 
     protected abstract void SetDescription();
 
