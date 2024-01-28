@@ -14,7 +14,7 @@ public class Submarine : MonoBehaviour
 
     // state of the submarine's crew
     private string _name;
-    private List<Player> _players;
+    public List<Player> _players;
 
     // positions of the submarine
     private Captain.Direction _currentCourse;
@@ -27,7 +27,7 @@ public class Submarine : MonoBehaviour
 
     #endregion
 
-    #region Properties
+        #region Properties
 
     /// <summary>
     /// The Direction the Captain has ordered the Submarine to go towards
@@ -57,7 +57,7 @@ public class Submarine : MonoBehaviour
     /// <summary>
     /// The name the players chose to refer to their crew
     /// </summary>
-    public string Name { get => _name; } // readonly, no reason to change the team's name mid-game
+    public string Name { get => _name; set => _name = value; } // readonly, no reason to change the team's name mid-game
 
     /// <summary>
     /// The players constituting the Submarin's crew
@@ -89,7 +89,7 @@ public class Submarine : MonoBehaviour
         _players            = new List<Player>(); // take the players chosen from the lobby available right before
 
         _nbOfTurnsSurfaced  = 0;
-
+        if(_gameMap!=null)
         _trail              = new int[_gameMap.GetMap().GetLength(0), _gameMap.GetMap().GetLength(1)];
     }
 
