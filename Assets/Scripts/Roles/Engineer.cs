@@ -22,7 +22,9 @@ public class Engineer : Role
 
     protected override void ToggleUI()
     {
-        throw new System.NotImplementedException();
+        GameObject ui = GameObject.Find("Dials");
+
+        ui.transform.localScale = !IsTurnOver ? Vector3.one : Vector3.zero;
     }
 
     #endregion
@@ -44,7 +46,13 @@ public class Engineer : Role
     // Update is called once per frame
     void Update()
     {
-        
+        if (!IsTurnOver)
+        {
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                FinishTurn();
+            }
+        }
     }
 
     #endregion
