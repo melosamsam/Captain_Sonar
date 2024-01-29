@@ -12,10 +12,10 @@ public class GameManager : MonoBehaviour
     static GameManager _instance;
 
     List<Submarine> _submarines;
-    Submarine _currentSubmarine;
+    [SerializeField] Submarine _currentSubmarine;
 
-    Player _currentPlayer;
-    Role _currentRole;
+    [SerializeField] Player _currentPlayer;
+    [SerializeField] Role _currentRole;
 
     List<Camera> _cameras;
 
@@ -118,8 +118,7 @@ public class GameManager : MonoBehaviour
         // randomly chooses which team starts first
         _currentSubmarine = _submarines[UnityEngine.Random.Range(0, 2)];
 
-        //_currentSubmarine = _submarines[0]; // starts with the blue team for testing purposes
-
+        // start the game
         _isGameOver = false;
         if (_isTurnBased) ProcessTurnByTurn();
         //else ProcessRealTime();
@@ -186,11 +185,8 @@ public class GameManager : MonoBehaviour
     void SwitchToNextTeam()
     {
         int index = _submarines.IndexOf(_currentSubmarine);
-        if (index >= 0)
-        {
-            if (index < _submarines.Count) _currentSubmarine = _submarines[index++];
-            else _currentSubmarine = _submarines[0];
-        }
+        _currentSubmarine = index == 0 ? _submarines[index++] : _submarines[0];
+        SwitchToNextRole();
     }
 
     void SwitchToNextRole()
