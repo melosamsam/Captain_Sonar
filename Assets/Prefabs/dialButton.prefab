@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1859133972716512847}
   - component: {fileID: 5521468136743217256}
   m_Layer: 0
-  m_Name: ButtonRed
+  m_Name: dialButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

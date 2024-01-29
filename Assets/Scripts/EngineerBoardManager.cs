@@ -5,40 +5,245 @@ using UnityEngine.UI;
 
 public class EngineerBoardManager : MonoBehaviour
 {
-    public EngineerDialData engineerDialData;
-    public Button[] buttons;
+    #region attributes
+    public EngineerDialData engineerDialDataW;
+    public EngineerDialData engineerDialDataN;
+    public EngineerDialData engineerDialDataS;
+    public EngineerDialData engineerDialDataE;
+
+    private Dictionary<EngineerDialData, Button[]> dialButtonsDictionary = new Dictionary<EngineerDialData, Button[]>();
 
     public Button dialButton;
+    #endregion
 
+    #region Initialisation
     void Start()
     {
-        InitializeBoard();
+        InitializeBoard(engineerDialDataW);
+        InitializeBoard(engineerDialDataN);
+        InitializeBoard(engineerDialDataS);
+        InitializeBoard(engineerDialDataE);
     }
 
-    void InitializeBoard()
+    private void InitializeBoard(EngineerDialData dialData)
     {
-        buttons = new Button[engineerDialData.tab.Length];
-        for (int i = 0; i < engineerDialData.tab.Length; i++)
-        {
-            // Capture the current value of i in a local variable
-            int currentIndex = i;
+        Button[] buttons = new Button[dialData.tab.Length];
+        dialButtonsDictionary[dialData] = buttons;
 
-            Button button = Instantiate(GetButtonPrefab(engineerDialData.tab[i].color), transform);
+        for (int i = 0; i < dialData.tab.Length; i++)
+        {
+            int currentIndex = i;
+            Button button = Instantiate(dialButton, transform);
+
+            // Set the Transition property to None
+            button.transition = Selectable.Transition.None;
 
             buttons[i] = button;
-            button.onClick.AddListener(() => OnButtonClick(currentIndex));
+            button.onClick.AddListener(() => OnButtonClick(dialData, currentIndex));
         }
     }
 
-    Button GetButtonPrefab(string color)
+    #endregion
+
+    #region Click
+    public void OnButtonClickW(int index)
     {
-        string prefabName = color + "Button";
-        return Resources.Load<Button>("Path/To/" + prefabName);
+        OnButtonClick(engineerDialDataW, index);
     }
 
-    void OnButtonClick(int i)
+    public void OnButtonClickN(int index)
     {
-        engineerDialData.tab[i].failureFlag = true;
-        // You might want to update UI here or perform other actions
+        OnButtonClick(engineerDialDataN, index);
     }
+
+    public void OnButtonClickS(int index)
+    {
+        OnButtonClick(engineerDialDataS, index);
+    }
+
+    public void OnButtonClickE(int index)
+    {
+        OnButtonClick(engineerDialDataE, index);
+    }
+
+    private void OnButtonClick(EngineerDialData dialData, int index)
+    {
+        Button currentButton = dialButtonsDictionary[dialData][index];
+
+        // Check if the button is already disabled
+        if (!currentButton.interactable)
+        {
+            Debug.Log("Button already disabled for dialData: " + dialData.name + ", index: " + index);
+            return;
+        }
+
+        if (dialData.CrossThatFailure(index))
+        {
+            dialData.tab[index].failureFlag = true;
+
+            currentButton.interactable = false;
+            currentButton.GetComponent<Button>().interactable = false;
+
+
+            Debug.Log("Button disabled for dialData: " + dialData.name + ", index: " + index);
+        }
+        else
+        {
+            Debug.Log("Button not disabled for dialData: " + dialData.name + ", index: " + index);
+        }
+    }
+
+
+    #endregion
+
+    #region Tests
+    bool PathFull(int path)
+    {
+        bool full = true;
+        foreach (var dialData in new[] { engineerDialDataW, engineerDialDataE, engineerDialDataS, engineerDialDataN })
+        {
+            for (int i = 0; i < dialData.tab.Length && full; i++)
+            {
+                if (dialData.tab[i].pathIndex == path && !dialData.tab[i].failureFlag)
+                {
+                    full = false;
+                }
+            }
+        }
+        return full;
+    }
+
+    public bool CheckColorFailure(string colorSystem)
+    {
+        bool result = false;
+        foreach (var dialData in new[] { engineerDialDataW, engineerDialDataE, engineerDialDataS, engineerDialDataN })
+        {
+            for (int i = 0; i < dialData.tab.Length && !result; i++)
+            {
+                if (dialData.tab[i].color == colorSystem && dialData.tab[i].failureFlag)
+                {
+                    result = true;
+                }
+            }
+        }
+        return result; // True if failure, false if okay
+    }
+    #endregion 
+
+    #region actions
+    void ClearThePath(int path)
+    {
+        if (PathFull(path))
+        {
+            Debug.Log("Path Full");
+            foreach (var dialData in new[] { engineerDialDataW, engineerDialDataE, engineerDialDataS, engineerDialDataN })
+            {
+                for (int i = 0; i < dialData.tab.Length; i++)
+                {
+                    if (dialData.tab[i].pathIndex == path)
+                    {
+                        dialData.tab[i].failureFlag = false;
+                        //enable button again
+                        dialButtonsDictionary[dialData][i].interactable = true;
+                    }
+                }
+            }
+        }
+    }
+
+    // If Surface
+    void ClearDials()
+    {
+        foreach (var dialData in new[] { engineerDialDataW, engineerDialDataE, engineerDialDataS, engineerDialDataN })
+        {
+            for (int i = 0; i < dialData.tab.Length; i++)
+            {
+                dialData.tab[i].failureFlag = false;
+                //enable button again
+                dialButtonsDictionary[dialData][i].interactable = true;
+            }
+        }
+    }
+
+    //If full
+    //Submarine submarine in parameter
+    void ClearOneDial()
+    {
+        foreach (var dialData in new[] { engineerDialDataW, engineerDialDataE, engineerDialDataS, engineerDialDataN })
+        {
+            if (dialData.DialFull())
+            {
+                Debug.Log("dial Full");
+                //submarine.TakeDamage(1);
+                for (int i = 0; i < dialData.tab.Length; i++)
+                {
+                    dialData.tab[i].failureFlag = false;
+                    dialButtonsDictionary[dialData][i].interactable = true;
+                }
+            }
+        }
+    }
+
+    string MatchCourse (Captain.Direction course)
+    {
+        string courseStr = "";
+        switch (course)
+        {
+            case Captain.Direction.North:
+                courseStr = "north";
+                break;
+            case Captain.Direction.South:
+                courseStr = "south";
+                break;
+            case Captain.Direction.East:
+                courseStr = "east";
+                break;
+            case Captain.Direction.West:
+                courseStr = "west";
+                break;
+        }
+        return courseStr;
+    }
+
+    //Disable dials that aren't on the current course
+    void FollowTheCourse(Captain.Direction course)
+    {
+        string nameDial=MatchCourse(course);
+        foreach (var dialData in new[] { engineerDialDataW, engineerDialDataE, engineerDialDataS, engineerDialDataN })
+        {
+            if (dialData.name!=nameDial)
+            {
+                for (int i = 0; i < dialData.tab.Length; i++)
+                {
+                    dialButtonsDictionary[dialData][i].interactable = false;
+                }
+            }
+        }
+    }
+
+    void FollowTheCourseMockUp(string course)
+    {
+        foreach (var dialData in new[] { engineerDialDataW, engineerDialDataE, engineerDialDataS, engineerDialDataN })
+        {
+            if (dialData.name != course)
+            {
+                for (int i = 0; i < dialData.tab.Length; i++)
+                {
+                    dialButtonsDictionary[dialData][i].interactable = false;
+                }
+            }
+        }
+    }
+
+    #endregion
+
+    void Update()
+    {
+        ClearThePath(1);
+        ClearThePath(2);
+        ClearThePath(3);
+        ClearOneDial();
+        FollowTheCourseMockUp("south");
+    }
+
 }
