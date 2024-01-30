@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,8 +14,9 @@ public class EngineerBoardManager : MonoBehaviour
     public EngineerDialData engineerDialDataE;
 
     private Dictionary<EngineerDialData, UnityEngine.UI.Button[]> dialButtonsDictionary = new Dictionary<EngineerDialData, UnityEngine.UI.Button[]>();
+    private Dictionary<EngineerDialData, Transform> crosses = new Dictionary<EngineerDialData, Transform>();
 
-    public Button dialButton;
+    public UnityEngine.UI.Button dialButton;
     #endregion
 
     #region Initialisation
@@ -29,9 +32,16 @@ public class EngineerBoardManager : MonoBehaviour
     {
         // reference to panel's GameObject
         GameObject panel = GameObject.Find($"{dialData.name}Panel");
-
         UnityEngine.UI.Button[] buttons = panel.GetComponentsInChildren<UnityEngine.UI.Button>();
         dialButtonsDictionary[dialData] = buttons;
+
+
+        // Fetch the crosses folder based on the panel
+        Transform crossesFolder = panel.transform.Find("Crosses");
+        crosses[dialData] = crossesFolder;
+
+        // Erase crosses using the entire folder
+        EraseCrosses(crossesFolder);
     }
 
     #endregion
@@ -74,6 +84,10 @@ public class EngineerBoardManager : MonoBehaviour
 
             currentButton.interactable = false;
             currentButton.GetComponent<UnityEngine.UI.Button>().interactable = false;
+
+            Transform cross = crosses[dialData].GetChild(index);
+            cross.gameObject.SetActive(true);
+
 
 
             Debug.Log("Button disabled for dialData: " + dialData.name + ", index: " + index);
@@ -134,8 +148,10 @@ public class EngineerBoardManager : MonoBehaviour
                     if (dialData.tab[i].pathIndex == path)
                     {
                         dialData.tab[i].failureFlag = false;
-                        //enable button again
                         dialButtonsDictionary[dialData][i].interactable = true;
+
+                        Transform cross = crosses[dialData].GetChild(i);
+                        cross.gameObject.SetActive(false);
                     }
                 }
             }
@@ -152,6 +168,9 @@ public class EngineerBoardManager : MonoBehaviour
                 dialData.tab[i].failureFlag = false;
                 //enable button again
                 dialButtonsDictionary[dialData][i].interactable = true;
+
+                Transform cross = crosses[dialData].GetChild(i);
+                cross.gameObject.SetActive(false);
             }
         }
     }
@@ -170,12 +189,15 @@ public class EngineerBoardManager : MonoBehaviour
                 {
                     dialData.tab[i].failureFlag = false;
                     dialButtonsDictionary[dialData][i].interactable = true;
+
+                    Transform cross = crosses[dialData].GetChild(i);
+                    cross.gameObject.SetActive(false);
                 }
             }
         }
     }
 
-    string MatchCourse (Captain.Direction course)
+    string MatchCourse(Captain.Direction course)
     {
         string courseStr = "";
         switch (course)
@@ -199,10 +221,10 @@ public class EngineerBoardManager : MonoBehaviour
     //Disable dials that aren't on the current course
     void FollowTheCourse(Captain.Direction course)
     {
-        string nameDial=MatchCourse(course);
+        string nameDial = MatchCourse(course);
         foreach (var dialData in new[] { engineerDialDataW, engineerDialDataE, engineerDialDataS, engineerDialDataN })
         {
-            if (dialData.name!=nameDial)
+            if (dialData.name != nameDial)
             {
                 for (int i = 0; i < dialData.tab.Length; i++)
                 {
@@ -216,7 +238,7 @@ public class EngineerBoardManager : MonoBehaviour
     {
         foreach (var dialData in new[] { engineerDialDataW, engineerDialDataE, engineerDialDataS, engineerDialDataN })
         {
-            if (dialData.name != course)
+            if (dialData.name.ToLower() != course.ToLower())
             {
                 for (int i = 0; i < dialData.tab.Length; i++)
                 {
@@ -224,6 +246,12 @@ public class EngineerBoardManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void EraseCrosses(Transform crossesFolder)
+    {
+        foreach (Transform cross in crossesFolder)
+            cross.gameObject.SetActive(false);
     }
 
     #endregion
