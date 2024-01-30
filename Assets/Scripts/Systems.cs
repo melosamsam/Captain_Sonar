@@ -1,22 +1,19 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
-using UnityEditor.UI;
 using UnityEngine;
-using UnityEngine.Timeline;
-using UnityEngine.UIElements;
 
 public class Systems : MonoBehaviour
 {
-    #region attributs
+    #region Attributs
+
     public string NameSystem;
     private string ColourSystem; //for mechanic 
     private int[] QuotaJauge; //if jauge full, can't fill it anymore //warn opposite team if system is ready (full)
     //I am thinking the failure attribute shouldn't be in this class
+
+    private List<GameObject> GaugeList;
     private bool Failure; //if mechanic circuit has crossed out colour
+
     #endregion
 
     #region Get
@@ -33,42 +30,47 @@ public class Systems : MonoBehaviour
     public void SetFailure(bool fail) { Failure = fail; }
     #endregion
 
-    #region Constructeurs
+    #region Unity method
     void Awake()
     {
         Failure= false;
         string name = NameSystem;
         
-        if(name == "torpedo" || name == "mine")
+        switch (name)
         {
-            ColourSystem = "red";
-            QuotaJauge = new int[3];
-        }
-        else
-        {
-            if (name == "silence" || name == "scenario")
-            {
+            case "mine":
+                ColourSystem = "red";
+                QuotaJauge = new int[2];
+                break;
+
+            case "torpedo":
+                ColourSystem = "red";
+                QuotaJauge = new int[3];
+                break;
+
+            case "drone":
+                ColourSystem = "green";
+                QuotaJauge = new int[3];
+                break;
+
+            case "sonar":
+                ColourSystem = "green";
+                QuotaJauge = new int[2];
+                break;
+
+            case "silence" or "scenario":
                 ColourSystem = "yellow";
-                QuotaJauge = new int[6];
-            }
-            else
-            {
-                if (name == "drone")
-                {
-                    ColourSystem = "green";
-                    QuotaJauge = new int[3];
-                }
-                else
-                {
-                    if (name == "sonar")
-                    {
-                        ColourSystem = "green";
-                        QuotaJauge = new int[4];
-                    }
-                }
-            }
+                QuotaJauge = new int[5];
+                break;
+
         }
 
+        Transform crosses = transform.Find("Crosses");
+        GaugeList = new List<GameObject>();
+        for (int i = 0; i < crosses.childCount; i++)
+            GaugeList.Add(crosses.GetChild(i).gameObject);
+
+        EraseCrosses();
     }
     #endregion
 
@@ -100,22 +102,25 @@ public class Systems : MonoBehaviour
 
     public void EmptyGauge()
     {
-        for (int i = 0; i < this.QuotaJauge.Length; i++)
-        {
-            this.QuotaJauge[i] = 0;
-        }
+        int index = Array.LastIndexOf(QuotaJauge, 1);
+        QuotaJauge[index] = 0;
+        GaugeList[index].SetActive(false);
     }
 
     public void FillGauge()
     {
         if (!GaugeFull()) {
-            int i = 0;
-            while (this.QuotaJauge[i]!=0)
-            {
-                i++;
-            }
-            this.QuotaJauge[i] = 1;
+            int i = Array.IndexOf(QuotaJauge, 0, 0);
+                
+            QuotaJauge[i] = 1;
+            GaugeList[i - 1].SetActive(true);
         }
+    }
+
+    private void EraseCrosses()
+    {
+        foreach (GameObject cross in GaugeList)
+            cross.SetActive(false);
     }
 
     #region Fonctions systèmes
