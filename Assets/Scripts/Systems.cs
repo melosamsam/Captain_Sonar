@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Systems : MonoBehaviour
@@ -123,8 +126,8 @@ public class Systems : MonoBehaviour
             cross.SetActive(false);
     }
 
-    #region Fonctions systèmes
-    //Je crois qu'on devrait prendre le gentil submarine en paramètre
+    #region Fonctions systï¿½mes
+    //Je crois qu'on devrait prendre le gentil submarine en paramï¿½tre
     bool initialize_Mine(Position positionDrop, Submarine goodSubmarine)
     {
         bool dropped = false;
@@ -132,13 +135,13 @@ public class Systems : MonoBehaviour
         {
             int from = goodSubmarine.CurrentPosition.x + goodSubmarine.CurrentPosition.y;
             int chosenPosition = positionDrop.x + positionDrop.y;
-            //Position de dépôt de la mine(range de dépôt)
+            //Position de dï¿½pï¿½t de la mine(range de dï¿½pï¿½t)
             if (Math.Abs(from-chosenPosition)<=4) 
             {
                 dropped = true;
                 EmptyGauge();
                 UnityEngine.Debug.Log("Mine was dropped."); //To both team or specified message "you dropped a mine in Position" to goodSubmarine
-                //Marquer la position sur la map équipe dépôt
+                //Marquer la position sur la map ï¿½quipe dï¿½pï¿½t
             }
             else UnityEngine.Debug.Log("The chosen position is out of range.");
 
@@ -154,7 +157,7 @@ public class Systems : MonoBehaviour
         {
             int from = goodSubmarine.CurrentPosition.x + goodSubmarine.CurrentPosition.y;
             int chosenPosition = positionDrop.x + positionDrop.y;
-            //Position de lancement de la torpille (range de dépôt)
+            //Position de lancement de la torpille (range de dï¿½pï¿½t)
             if (Math.Abs(from- chosenPosition) <=4) 
             {
                 impact = Activate_Red(positionDrop, goodSubmarine, enemy);
@@ -170,8 +173,8 @@ public class Systems : MonoBehaviour
     {
         bool impact = false;
 
-        //Alerte les 2 équipes de l’activation
-        //Range d’explosion
+        //Alerte les 2 ï¿½quipes de lï¿½activation
+        //Range dï¿½explosion
 
         int to = enemy.CurrentPosition.x + enemy.CurrentPosition.y;
         int from = goodSubmarine.CurrentPosition.x + goodSubmarine.CurrentPosition.y;
@@ -219,7 +222,7 @@ public class Systems : MonoBehaviour
     void Activate_Silence()
     {
         if(GaugeFull() && NoFailure("yellow")){
-            //Faire un move (entre 0 et 4 unidirectionnel) je pense pas c’est à nous de gérer et plutôt on appelle une autre fonction de déplacement
+            //Faire un move (entre 0 et 4 unidirectionnel) je pense pas cï¿½est ï¿½ nous de gï¿½rer et plutï¿½t on appelle une autre fonction de dï¿½placement
             //Vider Jauge
             EmptyGauge();
         }
@@ -229,7 +232,7 @@ public class Systems : MonoBehaviour
     {
         if(GaugeFull() && NoFailure("green"))
         {
-            //Appel Fonction qui demande à l’autre équipe de choisir ses coordonnées et check si une est bonne et l’autre fausse
+            //Appel Fonction qui demande ï¿½ lï¿½autre ï¿½quipe de choisir ses coordonnï¿½es et check si une est bonne et lï¿½autre fausse
             //vider la jauge
             EmptyGauge() ;
         }
@@ -240,9 +243,9 @@ public class Systems : MonoBehaviour
         bool used = false;
         if (GaugeFull() && NoFailure("green"))
         {
-            //bool bon secteur deviné ? je pense pas vu que ca c’est juste eux a prendre en note si oui ou non parce que non peut les aider autant que oui
+            //bool bon secteur devinï¿½ ? je pense pas vu que ca cï¿½est juste eux a prendre en note si oui ou non parce que non peut les aider autant que oui
             //pas de verif que info rep bonne vu que dans chat vocal
-            //Aaah c’est vrai. Triche trop facile en fait
+            //Aaah cï¿½est vrai. Triche trop facile en fait
             //Vider la jauge
             EmptyGauge();
 

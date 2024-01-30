@@ -44,7 +44,7 @@ public class Submarine : MonoBehaviour
 
     #endregion
 
-    #region Properties
+        #region Properties
 
     /// <summary>
     /// 
@@ -79,7 +79,7 @@ public class Submarine : MonoBehaviour
     /// <summary>
     /// The name the players chose to refer to their crew
     /// </summary>
-    public string Name { get => _name; } // readonly, no reason to change the team's name mid-game
+    public string Name { get => _name; set => _name = value; } // readonly, no reason to change the team's name mid-game
 
     /// <summary>
     /// The players constituting the Submarin's crew
@@ -112,11 +112,9 @@ public class Submarine : MonoBehaviour
         _players            = GetComponentsInChildren<Player>().ToList(); // take the players chosen from the lobby available right before
 
         _nbOfTurnsSurfaced  = 0;
-
         _gameMap            = GameManager.Instance.MainMap;
-
+        if(_gameMap!=null)
         _trail              = new int[_gameMap.GetMap().GetLength(0), _gameMap.GetMap().GetLength(1)];
-
     }
 
     // Update is called once per frame
