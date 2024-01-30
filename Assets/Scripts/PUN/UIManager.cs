@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 using Photon.Pun;
 using Photon.Realtime;
@@ -74,6 +75,10 @@ public class UIManager : MonoBehaviourPunCallbacks
         }
     }
 
+    public void StartGame()
+    {
+        //SceneManager.LoadScene("TestGame");
+    }
 
     public void ChooseSubmarineButtonClicked(string submarineName)
     {

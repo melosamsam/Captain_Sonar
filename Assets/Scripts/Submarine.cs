@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Submarine : MonoBehaviour
 {
@@ -44,7 +45,7 @@ public class Submarine : MonoBehaviour
 
     #endregion
 
-        #region Properties
+    #region Properties
 
     /// <summary>
     /// 
@@ -103,26 +104,31 @@ public class Submarine : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _maxHealth          = GameManager.Instance.IsNormalMode ? NORMAL_MODE_HEALTH : HUNT_MODE_HEALTH;
-        _health             = _maxHealth; // we start the game at full health
-        _isSubmerged        = true;
-        _currentCourse      = Captain.Direction.None;
+        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("Team_Role_Setup"))
+        {
+            _maxHealth = GameManager.Instance.IsNormalMode ? NORMAL_MODE_HEALTH : HUNT_MODE_HEALTH;
+            _health = _maxHealth; // we start the game at full health
+            _isSubmerged = true;
+            _currentCourse = Captain.Direction.None;
 
-        _color              = gameObject.name.Split(' ')[0];
-        _players            = GetComponentsInChildren<Player>().ToList(); // take the players chosen from the lobby available right before
-
-        _nbOfTurnsSurfaced  = 0;
-        _gameMap            = GameManager.Instance.MainMap;
-        if(_gameMap!=null)
-        _trail              = new int[_gameMap.GetMap().GetLength(0), _gameMap.GetMap().GetLength(1)];
+            _color = gameObject.name.Split(' ')[0];
+            //_players            = GetComponentsInChildren<Player>().ToList(); // take the players chosen from the lobby available right before
+            _nbOfTurnsSurfaced = 0;
+            _gameMap = GameManager.Instance.MainMap;
+            if (_gameMap != null)
+                _trail = new int[_gameMap.GetMap().GetLength(0), _gameMap.GetMap().GetLength(1)];
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!(_nbOfTurnsSurfaced < TURNS_SURFACED)) ToggleSubmersion();
+        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("Team_Role_Setup"))
+        {
+            if (!(_nbOfTurnsSurfaced < TURNS_SURFACED)) ToggleSubmersion();
 
-        if (_health <= 0) Die();
+            if (_health <= 0) Die();
+        }
     }
 
     #endregion

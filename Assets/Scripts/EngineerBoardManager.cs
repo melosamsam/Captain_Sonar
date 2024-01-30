@@ -11,7 +11,7 @@ public class EngineerBoardManager : MonoBehaviour
     public EngineerDialData engineerDialDataS;
     public EngineerDialData engineerDialDataE;
 
-    private Dictionary<EngineerDialData, Button[]> dialButtonsDictionary = new Dictionary<EngineerDialData, Button[]>();
+    private Dictionary<EngineerDialData, UnityEngine.UI.Button[]> dialButtonsDictionary = new Dictionary<EngineerDialData, UnityEngine.UI.Button[]>();
 
     public Button dialButton;
     #endregion
@@ -30,7 +30,7 @@ public class EngineerBoardManager : MonoBehaviour
         // reference to panel's GameObject
         GameObject panel = GameObject.Find($"{dialData.name}Panel");
 
-        Button[] buttons = panel.GetComponentsInChildren<Button>();
+        UnityEngine.UI.Button[] buttons = panel.GetComponentsInChildren<UnityEngine.UI.Button>();
         dialButtonsDictionary[dialData] = buttons;
     }
 
@@ -59,7 +59,7 @@ public class EngineerBoardManager : MonoBehaviour
 
     private void OnButtonClick(EngineerDialData dialData, int index)
     {
-        Button currentButton = dialButtonsDictionary[dialData][index];
+        UnityEngine.UI.Button currentButton = dialButtonsDictionary[dialData][index];
 
         // Check if the button is already disabled
         if (!currentButton.interactable)
@@ -73,7 +73,7 @@ public class EngineerBoardManager : MonoBehaviour
             dialData.tab[index].failureFlag = true;
 
             currentButton.interactable = false;
-            currentButton.GetComponent<Button>().interactable = false;
+            currentButton.GetComponent<UnityEngine.UI.Button>().interactable = false;
 
 
             Debug.Log("Button disabled for dialData: " + dialData.name + ", index: " + index);

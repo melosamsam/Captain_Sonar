@@ -3,15 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Photon.Pun;
 
 public class GameManager : MonoBehaviour
 {
-
+    /// <summary>
+    /// Add Team Manager methods, variables and sync -> sub1 and sub2 in _submarines, no current player and add role management.
+    /// Only one player per scene can join submarines
+    /// </summary>
     #region Attributes
 
     static GameManager _instance;
 
-    List<Submarine> _submarines;
+    [SerializeField] List<Submarine> _submarines;
     [SerializeField] Submarine _currentSubmarine;
 
     [SerializeField] Player _currentPlayer;
@@ -161,14 +165,11 @@ public class GameManager : MonoBehaviour
         _currentPlayer = _currentRole != null ? _currentRole.gameObject.GetComponent<Player>() : null;
     }
 
-    void InitiliazeBoards()
-    {
-
-    }
-
     void InitializeGame()
     {
-        _submarines = FindObjectsOfType<Submarine>().ToList();
+        //_submarines = FindObjectsOfType<Submarine>().ToList();
+        _submarines.Add(TeamManager.submarine1.GetComponent<Submarine>());
+        _submarines.Add(TeamManager.submarine2.GetComponent<Submarine>());
         _currentSubmarine = null;
         _currentPlayer = null;
         _currentRole = null;

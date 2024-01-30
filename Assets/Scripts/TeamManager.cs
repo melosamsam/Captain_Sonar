@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class GameManager : MonoBehaviourPunCallbacks
+public class TeamManager : MonoBehaviourPunCallbacks
 {
     public GameObject submarinePrefab;
     public GameObject playerPrefab;
 
-    private GameObject submarine1;
-    private GameObject submarine2;
+    public static GameObject submarine1;
+    public static GameObject submarine2;
 
     void Start()
     {

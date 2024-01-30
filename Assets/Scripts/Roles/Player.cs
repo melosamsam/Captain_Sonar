@@ -89,10 +89,6 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.LeftArrow))
                 SwitchCamera(-1);        
         }
-        if (_playerInfo != null)
-        {
-            _playerInfo.text = _playerName;
-        }
         _submarine = null;
     }
 
@@ -168,6 +164,18 @@ public class Player : MonoBehaviour
     }
 
     public void SwitchCamera(int direction)
+    {
+        int index = _cameras.IndexOf(_currentCamera);
+        int newIndex = index + direction;
+
+        _currentCamera.enabled = false; // deactivate current camera
+
+        if (newIndex < 0) _currentCamera = _cameras[^1];
+        else if (!(newIndex < _cameras.Count)) _currentCamera = _cameras[0];
+        else _currentCamera = _cameras[newIndex];
+
+        _currentCamera.enabled = true; // activate new camera
+    }
     /// <summary>
     /// Assigns the chosen submarine to the player, used in team choice at the beginning or in the event of a swap.
     /// </summary>
