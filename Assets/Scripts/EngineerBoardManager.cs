@@ -27,20 +27,11 @@ public class EngineerBoardManager : MonoBehaviour
 
     private void InitializeBoard(EngineerDialData dialData)
     {
-        Button[] buttons = new Button[dialData.tab.Length];
+        // reference to panel's GameObject
+        GameObject panel = GameObject.Find($"{dialData.name}Panel");
+
+        Button[] buttons = panel.GetComponentsInChildren<Button>();
         dialButtonsDictionary[dialData] = buttons;
-
-        for (int i = 0; i < dialData.tab.Length; i++)
-        {
-            int currentIndex = i;
-            Button button = Instantiate(dialButton, transform);
-
-            // Set the Transition property to None
-            button.transition = Selectable.Transition.None;
-
-            buttons[i] = button;
-            button.onClick.AddListener(() => OnButtonClick(dialData, currentIndex));
-        }
     }
 
     #endregion
