@@ -71,11 +71,11 @@ public class Board : MonoBehaviour
                 break;
 
             case FirstMate:
-                InitializeFirstMateBoard(submarine.Color, (FirstMate)role);
+                InitializeFirstMateBoard(submarine.Color);
                 break;
 
             case Engineer:
-                InitializeEngineerBoard(submarine.Color, (Engineer)role);
+                InitializeEngineerBoard(submarine.Color);
                 break;
 
             case RadioDetector:
@@ -116,7 +116,7 @@ public class Board : MonoBehaviour
         //sert à distribuer la carte / initialiser le visuel
     }
 
-    static void InitializeFirstMateBoard(string team, FirstMate role)
+    static void InitializeFirstMateBoard(string team)
     {
         // the board to assign to the player
         Transform renderCamera = GameObject.Find($"{team} First Mate").transform;
@@ -127,8 +127,6 @@ public class Board : MonoBehaviour
 
         // replace the default sprite by the correct sprite according to the game's settings and the Role
         firstMateBoard.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
-
-        UpdateUIEvents(firstMateBoard, role);
     }
 
     static void Initialize_engineerBoard(bool gameMode)
@@ -138,7 +136,7 @@ public class Board : MonoBehaviour
 
     }
 
-    static void InitializeEngineerBoard(string team, Engineer role)
+    static void InitializeEngineerBoard(string team)
     {
         // the board to assign to the player
         Transform renderCamera = GameObject.Find($"{team} Engineer").transform;
@@ -149,8 +147,6 @@ public class Board : MonoBehaviour
 
         // replace the default sprite by the correct sprite according to the game's settings and the Role
         engineerBoard.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
-
-        UpdateUIEvents(engineerBoard, role);
     }
 
     static void Initialize_SeeThrough()
@@ -171,7 +167,7 @@ public class Board : MonoBehaviour
         // replace the default sprite by the correct sprite according to the game's settings and the Role
         detectorBoard.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
 
-        UpdateUIEvents (detectorBoard, role);
+        UpdateUIEvents(renderCamera.GetChild(0).gameObject, role);
     }
 
     static void UpdateUIEvents(GameObject board, Role role)
@@ -215,16 +211,19 @@ public class Board : MonoBehaviour
 
                 break;
 
-            case FirstMate:
-                FirstMate firstMate = (FirstMate)role;
-                break;
-
-            case Engineer:
-                Engineer engineer = (Engineer)role;
-                break;
-
             case RadioDetector:
                 RadioDetector radioDetector = (RadioDetector)role;
+
+                // configuring the 'Radio_detector_logo' events
+                Transform detectorActions = board.transform.Find("Actions");
+
+                UnityEngine.UI.Button detectorLogo = detectorActions.Find("Radio_detector_logo").GetComponent<UnityEngine.UI.Button>();
+                detectorLogo.onClick.AddListener(() => radioDetector.ToggleSeeThrough());
+
+                // configuring the See through parent GameObject as the Radio Detector's See Through
+                GameObject seeThrough = detectorActions.Find("SeeThroughParent").gameObject;
+                radioDetector.SeeThrough = seeThrough;
+
                 break;
         }
     }
