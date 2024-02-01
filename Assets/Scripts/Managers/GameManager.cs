@@ -120,10 +120,10 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        InitializeBoards();
-
         // randomly chooses which team starts first
         _currentSubmarine = _submarines[UnityEngine.Random.Range(0, 2)];
+
+        InitializeBoards();
 
         // start the game
         _isGameOver = false;

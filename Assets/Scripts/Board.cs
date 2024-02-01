@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -66,19 +67,19 @@ public class Board : MonoBehaviour
         switch (role)
         {
             case Captain:
-                InitializeCaptainBoard(map, submarine.Color);
+                InitializeCaptainBoard(map, submarine.Color, (Captain)role);
                 break;
 
             case FirstMate:
-                InitializeFirstMateBoard(submarine.Color);
+                InitializeFirstMateBoard(submarine.Color, (FirstMate)role);
                 break;
 
             case Engineer:
-                InitializeEngineerBoard(submarine.Color);
+                InitializeEngineerBoard(submarine.Color, (Engineer)role);
                 break;
 
             case RadioDetector:
-                InitializeRadioDetector(map, submarine.Color);
+                InitializeRadioDetector(map, submarine.Color, (RadioDetector)role);
                 break;
         }
     }
@@ -94,7 +95,7 @@ public class Board : MonoBehaviour
         Map currentMap = new Map(chosenMap, gameMode);
     }
 
-    static public void InitializeCaptainBoard(Map map, string team)
+    static public void InitializeCaptainBoard(Map map, string team, Captain role)
     {
         // the board to assign to the player
         Transform renderCamera = GameObject.Find($"{team} Captain").transform;
@@ -105,6 +106,8 @@ public class Board : MonoBehaviour
 
         // replace the default sprite by the correct sprite according to the game's settings and the Role
         capBoard.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
+
+        UpdateUIEvents(renderCamera.GetChild(0).gameObject, role);
     }
 
     static void Initialize_firstMateBoard()
@@ -113,7 +116,7 @@ public class Board : MonoBehaviour
         //sert à distribuer la carte / initialiser le visuel
     }
 
-    static void InitializeFirstMateBoard(string team)
+    static void InitializeFirstMateBoard(string team, FirstMate role)
     {
         // the board to assign to the player
         Transform renderCamera = GameObject.Find($"{team} First Mate").transform;
@@ -124,6 +127,8 @@ public class Board : MonoBehaviour
 
         // replace the default sprite by the correct sprite according to the game's settings and the Role
         firstMateBoard.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
+
+        UpdateUIEvents(firstMateBoard, role);
     }
 
     static void Initialize_engineerBoard(bool gameMode)
@@ -133,10 +138,10 @@ public class Board : MonoBehaviour
 
     }
 
-    static void InitializeEngineerBoard(string team)
+    static void InitializeEngineerBoard(string team, Engineer role)
     {
         // the board to assign to the player
-        Transform renderCamera = GameObject.Find($"{team} First Mate").transform;
+        Transform renderCamera = GameObject.Find($"{team} Engineer").transform;
         GameObject engineerBoard = renderCamera.GetChild(0).Find("Board").gameObject;
 
         // the path where the correct sprite is
@@ -144,6 +149,8 @@ public class Board : MonoBehaviour
 
         // replace the default sprite by the correct sprite according to the game's settings and the Role
         engineerBoard.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
+
+        UpdateUIEvents(engineerBoard, role);
     }
 
     static void Initialize_SeeThrough()
@@ -152,7 +159,7 @@ public class Board : MonoBehaviour
         //Avec même quadrillage que map, option d’effacement/dessin/...
     }
 
-    static void InitializeRadioDetector(Map map, string team)
+    static void InitializeRadioDetector(Map map, string team, RadioDetector role)
     {
         // the board to assign to the player
         Transform renderCamera = GameObject.Find($"{team} Radio Detector").transform;
@@ -163,6 +170,63 @@ public class Board : MonoBehaviour
 
         // replace the default sprite by the correct sprite according to the game's settings and the Role
         detectorBoard.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
+
+        UpdateUIEvents (detectorBoard, role);
+    }
+
+    static void UpdateUIEvents(GameObject board, Role role)
+    {
+        switch (role)
+        {
+            case Captain:
+                Captain captain = (Captain)role;
+
+                // getting the interactable elements of the 'Actions' GameObject
+                GameObject actions = board.transform.Find("Actions").gameObject;
+
+                GameObject captainLogo = actions.transform.GetChild(0).gameObject;
+                GameObject windRose = actions.transform.GetChild(1).gameObject;
+                GameObject overlay = actions.transform.GetChild(2).gameObject;
+
+
+                // configuring "Captain_logo" events
+                UnityEngine.UI.Button logo = captainLogo.GetComponent<UnityEngine.UI.Button>();
+                logo.onClick.AddListener(() => captain.ToggleOverlay());
+                
+                // configuring "WindRose" buttons events
+                foreach (UnityEngine.UI.Button button in windRose.GetComponentsInChildren<UnityEngine.UI.Button>())
+                    button.onClick.AddListener(() => captain.OrderSubmarineCourse(button.gameObject.name[0].ToString()));
+
+                // configuring other powers
+                GameObject background = overlay.transform.Find("Background").gameObject;
+
+                // Surface power
+                UnityEngine.UI.Button surfaceBtn = background.transform.Find("Surface").GetComponent<UnityEngine.UI.Button>();
+                surfaceBtn.onClick.AddListener(() => captain.OrderSurface());
+
+                // Activating systems power
+                TMP_Dropdown dropdown = background.transform.Find("Systems dropdown").GetComponent<TMP_Dropdown>();
+                captain.SystemDropdown = dropdown;
+                dropdown.onValueChanged.AddListener((value) => captain.ActivateSystem());
+
+                // configuring the "Close" button
+                UnityEngine.UI.Button closeBtn = overlay.transform.Find("Close").GetComponent<UnityEngine.UI.Button>();
+                closeBtn.onClick.AddListener(() => captain.ToggleOverlay());
+
+                break;
+
+            case FirstMate:
+                FirstMate firstMate = (FirstMate)role;
+                break;
+
+            case Engineer:
+                Engineer engineer = (Engineer)role;
+                break;
+
+            case RadioDetector:
+                RadioDetector radioDetector = (RadioDetector)role;
+                break;
+        }
     }
 
     #endregion

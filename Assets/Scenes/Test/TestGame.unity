@@ -314,6 +314,10 @@ PrefabInstance:
       propertyPath: m_RenderMode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8109199536619119363, guid: 785caf15883eced4e846af5fae9cbfc8, type: 3}
+      propertyPath: m_PixelPerfect
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8109199536619119372, guid: 785caf15883eced4e846af5fae9cbfc8, type: 3}
       propertyPath: m_Name
       value: RadioDetectorBoard
@@ -358,6 +362,10 @@ PrefabInstance:
       objectReference: {fileID: 647998715}
     - target: {fileID: 4747614784282478553, guid: c9eaeb6f30567164799c30c11a7f3d75, type: 3}
       propertyPath: m_RenderMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4747614784282478553, guid: c9eaeb6f30567164799c30c11a7f3d75, type: 3}
+      propertyPath: m_PixelPerfect
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4747614784282478553, guid: c9eaeb6f30567164799c30c11a7f3d75, type: 3}
@@ -480,6 +488,10 @@ PrefabInstance:
       objectReference: {fileID: 1145295915}
     - target: {fileID: 3320068267465471212, guid: 46fad0d799b4d164c9de8e25e1950bc5, type: 3}
       propertyPath: m_RenderMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3320068267465471212, guid: 46fad0d799b4d164c9de8e25e1950bc5, type: 3}
+      propertyPath: m_PixelPerfect
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3320068267465471212, guid: 46fad0d799b4d164c9de8e25e1950bc5, type: 3}
@@ -737,6 +749,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4747614784282478553, guid: c9eaeb6f30567164799c30c11a7f3d75, type: 3}
+      propertyPath: m_PixelPerfect
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4747614784282478553, guid: c9eaeb6f30567164799c30c11a7f3d75, type: 3}
       propertyPath: m_TargetDisplay
       value: 2
       objectReference: {fileID: 0}
@@ -843,7 +859,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &292395201
 Transform:
   m_ObjectHideFlags: 0
@@ -1009,14 +1025,14 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1920
-    height: 1080
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 26.991467
   orthographic: 0
   orthographic size: 5
-  m_Depth: 0
+  m_Depth: -4
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -1102,14 +1118,14 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1920
-    height: 1080
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 26.991467
   orthographic: 0
   orthographic size: 5
-  m_Depth: 0
+  m_Depth: -7
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -1149,7 +1165,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &707997620
 Transform:
   m_ObjectHideFlags: 0
@@ -1258,7 +1274,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 862273981}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1409, y: 4, z: -5.2483196}
+  m_LocalPosition: {x: -1526, y: 4, z: -5.2483196}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1287,14 +1303,14 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1920
-    height: 1080
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 26.991467
   orthographic: 0
   orthographic size: 5
-  m_Depth: 0
+  m_Depth: -5
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -1504,6 +1520,10 @@ PrefabInstance:
       propertyPath: m_RenderMode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8109199536619119363, guid: 785caf15883eced4e846af5fae9cbfc8, type: 3}
+      propertyPath: m_PixelPerfect
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8109199536619119372, guid: 785caf15883eced4e846af5fae9cbfc8, type: 3}
       propertyPath: m_Name
       value: RadioDetectorBoard
@@ -1601,7 +1621,7 @@ MonoBehaviour:
   _currentSubmarine: {fileID: 0}
   _currentPlayer: {fileID: 0}
   _currentRole: {fileID: 0}
-  _mapNumber: 2
+  _mapNumber: 3
 --- !u!4 &1122364612
 Transform:
   m_ObjectHideFlags: 0
@@ -1664,14 +1684,14 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1920
-    height: 1080
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 26.991467
   orthographic: 0
   orthographic size: 5
-  m_Depth: 0
+  m_Depth: -2
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -1727,6 +1747,10 @@ PrefabInstance:
       objectReference: {fileID: 2069734227}
     - target: {fileID: 3320068267465471212, guid: 46fad0d799b4d164c9de8e25e1950bc5, type: 3}
       propertyPath: m_RenderMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3320068267465471212, guid: 46fad0d799b4d164c9de8e25e1950bc5, type: 3}
+      propertyPath: m_PixelPerfect
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3320068267465471212, guid: 46fad0d799b4d164c9de8e25e1950bc5, type: 3}
@@ -1871,14 +1895,14 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1920
-    height: 1080
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 26.991467
   orthographic: 0
   orthographic size: 5
-  m_Depth: 0
+  m_Depth: -3
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -2167,6 +2191,10 @@ PrefabInstance:
       propertyPath: m_RenderMode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 409484308722101543, guid: a9dff42fab6785c4891fb0ae20c60ccb, type: 3}
+      propertyPath: m_PixelPerfect
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 409484308722101544, guid: a9dff42fab6785c4891fb0ae20c60ccb, type: 3}
       propertyPath: m_Name
       value: CaptainBoard
@@ -2249,7 +2277,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 409484310069003737, guid: a9dff42fab6785c4891fb0ae20c60ccb, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 7950003.5
+      value: 8994115
       objectReference: {fileID: 0}
     - target: {fileID: 838193802056887876, guid: a9dff42fab6785c4891fb0ae20c60ccb, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2297,7 +2325,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6987855832746466850, guid: a9dff42fab6785c4891fb0ae20c60ccb, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000061035156
+      value: 0.00048828125
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a9dff42fab6785c4891fb0ae20c60ccb, type: 3}
@@ -2366,14 +2394,14 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1920
-    height: 1080
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 26.991467
   orthographic: 0
   orthographic size: 5
-  m_Depth: 0
+  m_Depth: -8
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -2604,6 +2632,10 @@ PrefabInstance:
       propertyPath: m_RenderMode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 409484308722101543, guid: a9dff42fab6785c4891fb0ae20c60ccb, type: 3}
+      propertyPath: m_PixelPerfect
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 409484308722101544, guid: a9dff42fab6785c4891fb0ae20c60ccb, type: 3}
       propertyPath: m_Name
       value: CaptainBoard
@@ -2694,7 +2726,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 409484310069003737, guid: a9dff42fab6785c4891fb0ae20c60ccb, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 8314638.5
+      value: 9358899
       objectReference: {fileID: 0}
     - target: {fileID: 838193802056887876, guid: a9dff42fab6785c4891fb0ae20c60ccb, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2798,14 +2830,14 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1920
-    height: 1080
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 26.991467
   orthographic: 0
   orthographic size: 5
-  m_Depth: 0
+  m_Depth: -6
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -2854,7 +2886,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2097294215}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1409, y: -686, z: -5.2483196}
+  m_LocalPosition: {x: -1526, y: -686, z: -5.2483196}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2883,14 +2915,14 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1920
-    height: 1080
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 26.991467
   orthographic: 0
   orthographic size: 5
-  m_Depth: 0
+  m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295

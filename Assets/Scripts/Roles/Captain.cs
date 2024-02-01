@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -17,7 +15,15 @@ public class Captain : Role
 
     #region Properties
 
+    /// <summary>
+    /// 
+    /// </summary>
     public Direction ChosenCourse { get; private set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public TMP_Dropdown SystemDropdown { get; set; }
   
     #endregion
 
