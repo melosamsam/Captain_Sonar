@@ -116,7 +116,7 @@ public class FirstMate : Role
                         _filledGauges.Add(system); // mark the system as filled in our List
                         int toFill = Array.IndexOf(newGauge, 0); // get the 1st case that hasn't been filled yet
                         newGauge[toFill] = 1; // fill up the new gauge by 1
-                        currentSystem.SetQuotajauge(newGauge); // set the new gauge as the system's one
+                        currentSystem.FillGauge(); // set the new gauge as the system's one
                         Debug.Log($"{system} has been filled by 1");
                     }
                     else if (currentSystem.GetColourSystem() == "green") // The First Mate can only activate Location systems
@@ -136,7 +136,7 @@ public class FirstMate : Role
             {
                 int toRemove = Array.LastIndexOf(newGauge, 1);
                 newGauge[toRemove] = 0;
-                currentSystem.SetQuotajauge(newGauge);
+                currentSystem.EmptyGauge();
                 _filledGauges.Remove(system);
                 Debug.Log($"{system} has been decremented by 1");
             }

@@ -1,44 +1,268 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class EngineerBoardManager : MonoBehaviour
 {
-    public EngineerDialData engineerDialData;
-    public Button[] buttons;
+    #region attributes
+    public EngineerDialData engineerDialDataW;
+    public EngineerDialData engineerDialDataN;
+    public EngineerDialData engineerDialDataS;
+    public EngineerDialData engineerDialDataE;
 
-    public Button dialButton;
+    private Dictionary<EngineerDialData, UnityEngine.UI.Button[]> dialButtonsDictionary = new Dictionary<EngineerDialData, UnityEngine.UI.Button[]>();
+    private Dictionary<EngineerDialData, Transform> crosses = new Dictionary<EngineerDialData, Transform>();
 
+    public UnityEngine.UI.Button dialButton;
+    #endregion
+
+    #region Initialisation
     void Start()
     {
-        InitializeBoard();
+        InitializeBoard(engineerDialDataW);
+        InitializeBoard(engineerDialDataN);
+        InitializeBoard(engineerDialDataS);
+        InitializeBoard(engineerDialDataE);
     }
 
-    void InitializeBoard()
+    private void InitializeBoard(EngineerDialData dialData)
     {
-        buttons = new Button[engineerDialData.tab.Length];
-        for (int i = 0; i < engineerDialData.tab.Length; i++)
+        // reference to panel's GameObject
+        GameObject panel = GameObject.Find($"{dialData.name}Panel");
+        UnityEngine.UI.Button[] buttons = panel.GetComponentsInChildren<UnityEngine.UI.Button>();
+        dialButtonsDictionary[dialData] = buttons;
+
+
+        // Fetch the crosses folder based on the panel
+        Transform crossesFolder = panel.transform.Find("Crosses");
+        crosses[dialData] = crossesFolder;
+
+        // Erase crosses using the entire folder
+        EraseCrosses(crossesFolder);
+    }
+
+    #endregion
+
+    #region Click
+    public void OnButtonClickW(int index)
+    {
+        OnButtonClick(engineerDialDataW, index);
+    }
+
+    public void OnButtonClickN(int index)
+    {
+        OnButtonClick(engineerDialDataN, index);
+    }
+
+    public void OnButtonClickS(int index)
+    {
+        OnButtonClick(engineerDialDataS, index);
+    }
+
+    public void OnButtonClickE(int index)
+    {
+        OnButtonClick(engineerDialDataE, index);
+    }
+
+    private void OnButtonClick(EngineerDialData dialData, int index)
+    {
+        UnityEngine.UI.Button currentButton = dialButtonsDictionary[dialData][index];
+
+        // Check if the button is already disabled
+        if (!currentButton.interactable)
         {
-            // Capture the current value of i in a local variable
-            int currentIndex = i;
+            Debug.Log("Button already disabled for dialData: " + dialData.name + ", index: " + index);
+            return;
+        }
 
-            Button button = Instantiate(GetButtonPrefab(engineerDialData.tab[i].color), transform);
+        if (dialData.CrossThatFailure(index))
+        {
+            dialData.tab[index].failureFlag = true;
 
-            buttons[i] = button;
-            button.onClick.AddListener(() => OnButtonClick(currentIndex));
+            currentButton.interactable = false;
+            currentButton.GetComponent<UnityEngine.UI.Button>().interactable = false;
+
+            Transform cross = crosses[dialData].GetChild(index);
+            cross.gameObject.SetActive(true);
+
+
+
+            Debug.Log("Button disabled for dialData: " + dialData.name + ", index: " + index);
+        }
+        else
+        {
+            Debug.Log("Button not disabled for dialData: " + dialData.name + ", index: " + index);
         }
     }
 
-    Button GetButtonPrefab(string color)
+
+    #endregion
+
+    #region Tests
+    bool PathFull(int path)
     {
-        string prefabName = color + "Button";
-        return Resources.Load<Button>("Path/To/" + prefabName);
+        bool full = true;
+        foreach (var dialData in new[] { engineerDialDataW, engineerDialDataE, engineerDialDataS, engineerDialDataN })
+        {
+            for (int i = 0; i < dialData.tab.Length && full; i++)
+            {
+                if (dialData.tab[i].pathIndex == path && !dialData.tab[i].failureFlag)
+                {
+                    full = false;
+                }
+            }
+        }
+        return full;
     }
 
-    void OnButtonClick(int i)
+    public bool CheckColorFailure(string colorSystem)
     {
-        engineerDialData.tab[i].failureFlag = true;
-        // You might want to update UI here or perform other actions
+        bool result = false;
+        foreach (var dialData in new[] { engineerDialDataW, engineerDialDataE, engineerDialDataS, engineerDialDataN })
+        {
+            for (int i = 0; i < dialData.tab.Length && !result; i++)
+            {
+                if (dialData.tab[i].color == colorSystem && dialData.tab[i].failureFlag)
+                {
+                    result = true;
+                }
+            }
+        }
+        return result; // True if failure, false if okay
     }
+    #endregion 
+
+    #region actions
+    void ClearThePath(int path)
+    {
+        if (PathFull(path))
+        {
+            Debug.Log("Path Full");
+            foreach (var dialData in new[] { engineerDialDataW, engineerDialDataE, engineerDialDataS, engineerDialDataN })
+            {
+                for (int i = 0; i < dialData.tab.Length; i++)
+                {
+                    if (dialData.tab[i].pathIndex == path)
+                    {
+                        dialData.tab[i].failureFlag = false;
+                        dialButtonsDictionary[dialData][i].interactable = true;
+
+                        Transform cross = crosses[dialData].GetChild(i);
+                        cross.gameObject.SetActive(false);
+                    }
+                }
+            }
+        }
+    }
+
+    // If Surface
+    void ClearDials()
+    {
+        foreach (var dialData in new[] { engineerDialDataW, engineerDialDataE, engineerDialDataS, engineerDialDataN })
+        {
+            for (int i = 0; i < dialData.tab.Length; i++)
+            {
+                dialData.tab[i].failureFlag = false;
+                //enable button again
+                dialButtonsDictionary[dialData][i].interactable = true;
+
+                Transform cross = crosses[dialData].GetChild(i);
+                cross.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    //If full
+    //Submarine submarine in parameter
+    void ClearOneDial()
+    {
+        foreach (var dialData in new[] { engineerDialDataW, engineerDialDataE, engineerDialDataS, engineerDialDataN })
+        {
+            if (dialData.DialFull())
+            {
+                Debug.Log("dial Full");
+                //submarine.TakeDamage(1);
+                for (int i = 0; i < dialData.tab.Length; i++)
+                {
+                    dialData.tab[i].failureFlag = false;
+                    dialButtonsDictionary[dialData][i].interactable = true;
+
+                    Transform cross = crosses[dialData].GetChild(i);
+                    cross.gameObject.SetActive(false);
+                }
+            }
+        }
+    }
+
+    string MatchCourse(Captain.Direction course)
+    {
+        string courseStr = "";
+        switch (course)
+        {
+            case Captain.Direction.North:
+                courseStr = "north";
+                break;
+            case Captain.Direction.South:
+                courseStr = "south";
+                break;
+            case Captain.Direction.East:
+                courseStr = "east";
+                break;
+            case Captain.Direction.West:
+                courseStr = "west";
+                break;
+        }
+        return courseStr;
+    }
+
+    //Disable dials that aren't on the current course
+    void FollowTheCourse(Captain.Direction course)
+    {
+        string nameDial = MatchCourse(course);
+        foreach (var dialData in new[] { engineerDialDataW, engineerDialDataE, engineerDialDataS, engineerDialDataN })
+        {
+            if (dialData.name != nameDial)
+            {
+                for (int i = 0; i < dialData.tab.Length; i++)
+                {
+                    dialButtonsDictionary[dialData][i].interactable = false;
+                }
+            }
+        }
+    }
+
+    void FollowTheCourseMockUp(string course)
+    {
+        foreach (var dialData in new[] { engineerDialDataW, engineerDialDataE, engineerDialDataS, engineerDialDataN })
+        {
+            if (dialData.name.ToLower() != course.ToLower())
+            {
+                for (int i = 0; i < dialData.tab.Length; i++)
+                {
+                    dialButtonsDictionary[dialData][i].interactable = false;
+                }
+            }
+        }
+    }
+
+    private void EraseCrosses(Transform crossesFolder)
+    {
+        foreach (Transform cross in crossesFolder)
+            cross.gameObject.SetActive(false);
+    }
+
+    #endregion
+
+    void Update()
+    {
+        ClearThePath(1);
+        ClearThePath(2);
+        ClearThePath(3);
+        ClearOneDial();
+        FollowTheCourseMockUp("south");
+    }
+
 }

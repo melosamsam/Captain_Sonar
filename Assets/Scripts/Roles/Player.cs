@@ -32,7 +32,12 @@ public class Player : MonoBehaviour
     /// <summary>
     /// The name used to refer to the player throughout the game
     /// </summary>
-    public string Name { get { return _playerName; } }
+    public string Name { get { return _playerName; } set { _playerName = value; }  }
+    /// <summary>
+    /// The assigned submarine (or team) assigned to the player
+    /// </summary>
+    public Submarine AssignedSubmarine { get { return _submarine; } }
+
 
     #endregion
 
@@ -41,16 +46,31 @@ public class Player : MonoBehaviour
     // Awake is called when an enabled script instance is being loaded
     private void Awake()
     {
+        // Assign a default value if _playerName is null
+        _playerName = _playerName ?? "DefaultPlayerName";
         _playerName = _playerName.Trim(' ');
 
         _playerRoleNames = new List<string>();
         _playerRoles = new List<Role>();
         _cameras = new List<Camera>();
 
-        foreach (Role role in GetComponents<Role>())
+        // Ensure there is at least one Role component attached
+        Role[] roles = GetComponents<Role>();
+        if (roles.Length > 0)
         {
-            _playerRoles.Add(role);
-            _playerRoleNames.Add(role.Name);
+            foreach (Role role in roles)
+            {
+                if (role != null)
+                {
+                    _playerRoles.Add(role);
+                    _playerRoleNames.Add(role.Name);
+                }
+            }
+        }
+        else
+        {
+            // Log a warning or handle the case where no Role components are found
+            Debug.LogWarning("No Role components found on the player object.");
         }
     }
 
@@ -69,6 +89,7 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.LeftArrow))
                 SwitchCamera(-1);        
         }
+        _submarine = null;
     }
 
     #endregion
@@ -142,7 +163,6 @@ public class Player : MonoBehaviour
         _playerRoles.RemoveAt(toRemove);
     }
 
-
     public void SwitchCamera(int direction)
     {
         int index = _cameras.IndexOf(_currentCamera);
@@ -156,6 +176,28 @@ public class Player : MonoBehaviour
 
         _currentCamera.enabled = true; // activate new camera
     }
+    /// <summary>
+    /// Assigns the chosen submarine to the player, used in team choice at the beginning or in the event of a swap.
+    /// </summary>
+    /// <param name="submarine"></param>
+    public void AssignSubmarine(Submarine submarine)
+    {
+        _submarine = submarine;
+        submarine.Players.Add(this);
+        Debug.Log($"{_playerName} has been assigned to the {submarine.Name} submarine.");
+    }
+
+    /// <summary>
+    /// Removes the assigned submarine in case of need, for example a team swap.
+    /// </summary>
+    public void RemoveSubmarine()
+    {
+        _submarine = null;
+    }
+
+    /// <summary>
+    /// Disables/enables the usage of the microphone, to communicate with its team
+    /// </summary>
 
     #endregion
 }
