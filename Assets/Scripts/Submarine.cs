@@ -21,7 +21,7 @@ public class Submarine : MonoBehaviour
     [SerializeField] private List<Player> _players;
 
     // positions of the submarine
-    private Captain.Direction _currentCourse;
+    private Direction _currentCourse;
     private Position _currentPosition;
     private int[,] _trail;
 
@@ -55,7 +55,7 @@ public class Submarine : MonoBehaviour
     /// <summary>
     /// The Direction the Captain has ordered the Submarine to go towards
     /// </summary>
-    public Captain.Direction CurrentCourse { get { return _currentCourse; } set { _currentCourse = value; } }
+    public Direction CurrentCourse { get { return _currentCourse; } set { _currentCourse = value; } }
 
     /// <summary>
     /// Current position of the Submarine on the selected map
@@ -109,7 +109,7 @@ public class Submarine : MonoBehaviour
             _maxHealth          = GameManager.Instance.IsNormalMode ? NORMAL_MODE_HEALTH : HUNT_MODE_HEALTH;
             _health             = _maxHealth; // we start the game at full health
             _isSubmerged        = true;
-            _currentCourse      = Captain.Direction.None;
+            _currentCourse      = Direction.None;
 
             _color              = gameObject.name.Split(' ')[0];
             _players            = GetComponentsInChildren<Player>().ToList(); // take the players chosen from the lobby available right before
@@ -150,22 +150,22 @@ public class Submarine : MonoBehaviour
     /// Updates the position of the submarine of the game's Map according to the Captain's decision
     /// </summary>
     /// <param name="course">The course/direction chosen by the Captain</param>
-    public bool Move(Captain.Direction course)
+    public bool Move(Direction course)
     {
         Position newPosition = _currentPosition;
 
         switch (course)
         {
-            case Captain.Direction.North:
+            case Direction.North:
                 newPosition.x--;
                 break;
-            case Captain.Direction.South:
+            case Direction.South:
                 newPosition.x++;
                 break;
-            case Captain.Direction.East:
+            case Direction.East:
                 newPosition.y++;
                 break;
-            case Captain.Direction.West:
+            case Direction.West:
                 newPosition.y--;
                 break;
         }

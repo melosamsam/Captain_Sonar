@@ -13,7 +13,6 @@ public class RadioDetector : Role
     private bool _isGridOpen;
     private GameObject _seeThrough;
     private GameObject _Grid;
-    public enum Direction { North, East, South, West, None }
     private Position currentpos = new Position(9,9);
 
     #endregion

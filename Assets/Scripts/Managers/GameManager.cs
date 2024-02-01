@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Photon.Pun;
 
 public class GameManager : MonoBehaviour
 {
@@ -127,6 +126,10 @@ public class GameManager : MonoBehaviour
 
         // start the game
         _isGameOver = false;
+
+        // Captains choose their initial position before the game
+        ChooseInitialPositions();
+
         if (_isTurnBased) ProcessTurnByTurn();
         //else ProcessRealTime();
     }
@@ -140,6 +143,24 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Private methods
+
+    void ChooseInitialPositions()
+    {
+        foreach (Submarine submarine in _submarines)
+        {
+            Captain captain = submarine.GetComponentInChildren<Captain>();
+            _currentRole = captain;
+            GetPlayerFromRole();
+            if (captain != null && !captain.IsInitialPositionChosen)
+            {
+                Debug.Log($"{submarine.Color} Captain, player {_currentPlayer.Name}, is choosing submarine position...");
+                StartCoroutine(captain.SelectSubmarinePosition());
+                Debug.Log($"{submarine.Color} Captain, player {_currentPlayer.Name}, has chosen the submarine position!");
+            }
+        }
+        _currentPlayer  = null;
+        _currentRole    = null;
+    }
 
     void DisableCameras()
     {
@@ -249,6 +270,4 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion
-
-
 }

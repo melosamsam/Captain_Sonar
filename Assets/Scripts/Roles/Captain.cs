@@ -1,14 +1,18 @@
 using TMPro;
+using System.Collections;
 using UnityEngine;
+
+public enum Direction { North, East, South, West, None }
 
 public class Captain : Role
 {
 
     #region Attributes
 
-    public enum Direction { North, East, South, West, None }
 
+    private bool _isInitialPositionChosen;
     private bool _isOverlayOpen;
+
     private TMP_Dropdown _systemDropdown;
 
     #endregion
@@ -18,12 +22,17 @@ public class Captain : Role
     /// <summary>
     /// 
     /// </summary>
+    public bool IsInitialPositionChosen { get => _isInitialPositionChosen; }
+
+    /// <summary>
+    /// 
+    /// </summary>
     public Direction ChosenCourse { get; private set; }
 
     /// <summary>
     /// 
     /// </summary>
-    public TMP_Dropdown SystemDropdown { get; set; }
+    public TMP_Dropdown SystemDropdown { get => _systemDropdown; set => _systemDropdown = value; }
   
     #endregion
 
@@ -169,6 +178,20 @@ public class Captain : Role
         _submarine.MakeSurface();
 
         FinishTurn();
+    }
+
+    public IEnumerator SelectSubmarinePosition()
+    {
+        // Show a user interface to allow the captain to choose a position
+        if (!_isInitialPositionChosen)
+        {
+
+            // Simulate a delay for testing purposes
+            yield return new WaitForSeconds(3f);
+            //yield return new WaitUntil(() => _isInitialPositionChosen); // when UI is done
+
+            _isInitialPositionChosen = true;
+        }
     }
 
     /// <summary>

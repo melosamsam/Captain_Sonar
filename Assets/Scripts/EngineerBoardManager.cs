@@ -197,21 +197,21 @@ public class EngineerBoardManager : MonoBehaviour
         }
     }
 
-    string MatchCourse(Captain.Direction course)
+    string MatchCourse(Direction course)
     {
         string courseStr = "";
         switch (course)
         {
-            case Captain.Direction.North:
+            case Direction.North:
                 courseStr = "north";
                 break;
-            case Captain.Direction.South:
+            case Direction.South:
                 courseStr = "south";
                 break;
-            case Captain.Direction.East:
+            case Direction.East:
                 courseStr = "east";
                 break;
-            case Captain.Direction.West:
+            case Direction.West:
                 courseStr = "west";
                 break;
         }
@@ -219,7 +219,7 @@ public class EngineerBoardManager : MonoBehaviour
     }
 
     //Disable dials that aren't on the current course
-    void FollowTheCourse(Captain.Direction course)
+    void FollowTheCourse(Direction course)
     {
         string nameDial = MatchCourse(course);
         foreach (var dialData in new[] { engineerDialDataW, engineerDialDataE, engineerDialDataS, engineerDialDataN })
