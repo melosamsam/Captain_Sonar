@@ -1,43 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
-//using System.Media;
-using System.Security;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Board : MonoBehaviour
 {
     #region Attributes
+
     private const string BOARD_PATH = "Assets/UI/Boards/";
     static private string mapName;
-
-    [SerializeField] static private GameObject captainBoardPrefab;
-    [SerializeField] static private GameObject firstMateBoardPrefab;
-    [SerializeField] static private GameObject engineerBoardPrefab;
-    [SerializeField] static private GameObject radioDetectorBoardPrefab;
-
 
     public string boardName;
     public bool realTime; //True if realtime, false if turn by turn
     static string gameMode;
+
     #endregion
 
     #region Get
     public string GetNameBoard() { return boardName; }
     public bool GetGameMode() { return realTime; }
+
     #endregion
 
     #region Set
+
     public void SetNameBoard(string name) { boardName = name; }
     public void SetGameMode(bool mode) { realTime = mode; }
+
     #endregion
 
-    private void Awake()
-    {
-        gameMode = realTime ? "Realtime" : "Turn_by_Turn";
-    }
-
     #region Constructor
+
     public Board (string boardName, bool realTime)
     {
         this.boardName = boardName;
@@ -56,7 +48,44 @@ public class Board : MonoBehaviour
             //chosenMap choisi dans le script du jeu (main)
         }
     }
+
     #endregion
+
+    #region Public methods
+
+    /// <summary>
+    /// Loads the correct image on a board of the game
+    /// </summary>
+    /// <param name="map">Map object corresponding to the current game's map</param>
+    /// <param name="submarine">The team</param>
+    /// <param name="role">The role for whom to load the Board</param>
+    /// <param name="isTurnBased">If the game is currently played turn by turn, or in real time</param>
+    static public void Initialize(Map map, Submarine submarine, Role role, bool isTurnBased=true)
+    {
+        gameMode = isTurnBased ? "Turn_by_Turn" : "Realtime";
+        switch (role)
+        {
+            case Captain:
+                InitializeCaptainBoard(map, submarine.Color);
+                break;
+
+            case FirstMate:
+                InitializeFirstMateBoard(submarine.Color);
+                break;
+
+            case Engineer:
+                InitializeEngineerBoard(submarine.Color);
+                break;
+
+            case RadioDetector:
+                InitializeRadioDetector(map, submarine.Color);
+                break;
+        }
+    }
+
+    #endregion
+
+    #region Private methods
 
     //sert à distribuer la carte / initialiser le visuel
     static void Initialize_captainmap(int chosenMap, bool gameMode)
@@ -65,19 +94,17 @@ public class Board : MonoBehaviour
         Map currentMap = new Map(chosenMap, gameMode);
     }
 
-    static public GameObject InitializeCaptainBoard(int teamNb)
+    static public void InitializeCaptainBoard(Map map, string team)
     {
         // the board to assign to the player
-        GameObject capBoard = captainBoardPrefab;
-        string team = teamNb == 0 ? "Blue" : "Red";
+        Transform renderCamera = GameObject.Find($"{team} Captain").transform;
+        GameObject capBoard = renderCamera.GetChild(0).Find("Board").gameObject;
 
-        // the path where the sprite is
-        string spritePath = $"{BOARD_PATH}Captain/{mapName}_Captain_{team}_{gameMode}.png";
+        // the path where the correct sprite is
+        string spritePath = $"{BOARD_PATH}Captain/{map.GetNameMap()}_Captain_{team}_{gameMode}.png";
 
         // replace the default sprite by the correct sprite according to the game's settings and the Role
-        capBoard.GetComponent<SpriteRenderer>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
-
-        return capBoard;
+        capBoard.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
     }
 
     static void Initialize_firstMateBoard()
@@ -85,29 +112,58 @@ public class Board : MonoBehaviour
         //Créer les systèmes et jauges avant
         //sert à distribuer la carte / initialiser le visuel
     }
+
+    static void InitializeFirstMateBoard(string team)
+    {
+        // the board to assign to the player
+        Transform renderCamera = GameObject.Find($"{team} First Mate").transform;
+        GameObject firstMateBoard = renderCamera.GetChild(0).Find("Board").gameObject;
+
+        // the path where the correct sprite is
+        string spritePath = $"{BOARD_PATH}First_Mate/First_Mate_{team}_{gameMode}.png";
+
+        // replace the default sprite by the correct sprite according to the game's settings and the Role
+        firstMateBoard.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
+    }
+
     static void Initialize_engineerBoard(bool gameMode)
     {
         //Créer les élements (radioactivité,…) avant
         //Le gameMode influe que pour faire surface je crois, ce serait bien de trouver autre chose qu'entourer le bateau parce que c'est pas pratique avec la souris
 
     }
+
+    static void InitializeEngineerBoard(string team)
+    {
+        // the board to assign to the player
+        Transform renderCamera = GameObject.Find($"{team} First Mate").transform;
+        GameObject engineerBoard = renderCamera.GetChild(0).Find("Board").gameObject;
+
+        // the path where the correct sprite is
+        string spritePath = $"{BOARD_PATH}Engineer/Engineer_{team}_{gameMode}.png";
+
+        // replace the default sprite by the correct sprite according to the game's settings and the Role
+        engineerBoard.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
+    }
+
     static void Initialize_SeeThrough()
     {
         //Dimension x4 taille de la map ou juste très grand 
         //Avec même quadrillage que map, option d’effacement/dessin/...
     }
 
-    // Espace commentaire disponible pour tous les joueurs avec un panel qu’on clique (flèche,…) pour prendre des notes 
-
-    // Start is called before the first frame update
-    void Start()
+    static void InitializeRadioDetector(Map map, string team)
     {
-        
+        // the board to assign to the player
+        Transform renderCamera = GameObject.Find($"{team} Radio Detector").transform;
+        GameObject detectorBoard = renderCamera.GetChild(0).Find("Board").gameObject;
+
+        // the path where the correct sprite is
+        string spritePath = $"{BOARD_PATH}Radio_Detector/{map.GetNameMap()}_Detector_{team}_{gameMode}.png";
+
+        // replace the default sprite by the correct sprite according to the game's settings and the Role
+        detectorBoard.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    #endregion
 }

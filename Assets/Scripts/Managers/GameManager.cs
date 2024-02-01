@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     bool _isNormalMode;
     bool _isGameOver;
 
+    [SerializeField] int _mapNumber;
     Map _mainMap;
 
     // constants
@@ -119,6 +120,8 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        InitializeBoards();
+
         // randomly chooses which team starts first
         _currentSubmarine = _submarines[UnityEngine.Random.Range(0, 2)];
 
@@ -165,6 +168,20 @@ public class GameManager : MonoBehaviour
         _currentPlayer = _currentRole != null ? _currentRole.gameObject.GetComponent<Player>() : null;
     }
 
+    void InitializeBoards()
+    {
+        foreach (Submarine submarine in _submarines)
+        {
+            foreach (Player player in submarine.Players)
+            {
+                foreach (Role role in player.Role)
+                {
+                    Board.Initialize(_mainMap, submarine, role);
+                }
+            }
+        }
+    }
+
     void InitializeGame()
     {
         _submarines = FindObjectsOfType<Submarine>().ToList();
@@ -174,6 +191,7 @@ public class GameManager : MonoBehaviour
         _isTurnBased = true;
         _isNormalMode = true;
         _isGameOver = true;
+        _mainMap = new(_mapNumber, !_isTurnBased);
     }
 
     void ProcessTurnByTurn()
