@@ -167,9 +167,7 @@ public class GameManager : MonoBehaviour
 
     void InitializeGame()
     {
-        //_submarines = FindObjectsOfType<Submarine>().ToList();
-        _submarines.Add(TeamManager.submarine1.GetComponent<Submarine>());
-        _submarines.Add(TeamManager.submarine2.GetComponent<Submarine>());
+        _submarines = FindObjectsOfType<Submarine>().ToList();
         _currentSubmarine = null;
         _currentPlayer = null;
         _currentRole = null;

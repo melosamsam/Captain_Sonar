@@ -106,15 +106,16 @@ public class Submarine : MonoBehaviour
     {
         if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("Team_Role_Setup"))
         {
-            _maxHealth = GameManager.Instance.IsNormalMode ? NORMAL_MODE_HEALTH : HUNT_MODE_HEALTH;
-            _health = _maxHealth; // we start the game at full health
-            _isSubmerged = true;
-            _currentCourse = Captain.Direction.None;
+            _maxHealth          = GameManager.Instance.IsNormalMode ? NORMAL_MODE_HEALTH : HUNT_MODE_HEALTH;
+            _health             = _maxHealth; // we start the game at full health
+            _isSubmerged        = true;
+            _currentCourse      = Captain.Direction.None;
 
-            _color = gameObject.name.Split(' ')[0];
-            //_players            = GetComponentsInChildren<Player>().ToList(); // take the players chosen from the lobby available right before
-            _nbOfTurnsSurfaced = 0;
+            _color              = gameObject.name.Split(' ')[0];
+            _players            = GetComponentsInChildren<Player>().ToList(); // take the players chosen from the lobby available right before
+            _nbOfTurnsSurfaced  = 0;
             _gameMap = GameManager.Instance.MainMap;
+
             if (_gameMap != null)
                 _trail = new int[_gameMap.GetMap().GetLength(0), _gameMap.GetMap().GetLength(1)];
         }
