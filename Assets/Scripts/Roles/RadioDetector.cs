@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class RadioDetector : Role
 {
@@ -8,8 +10,16 @@ public class RadioDetector : Role
     #region Attributes
 
     private bool _isSeeThroughOpen;
+    private bool _isGridOpen;
     private GameObject _seeThrough;
+    private GameObject _Grid;
+    public enum Direction { North, East, South, West, None }
+    private Position currentpos = new Position(9,9);
 
+    #endregion
+
+    #region
+    public Direction ChosenCourse { get; private set; }
     #endregion
 
     #region Overridden methods
@@ -54,7 +64,9 @@ public class RadioDetector : Role
     void Start()
     {
         _seeThrough = GameObject.Find("See through");
+        _Grid = GameObject.Find("Grid");
         _isSeeThroughOpen = false;
+        _isGridOpen = false;
     }
 
     // Update is called once per frame
@@ -77,9 +89,42 @@ public class RadioDetector : Role
     {
         _isSeeThroughOpen = !_isSeeThroughOpen;
         _seeThrough.transform.localScale = _isSeeThroughOpen ? Vector3.one : Vector3.zero;
+        _isGridOpen = !_isGridOpen;
+        _Grid.transform.localScale = _isGridOpen ? new Vector3(1,90,5) : Vector3.zero;
     }
 
     #endregion
+
+    public void OrderSubmarineCourse(string courseChar)
+    {
+        Position retour = new Position(0, 0);
+        switch (courseChar)
+        {
+            case "N":
+                retour.x = currentpos.x;
+                retour.y = currentpos.y - 1;
+                break;
+            case "S":
+                retour.x = currentpos.x;
+                retour.y = currentpos.y + 1;
+                break;
+            case "E":
+                retour.x = currentpos.x + 1;
+                retour.y = currentpos.y;
+                break;
+            case "W":
+                retour.x = currentpos.x - 1;
+                retour.y = currentpos.y;
+                break;
+        }
+        //on a la position a aller 
+        //on a la position où on est.
+        //dans les 4 cas de direction on fait un Find Gameobject pour récupérer l'id du truc.
+        //s'il est apparent on le fait disparaitre et inversement.
+        //s'il va vers le Nord et finalement nan, s'il va vers le sud ensuite, le tracé change d'etat (apparait si pas apparent et disparait si apparant)
+
+        
+    }
 
     public void Trace(Position pos, string direction)
     {
