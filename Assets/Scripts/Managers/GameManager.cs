@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Photon.Pun;
 
 public class GameManager : MonoBehaviour
 {
@@ -28,6 +27,7 @@ public class GameManager : MonoBehaviour
     bool _isNormalMode;
     bool _isGameOver;
 
+    [SerializeField] int _mapNumber;
     Map _mainMap;
 
     // constants
@@ -122,8 +122,14 @@ public class GameManager : MonoBehaviour
         // randomly chooses which team starts first
         _currentSubmarine = _submarines[UnityEngine.Random.Range(0, 2)];
 
+        InitializeBoards();
+
         // start the game
         _isGameOver = false;
+
+        // Captains choose their initial position before the game
+        ChooseInitialPositions();
+
         if (_isTurnBased) ProcessTurnByTurn();
         //else ProcessRealTime();
     }
@@ -137,6 +143,24 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Private methods
+
+    void ChooseInitialPositions()
+    {
+        foreach (Submarine submarine in _submarines)
+        {
+            Captain captain = submarine.GetComponentInChildren<Captain>();
+            _currentRole = captain;
+            GetPlayerFromRole();
+            if (captain != null && !captain.IsInitialPositionChosen)
+            {
+                Debug.Log($"{submarine.Color} Captain, player {_currentPlayer.Name}, is choosing submarine position...");
+                StartCoroutine(captain.SelectSubmarinePosition());
+                Debug.Log($"{submarine.Color} Captain, player {_currentPlayer.Name}, has chosen the submarine position!");
+            }
+        }
+        _currentPlayer  = null;
+        _currentRole    = null;
+    }
 
     void DisableCameras()
     {
@@ -165,17 +189,30 @@ public class GameManager : MonoBehaviour
         _currentPlayer = _currentRole != null ? _currentRole.gameObject.GetComponent<Player>() : null;
     }
 
+    void InitializeBoards()
+    {
+        foreach (Submarine submarine in _submarines)
+        {
+            foreach (Player player in submarine.Players)
+            {
+                foreach (Role role in player.Role)
+                {
+                    Board.Initialize(_mainMap, submarine, role);
+                }
+            }
+        }
+    }
+
     void InitializeGame()
     {
-        //_submarines = FindObjectsOfType<Submarine>().ToList();
-        _submarines.Add(TeamManager.submarine1.GetComponent<Submarine>());
-        _submarines.Add(TeamManager.submarine2.GetComponent<Submarine>());
+        _submarines = FindObjectsOfType<Submarine>().ToList();
         _currentSubmarine = null;
         _currentPlayer = null;
         _currentRole = null;
         _isTurnBased = true;
         _isNormalMode = true;
         _isGameOver = true;
+        _mainMap = new(_mapNumber, !_isTurnBased);
     }
 
     void ProcessTurnByTurn()
@@ -233,6 +270,4 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion
-
-
 }

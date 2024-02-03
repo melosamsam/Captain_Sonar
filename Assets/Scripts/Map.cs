@@ -29,15 +29,15 @@ public class Map : MonoBehaviour
     #region Constructeurs
     public Map(int chosenMap, bool mode)
     {
-        this.numberMap = chosenMap;
-        this.realTime = mode;
+        numberMap = chosenMap;
+        realTime = mode;
 
         if (realTime) map = new int[15, 15];
         else map = new int[10, 10];
 
         if (numberMap==1)
         {
-            this.nameMap = "ALPHA-2";
+            nameMap = "Alpha-2";
             if (realTime)
             {
                 map[1, 1] = 1;
@@ -88,7 +88,7 @@ public class Map : MonoBehaviour
         }
         else if (numberMap == 2)
         {
-            this.nameMap = "BRAVO-2";
+            this.nameMap = "Bravo-2";
             if (realTime)
             {
             }
@@ -104,7 +104,7 @@ public class Map : MonoBehaviour
         }
         else if (numberMap == 3)
         {
-            this.nameMap = "CHARLIE-2";
+            nameMap = "Charlie-2";
             if (realTime)
             {
             }
@@ -125,7 +125,7 @@ public class Map : MonoBehaviour
 
     public int Find_Sector(Position position)
     {
-        int sector = 0;
+        int sector;
         if (realTime)
         {
             if (position.x <4 && position.y<4) sector = 1;
@@ -149,17 +149,5 @@ public class Map : MonoBehaviour
             else sector = 4;
         }
         return sector;
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

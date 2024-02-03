@@ -20,6 +20,15 @@ public class RadioDetector : Role
 
     #endregion
 
+    #region Properties
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public GameObject SeeThrough { get; set; }   
+
+    #endregion
+
     #region Overridden methods
 
     /// <summary>
@@ -88,6 +97,7 @@ public class RadioDetector : Role
     public void ToggleSeeThrough()
     {
         _isSeeThroughOpen = !_isSeeThroughOpen;
+        Debug.Log($"See through visible: {_isSeeThroughOpen}");
         _seeThrough.transform.localScale = _isSeeThroughOpen ? new Vector3((float)1.2,(float)1.7,1) : Vector3.zero;
         _isGridOpen = !_isGridOpen;
         _Grid.transform.localScale = _isGridOpen ? Vector3.one : Vector3.zero;
