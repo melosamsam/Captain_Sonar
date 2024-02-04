@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
@@ -30,5 +26,7 @@ public class GridManager : MonoBehaviour
 
             }
         }
+
+        _Parent.transform.localScale = Vector3.zero;
     }
 }
