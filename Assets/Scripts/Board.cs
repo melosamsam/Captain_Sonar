@@ -71,11 +71,11 @@ public class Board : MonoBehaviour
                 break;
 
             case FirstMate:
-                InitializeFirstMateBoard(submarine.Color);
+                InitializeFirstMateBoard(submarine.Color, (FirstMate)role);
                 break;
 
             case Engineer:
-                InitializeEngineerBoard(submarine.Color);
+                InitializeEngineerBoard(submarine.Color, (Engineer)role);
                 break;
 
             case RadioDetector:
@@ -116,7 +116,7 @@ public class Board : MonoBehaviour
         //sert à distribuer la carte / initialiser le visuel
     }
 
-    static void InitializeFirstMateBoard(string team)
+    static void InitializeFirstMateBoard(string team, FirstMate role)
     {
         // the board to assign to the player
         Transform renderCamera = GameObject.Find($"{team} First Mate").transform;
@@ -127,6 +127,8 @@ public class Board : MonoBehaviour
 
         // replace the default sprite by the correct sprite according to the game's settings and the Role
         firstMateBoard.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
+
+        UpdateUIEvents(firstMateBoard.transform.parent.gameObject, role);
     }
 
     static void Initialize_engineerBoard(bool gameMode)
@@ -136,7 +138,7 @@ public class Board : MonoBehaviour
 
     }
 
-    static void InitializeEngineerBoard(string team)
+    static void InitializeEngineerBoard(string team, Engineer role)
     {
         // the board to assign to the player
         Transform renderCamera = GameObject.Find($"{team} Engineer").transform;
@@ -147,6 +149,8 @@ public class Board : MonoBehaviour
 
         // replace the default sprite by the correct sprite according to the game's settings and the Role
         engineerBoard.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
+
+        UpdateUIEvents(engineerBoard.transform.parent.gameObject, role);
     }
 
     static void Initialize_SeeThrough()
@@ -172,6 +176,8 @@ public class Board : MonoBehaviour
 
     static void UpdateUIEvents(GameObject board, Role role)
     {
+        role.Board = board.transform;
+
         switch (role)
         {
             case Captain:
@@ -211,18 +217,44 @@ public class Board : MonoBehaviour
 
                 break;
 
+            case FirstMate:
+                FirstMate firstMate = (FirstMate)role;
+
+                // configuring the buttons for filling systems' gauges
+                GameObject systems = board.transform.GetChild(2).gameObject;
+                foreach (Systems system in systems.GetComponentsInChildren<Systems>())
+                {
+                    UnityEngine.UI.Button systemBtn = system.gameObject.GetComponentInChildren<UnityEngine.UI.Button>();
+                    systemBtn.onClick.AddListener(() => firstMate.FillGauge(system.gameObject.name.Split(' ')[0]));
+                }
+
+                break;
+
+            case Engineer:
+                break;
+
             case RadioDetector:
                 RadioDetector radioDetector = (RadioDetector)role;
 
                 // configuring the 'Radio_detector_logo' events
                 Transform detectorActions = board.transform.Find("Actions");
 
+                // configuring the See through parent GameObject as the Radio Detector's See Through
+                GameObject seeThrough = detectorActions.GetChild(1).Find("See through").gameObject;
+                radioDetector.SeeThrough = seeThrough;
+
+                GameObject grid = detectorActions.GetChild(1).Find("TileGrid").gameObject;
+                radioDetector.Grid = grid;
+
+                GameObject dot = detectorActions.GetChild(1).Find("StartingDot").gameObject;
+                radioDetector.Dot = dot;
+
+                // Generate the grid
+                GridManager gridManager = detectorActions.GetChild(1).Find("GridManager").GetComponent<GridManager>();
+                gridManager.GenerateGrid(grid);
+
                 UnityEngine.UI.Button detectorLogo = detectorActions.Find("Radio_detector_logo").GetComponent<UnityEngine.UI.Button>();
                 detectorLogo.onClick.AddListener(() => radioDetector.ToggleSeeThrough());
-
-                // configuring the See through parent GameObject as the Radio Detector's See Through
-                GameObject seeThrough = detectorActions.Find("SeeThroughParent").gameObject;
-                radioDetector.SeeThrough = seeThrough;
 
                 break;
         }

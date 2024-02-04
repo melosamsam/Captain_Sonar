@@ -1,6 +1,7 @@
 using TMPro;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum Direction { North, East, South, West, None }
 
@@ -8,7 +9,6 @@ public class Captain : Role
 {
 
     #region Attributes
-
 
     private bool _isInitialPositionChosen;
     private bool _isOverlayOpen;
@@ -48,7 +48,9 @@ public class Captain : Role
     void Start()
     {
         _submarine = GetComponentInParent<Submarine>();
-        _systemDropdown = GameObject.Find("Systems dropdown").GetComponent<TMP_Dropdown>();
+
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("TestCaptain"))
+            _systemDropdown = GameObject.Find("Systems dropdown").GetComponent<TMP_Dropdown>();
     }
 
     // Update is called once per frame
@@ -187,7 +189,7 @@ public class Captain : Role
         {
 
             // Simulate a delay for testing purposes
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(5f);
             //yield return new WaitUntil(() => _isInitialPositionChosen); // when UI is done
 
             _isInitialPositionChosen = true;
@@ -199,7 +201,13 @@ public class Captain : Role
     /// </summary>
     public void ToggleOverlay()
     {
-        GameObject overlay = GameObject.Find("Overlay");
+        GameObject overlay = null;
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("TestCaptain"))
+             overlay = GameObject.Find("Overlay");
+        else if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("TestGame"))
+        {
+            overlay = _board.GetChild(3).GetChild(2).gameObject;
+        }
 
         //switch the status of the overlay
         _isOverlayOpen = !_isOverlayOpen;

@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -48,7 +46,7 @@ public class Submarine : MonoBehaviour
     #region Properties
 
     /// <summary>
-    /// 
+    /// The color used to represents the Submarine as a team
     /// </summary>
     public string Color { get => _color; }
 
@@ -65,22 +63,22 @@ public class Submarine : MonoBehaviour
     /// <summary>
     /// The amount of health the submarine currently has
     /// </summary>
-    public int Health { get { return _health; } set { _health = value; } }
+    public int Health { get { return _health; } }
 
     /// <summary>
     /// Whether the submarine is currently under water or not
     /// </summary>
-    public bool IsSubmerged { get { return _isSubmerged; } set { _isSubmerged = value; } }
+    public bool IsSubmerged { get { return _isSubmerged; } }
 
     /// <summary>
     /// The amount of health the submarine starts the game with
     /// </summary>
-    public int MaxHealth { get { return _maxHealth; } set { _maxHealth = value; } }
+    public int MaxHealth { get { return _maxHealth; } }
 
     /// <summary>
     /// The name the players chose to refer to their crew
     /// </summary>
-    public string Name { get => _name; set => _name = value; } // readonly, no reason to change the team's name mid-game
+    public string Name { get => _name; set => _name = value; }
 
     /// <summary>
     /// The players constituting the Submarin's crew
@@ -95,7 +93,7 @@ public class Submarine : MonoBehaviour
     /// <summary>
     /// Number of turns during which the submarine has been on the surface
     /// </summary>
-    public int TurnsSurfaced { get { return _nbOfTurnsSurfaced; } set { _nbOfTurnsSurfaced = (value >= 0 && value <= 3) ? value: 0; } }
+    public int TurnsSurfaced { get { return _nbOfTurnsSurfaced; } set { _nbOfTurnsSurfaced = value; } }
 
     #endregion
 
@@ -114,7 +112,7 @@ public class Submarine : MonoBehaviour
             _color              = gameObject.name.Split(' ')[0];
             _players            = GetComponentsInChildren<Player>().ToList(); // take the players chosen from the lobby available right before
             _nbOfTurnsSurfaced  = 0;
-            _gameMap = GameManager.Instance.MainMap;
+            _gameMap            = GameManager.Instance.MainMap;
 
             if (_gameMap != null)
                 _trail = new int[_gameMap.GetMap().GetLength(0), _gameMap.GetMap().GetLength(1)];
@@ -126,7 +124,11 @@ public class Submarine : MonoBehaviour
     {
         if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("Team_Role_Setup"))
         {
-            if (!(_nbOfTurnsSurfaced < TURNS_SURFACED)) ToggleSubmersion();
+            if (!(_nbOfTurnsSurfaced <= TURNS_SURFACED))
+            {
+                _nbOfTurnsSurfaced = 0;
+                ToggleSubmersion();
+            }
 
             if (_health <= 0) Die();
         }
@@ -159,12 +161,15 @@ public class Submarine : MonoBehaviour
             case Direction.North:
                 newPosition.x--;
                 break;
+
             case Direction.South:
                 newPosition.x++;
                 break;
+
             case Direction.East:
                 newPosition.y++;
                 break;
+
             case Direction.West:
                 newPosition.y--;
                 break;
@@ -184,8 +189,8 @@ public class Submarine : MonoBehaviour
     /// <summary>
     /// Inflicts damage to the Submarine
     /// </summary>
-    /// <param name="damage">Amount of damage to hit the Submarine</param>
-    public void TakeDamage(int damage)
+    /// <param name="damage">Amount of damage to hit the Submarine, 1 by default</param>
+    public void TakeDamage(int damage=1)
     {
         if (_health > 0) _health -= damage;
         UnityEngine.Debug.Log($"The submarine has just taken {damage} damage(s). It can now only take {_health} more hits.");
@@ -196,18 +201,19 @@ public class Submarine : MonoBehaviour
 
     #region Private methods
 
-    private void Die()
+    void Die()
     {
         UnityEngine.Debug.Log("The submarine has been killed");
         GameManager.Instance.EndGame();
     }
    
-    private bool IsPathClear(Position positionToCheck)
+    bool IsPathClear(Position positionToCheck)
     {
-        return !((_gameMap.GetMap()[positionToCheck.x, positionToCheck.y] != UNEXPLORED_POSITION) || (_trail[positionToCheck.x, positionToCheck.y] == PAST_POSITION));
+        return !((_gameMap.GetMap()[positionToCheck.x, positionToCheck.y] != UNEXPLORED_POSITION) || 
+                    (_trail[positionToCheck.x, positionToCheck.y] == PAST_POSITION));
     }
 
-    private void ToggleSubmersion()
+    void ToggleSubmersion()
     {
         _isSubmerged = !_isSubmerged;
     }

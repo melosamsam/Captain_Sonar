@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class FirstMate : Role
 {
@@ -86,7 +86,12 @@ public class FirstMate : Role
     public void ActivateSystem(string system)
     {
         // if (System.IsReady)
-        Systems currentSystem = GameObject.Find(system + " System").GetComponent<Systems>();
+        Systems currentSystem = null;
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("TestFirstMate"))
+            currentSystem = GameObject.Find(system + " System").GetComponent<Systems>();
+        else if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("TestGame"))
+            currentSystem = _board.GetChild(2).Find(system + " System").GetComponent<Systems>();
+
         if (currentSystem != null )
         {
             if (currentSystem.GaugeFull())
@@ -103,7 +108,7 @@ public class FirstMate : Role
     public void FillGauge(string system)
     {
         // Get the script of the System corresponding to the `system` string
-        if (GameObject.Find(system + " System").TryGetComponent<Systems>(out var currentSystem))
+        if (_board.GetChild(2).Find(system + " System").TryGetComponent<Systems>(out var currentSystem))
         {
             int[] newGauge = currentSystem.GetQuotaJauge(); // copy the gauge
 

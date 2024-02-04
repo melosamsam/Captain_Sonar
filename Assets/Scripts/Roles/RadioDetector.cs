@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RadioDetector : Role
 {
@@ -8,9 +9,10 @@ public class RadioDetector : Role
     private bool _isSeeThroughOpen;
     private bool _isGridOpen;
     private bool _isDotOpen;
-    private GameObject _seeThrough;
-    private GameObject _Grid;
-    private GameObject _Dot;
+
+    [SerializeField] private GameObject _seeThrough;
+    [SerializeField] private GameObject _Grid;
+    [SerializeField] private GameObject _Dot;
 
     #endregion
 
@@ -19,7 +21,11 @@ public class RadioDetector : Role
     /// <summary>
     /// 
     /// </summary>
-    public GameObject SeeThrough { get; set; }   
+    public GameObject SeeThrough { get => _seeThrough; set { _seeThrough = value; } }
+
+    public GameObject Grid { get => _Grid; set { _Grid = value; } }
+
+    public GameObject Dot { get => _Dot; set { _Dot = value; } }
 
     #endregion
 
@@ -64,9 +70,13 @@ public class RadioDetector : Role
     // Start is called before the first frame update
     void Start()
     {
-        _seeThrough = GameObject.Find("See through");
-        _Grid = GameObject.Find("TileGrid");
-        _Dot = GameObject.Find("StartingDot");
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("TestRadioDetector"))
+        {
+            _seeThrough = GameObject.Find("See through");
+            _Grid = GameObject.Find("TileGrid");
+            _Dot = GameObject.Find("StartingDot");
+        }
+
         _isSeeThroughOpen = false;
         _isGridOpen = false;
         _isDotOpen = false;
@@ -92,11 +102,11 @@ public class RadioDetector : Role
     {
         _isSeeThroughOpen = !_isSeeThroughOpen;
         Debug.Log($"See through visible: {_isSeeThroughOpen}");
-        _seeThrough.transform.localScale = _isSeeThroughOpen ? new Vector3((float)1.2,(float)1.7,1) : Vector3.zero;
+        _seeThrough.transform.localScale = _isSeeThroughOpen ? new Vector3(1.2f, 1.7f, 1) : Vector3.zero;
         _isGridOpen = !_isGridOpen;
         _Grid.transform.localScale = _isGridOpen ? Vector3.one : Vector3.zero;
         _isDotOpen = !_isDotOpen;
-        _Dot.transform.localScale = _isDotOpen ? new Vector3(30,30,5) : Vector3.zero;
+        _Dot.transform.localScale = _isDotOpen ? new Vector3(30, 30, 5) : Vector3.zero;
     }
 
     #endregion

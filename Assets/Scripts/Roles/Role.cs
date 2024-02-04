@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Role : MonoBehaviour
@@ -9,6 +8,8 @@ public abstract class Role : MonoBehaviour
     private bool _isTurnOver = true;
 
     protected Submarine _submarine;
+
+    protected Transform _board;
 
     #endregion
 
@@ -38,6 +39,11 @@ public abstract class Role : MonoBehaviour
     /// The name of the Role
     /// </summary>
     public string Name { get; protected set; }
+
+    /// <summary>
+    /// Reference to the Board used by the Role
+    /// </summary>
+    public Transform Board { get => _board; set { _board = value; } }
 
     #endregion
 

@@ -101,6 +101,16 @@ public class GameManager : MonoBehaviour
         StartGame();
     }
 
+    private void Update()
+    {
+        if (!_currentSubmarine.IsSubmerged)
+        {
+            _currentSubmarine.TurnsSurfaced++;
+            _currentPlayer = null;
+            SwitchToNextTeam();
+        }
+    }
+
     #endregion
 
     #region Public methods

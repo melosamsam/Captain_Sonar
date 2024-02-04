@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Systems : MonoBehaviour
@@ -14,7 +12,7 @@ public class Systems : MonoBehaviour
     private int[] QuotaJauge; //if jauge full, can't fill it anymore //warn opposite team if system is ready (full)
     //I am thinking the failure attribute shouldn't be in this class
 
-    private List<GameObject> GaugeList;
+    [SerializeField] private List<GameObject> GaugeList;
     private bool Failure; //if mechanic circuit has crossed out colour
 
     #endregion
@@ -189,7 +187,7 @@ public class Systems : MonoBehaviour
         }
         else if (Math.Abs(to- chosenPosition) <=2) 
         {
-            enemy.TakeDamage(1);
+            enemy.TakeDamage();
             impact=true;
             UnityEngine.Debug.Log("You touched the enemy. Enemy suffered one damage."); //To goodSubmarine
             UnityEngine.Debug.Log("The enemy managed to touch you. You suffered one damage."); //To enemy
@@ -204,7 +202,7 @@ public class Systems : MonoBehaviour
         }
         else if (Math.Abs(from - chosenPosition) <= 2)
         {
-            goodSubmarine.TakeDamage(1);
+            goodSubmarine.TakeDamage();
             impact = true;
             UnityEngine.Debug.Log("Man... You shot yourself... You took one damage (and I think you deserve much more)."); //To goodSubmarine
             UnityEngine.Debug.Log("Jeez that other team really be playing Among us. They took one damage from their own attack."); //To enemy
