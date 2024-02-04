@@ -100,12 +100,19 @@ public class Board : MonoBehaviour
         // the board to assign to the player
         Transform renderCamera = GameObject.Find($"{team} Captain").transform;
         GameObject capBoard = renderCamera.GetChild(0).Find("Board").gameObject;
+        GameObject overlay = capBoard.transform.parent.GetChild(3).GetChild(2).gameObject;
 
         // the path where the correct sprite is
         string spritePath = $"{BOARD_PATH}Captain/{map.GetNameMap()}_Captain_{team}_{gameMode}.png";
 
+        // path for the overlay background
+        string overlayBgPath = $"Assets/UI/Buttons/Background_{ team.ToLower() }.png";
+
         // replace the default sprite by the correct sprite according to the game's settings and the Role
         capBoard.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
+
+        // set the overlay background to correspond the team's color
+        overlay.transform.Find("Background").GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(overlayBgPath);
 
         UpdateUIEvents(renderCamera.GetChild(0).gameObject, role);
     }

@@ -145,9 +145,11 @@ public class Captain : Role
             case "N":
                 course = Direction.North;
                 break;
+
             case "S":
                 course = Direction.South;
                 break;
+
             case "E":
                 course = Direction.East;
                 break;
@@ -157,9 +159,7 @@ public class Captain : Role
                 break;
         }
 
-        // if course in Submarine.GetPossibleCourses
         ChosenCourse = course;
-        // else, show error message and allow another input
 
         if (_submarine.Move(ChosenCourse))
         {
@@ -202,12 +202,11 @@ public class Captain : Role
     public void ToggleOverlay()
     {
         GameObject overlay = null;
+
         if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("TestCaptain"))
              overlay = GameObject.Find("Overlay");
         else if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("TestGame"))
-        {
             overlay = _board.GetChild(3).GetChild(2).gameObject;
-        }
 
         //switch the status of the overlay
         _isOverlayOpen = !_isOverlayOpen;
