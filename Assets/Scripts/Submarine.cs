@@ -186,6 +186,17 @@ public class Submarine : MonoBehaviour
         return canSubmarineMove;
     }
 
+    public bool SetPosition(Position position)
+    {
+        bool canSubmarineMove = IsPathClear(position);
+
+        if (canSubmarineMove && _currentPosition == null)
+            _currentPosition = position; // then update the submarine's position
+
+        return canSubmarineMove;
+
+    }
+
     /// <summary>
     /// Inflicts damage to the Submarine
     /// </summary>
@@ -203,7 +214,7 @@ public class Submarine : MonoBehaviour
 
     void Die()
     {
-        UnityEngine.Debug.Log("The submarine has been killed");
+        Debug.Log("The submarine has been killed");
         GameManager.Instance.EndGame();
     }
    

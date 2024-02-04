@@ -14,6 +14,7 @@ public class Captain : Role
     private bool _isOverlayOpen;
 
     private TMP_Dropdown _systemDropdown;
+    private GameObject _notification;
 
     #endregion
 
@@ -33,6 +34,11 @@ public class Captain : Role
     /// 
     /// </summary>
     public TMP_Dropdown SystemDropdown { get => _systemDropdown; set => _systemDropdown = value; }
+
+    /// <summary>
+    /// GameObject that displays when the Captain has to choose the initial position of their Submarine
+    /// </summary>
+    public GameObject Notification { get => _notification; set => _notification = value; }
   
     #endregion
 
@@ -63,7 +69,6 @@ public class Captain : Role
                 FinishTurn();
             }
         }
-
     }
 
     #endregion
@@ -132,6 +137,21 @@ public class Captain : Role
         FinishTurn();
     }
 
+    public void OpenPositionNotification()
+    {
+        _notification.transform.localScale = Vector3.one;
+    }
+
+    public void ClosePositionNotification()
+    {
+        _notification.transform.localScale = Vector3.zero;
+    }
+
+    public void ChooseInitialPosition()
+    {
+        TMP_InputField inputField = _notification.GetComponentInChildren<TMP_InputField>();
+        string input = inputField.text;
+    }
 
     /// <summary>
     /// Updates the Captain's given course to direct the whereabouts of the submarine.
@@ -184,17 +204,17 @@ public class Captain : Role
 
     public IEnumerator SelectSubmarinePosition()
     {
-        // Show a user interface to allow the captain to choose a position
-        if (!_isInitialPositionChosen)
-        {
+        _isInitialPositionChosen = false;
 
-            // Simulate a delay for testing purposes
-            yield return new WaitForSeconds(5f);
-            //yield return new WaitUntil(() => _isInitialPositionChosen); // when UI is done
+        // Simulate a delay for testing purposes
+        // OpenPositionNotification();
+        yield return new WaitForSeconds(10f);
+        //yield return new WaitUntil(() => _isInitialPositionChosen); // when UI is done
+        // ClosePositionNotification();
 
-            _isInitialPositionChosen = true;
-        }
+        _isInitialPositionChosen = true;
     }
+
 
     /// <summary>
     /// Opens/closes the overlay displaying more of the Captain's actions
