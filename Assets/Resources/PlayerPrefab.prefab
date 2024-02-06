@@ -48,8 +48,7 @@ MonoBehaviour:
   _playerRoles: []
   _playerName: playertest
   _playerRoleNames: []
-  _playerInfo: {fileID: 0}
-  IsMicOpen: 0
+  _cameras: []
 --- !u!114 &4530321871954064341
 MonoBehaviour:
   m_ObjectHideFlags: 0

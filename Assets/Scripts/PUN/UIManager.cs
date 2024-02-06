@@ -33,7 +33,10 @@ public class UIManager : MonoBehaviourPunCallbacks
         redSubmarinePlayersText.text = redText;
         blueSubmarinePlayersText.text = blueText;
     }
-
+    public void StartGame()
+    {
+        SceneManager.LoadScene("TestGame");
+    }
     private Submarine GetSubmarineByName(string submarineName)
     {
         GameObject submarineObject = GameObject.Find(submarineName);
@@ -73,11 +76,6 @@ public class UIManager : MonoBehaviourPunCallbacks
         {
             return "Submarine is null";
         }
-    }
-
-    public void StartGame()
-    {
-        //SceneManager.LoadScene("TestGame");
     }
 
     public void ChooseSubmarineButtonClicked(string submarineName)

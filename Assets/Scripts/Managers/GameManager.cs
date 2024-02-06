@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Photon.Pun;
 
 public class GameManager : MonoBehaviour
 {
@@ -33,6 +34,8 @@ public class GameManager : MonoBehaviour
     // constants
     readonly string[] ROLE_ORDER = { "Captain", "First Mate", "Engineer" };
 
+    public GameObject submarinePrefab;
+    public GameObject playerPrefab;
     #endregion
 
     #region Properties
@@ -98,7 +101,23 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         _cameras = FindObjectsOfType<Camera>().ToList();
-        StartGame();
+        if (PhotonNetwork.IsMasterClient)
+        {
+            // Instantiate submarines and add them to the _submarines list
+            GameObject submarine1Object = PhotonNetwork.Instantiate(submarinePrefab.name,
+                Vector3.zero, Quaternion.identity);
+            submarine1Object.name = "RedTeam";
+            submarine1Object.GetComponent<Submarine>().Name = "RedTeam";
+            _submarines.Add(submarine1Object.GetComponent<Submarine>());
+
+            GameObject submarine2Object = PhotonNetwork.Instantiate(submarinePrefab.name, Vector3.zero, Quaternion.identity);
+            submarine2Object.name = "BlueTeam";
+            submarine2Object.GetComponent<Submarine>().Name = "BlueTeam";
+            _submarines.Add(submarine2Object.GetComponent<Submarine>());
+
+            InstantiatePlayer();
+        }
+        //StartGame();
     }
 
     private void Update()
@@ -273,6 +292,27 @@ public class GameManager : MonoBehaviour
 
         GetPlayerFromRole();
     }
+<<<<<<< Updated upstream
+=======
+    void InstantiatePlayer()
+    {
+        GameObject playerObject = PhotonNetwork.Instantiate(playerPrefab.name, Vector3.zero, Quaternion.identity);
+        Player playerScript = playerObject.GetComponent<Player>();
+        playerScript.Name = "SomePlayerName";
+    }
+    IEnumerator TurnByTurnCoroutine()
+    {
+        while (!_isGameOver)
+        {
+            SwitchToNextRole();
+            Debug.Log($"{_currentSubmarine.Color} team's {_currentRole.Name}, player {_currentPlayer.Name}, is playing.");
+            yield return StartCoroutine(_currentRole.PerformRoleAction());
+            //StopCoroutine(_currentRole.PerformRoleAction());
+        }
+
+        Debug.Log("Game is over!");
+    }
+>>>>>>> Stashed changes
 
     #endregion
 }
