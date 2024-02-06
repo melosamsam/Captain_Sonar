@@ -206,10 +206,9 @@ public class Captain : Role
     {
         _isInitialPositionChosen = false;
 
-        // Simulate a delay for testing purposes
         // OpenPositionNotification();
-        yield return new WaitForSeconds(10f);
-        //yield return new WaitUntil(() => _isInitialPositionChosen); // when UI is done
+        yield return new WaitForSeconds(3f);
+        // yield return new WaitUntil(() => _isInitialPositionChosen); // when UI is done
         // ClosePositionNotification();
 
         _isInitialPositionChosen = true;

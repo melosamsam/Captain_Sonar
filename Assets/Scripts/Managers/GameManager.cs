@@ -138,10 +138,7 @@ public class GameManager : MonoBehaviour
         _isGameOver = false;
 
         // Captains choose their initial position before the game
-        ChooseInitialPositions();
-
-        if (_isTurnBased) ProcessTurnByTurn();
-        //else ProcessRealTime();
+        StartCoroutine(ChooseInitialPositions());
     }
 
     public void EndGame()
@@ -154,7 +151,7 @@ public class GameManager : MonoBehaviour
 
     #region Private methods
 
-    void ChooseInitialPositions()
+    IEnumerator ChooseInitialPositions()
     {
         foreach (Submarine submarine in _submarines)
         {
@@ -164,12 +161,15 @@ public class GameManager : MonoBehaviour
             if (captain != null && !captain.IsInitialPositionChosen)
             {
                 Debug.Log($"{submarine.Color} Captain, player {_currentPlayer.Name}, is choosing submarine position...");
-                StartCoroutine(captain.SelectSubmarinePosition());
+                yield return captain.SelectSubmarinePosition();
                 Debug.Log($"{submarine.Color} Captain, player {_currentPlayer.Name}, has chosen the submarine position!");
             }
         }
         _currentPlayer  = null;
         _currentRole    = null;
+
+        if (_isTurnBased) StartCoroutine(ProcessTurnByTurn());
+        //else ProcessRealTime();
     }
 
     void DisableCameras()
@@ -225,9 +225,17 @@ public class GameManager : MonoBehaviour
         _mainMap = new(_mapNumber, !_isTurnBased);
     }
 
-    void ProcessTurnByTurn()
+    IEnumerator ProcessTurnByTurn()
     {
-        StartCoroutine(TurnByTurnCoroutine());
+        while (!_isGameOver)
+        {
+            SwitchToNextRole();
+            Debug.Log($"{_currentSubmarine.Color} team's {_currentRole.Name}, player {_currentPlayer.Name}, is playing.");
+            yield return _currentRole.PerformRoleAction();
+            // StopCoroutine(_currentRole.PerformRoleAction());
+        }
+
+        Debug.Log("Game is over!");
     }
 
     void SwitchToNextTeam()
@@ -264,19 +272,6 @@ public class GameManager : MonoBehaviour
         }
 
         GetPlayerFromRole();
-    }
-
-    IEnumerator TurnByTurnCoroutine()
-    {
-        while (!_isGameOver)
-        {
-            SwitchToNextRole();
-            Debug.Log($"{_currentSubmarine.Color} team's {_currentRole.Name}, player {_currentPlayer.Name}, is playing.");
-            yield return StartCoroutine(_currentRole.PerformRoleAction());
-            //StopCoroutine(_currentRole.PerformRoleAction());
-        }
-
-        Debug.Log("Game is over!");
     }
 
     #endregion
