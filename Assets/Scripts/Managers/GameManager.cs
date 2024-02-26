@@ -292,27 +292,13 @@ public class GameManager : MonoBehaviour
 
         GetPlayerFromRole();
     }
-<<<<<<< Updated upstream
-=======
+
     void InstantiatePlayer()
     {
         GameObject playerObject = PhotonNetwork.Instantiate(playerPrefab.name, Vector3.zero, Quaternion.identity);
         Player playerScript = playerObject.GetComponent<Player>();
         playerScript.Name = "SomePlayerName";
     }
-    IEnumerator TurnByTurnCoroutine()
-    {
-        while (!_isGameOver)
-        {
-            SwitchToNextRole();
-            Debug.Log($"{_currentSubmarine.Color} team's {_currentRole.Name}, player {_currentPlayer.Name}, is playing.");
-            yield return StartCoroutine(_currentRole.PerformRoleAction());
-            //StopCoroutine(_currentRole.PerformRoleAction());
-        }
-
-        Debug.Log("Game is over!");
-    }
->>>>>>> Stashed changes
 
     #endregion
 }
