@@ -121,12 +121,12 @@ public class GameManager : MonoBehaviour
             InstantiatePlayer();
         }
 
-        InitializeGame();
+        if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("TestGame"))) InitializeGame();
     }
 
     private void Update()
     {
-        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("TestGame"))
+        if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("TestGame")))
         {
             if (!_currentSubmarine.IsSubmerged)
             {
@@ -156,10 +156,6 @@ public class GameManager : MonoBehaviour
         }
 
         _mainMap = new Map(_mapNumber, !_isTurnBased);
-        Debug.Log(_submarines[0]);
-        // randomly chooses which team starts first
-        print("YOLO");
-        
     }
 
     public void EndGame()
@@ -273,12 +269,19 @@ public class GameManager : MonoBehaviour
 
     IEnumerator ProcessTurnByTurn()
     {
+        // all roles' turn is over (disabled) right before the game starts
+        foreach (Submarine sub in _submarines)
+        {
+            foreach (Player player in sub.Players)
+                foreach (Role role in player.Role) role.ToggleTurn();
+        }
+
+
         while (!_isGameOver)
         {
             SwitchToNextRole();
             Debug.Log($"{_currentSubmarine.Color} team's {_currentRole.Name}, player {_currentPlayer.Name}, is playing.");
             yield return _currentRole.PerformRoleAction();
-            // StopCoroutine(_currentRole.PerformRoleAction());
         }
 
         Debug.Log("Game is over!");
@@ -302,11 +305,11 @@ public class GameManager : MonoBehaviour
             int index = Array.IndexOf(ROLE_ORDER, _currentRole.Name);
             if (index >= 0 && index < ROLE_ORDER.Length - 1)
             {
-                // Incrémentez l'index pour passer au prochain rôle
+                // increment index to get the next Role
                 index++;
                 string nextRole = ROLE_ORDER[index];
 
-                // Cherchez le prochain rôle dans les composants enfants du sous-marin
+                // Look for the next Role in the Submarine's children components
                 Role[] roles = _currentSubmarine.gameObject.GetComponentsInChildren<Role>();
                 _currentRole = Array.Find(roles, role => role.Name == nextRole);
             }

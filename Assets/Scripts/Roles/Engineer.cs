@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Engineer : Role
@@ -22,9 +20,9 @@ public class Engineer : Role
 
     protected override void ToggleUI()
     {
-        GameObject ui = GameObject.Find("Dials");
+        Transform ui = _board.Find("Dials");
 
-        ui.transform.localScale = !IsTurnOver ? Vector3.one : Vector3.zero;
+        ui.localScale = !IsTurnOver ? Vector3.one : Vector3.zero;
     }
 
     #endregion
@@ -35,12 +33,6 @@ public class Engineer : Role
     void Awake()
     {
         SetDescription();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
     }
 
     // Update is called once per frame

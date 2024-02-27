@@ -1037,7 +1037,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.5333192, g: 0.58431375, b: 0.16470589, a: 0.39215687}
     m_PressedColor: {r: 0.3356638, g: 0.3679245, b: 0.10239409, a: 0.39607844}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -1171,7 +1171,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.5333192, g: 0.58431375, b: 0.16470589, a: 0.39215687}
     m_PressedColor: {r: 0.3356638, g: 0.3679245, b: 0.10239409, a: 0.39607844}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -1888,7 +1888,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.5333192, g: 0.58431375, b: 0.16470589, a: 0.39215687}
     m_PressedColor: {r: 0.3356638, g: 0.3679245, b: 0.10239409, a: 0.39607844}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -1971,6 +1971,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NameSystem: sonar
+  GaugeList: []
 --- !u!1 &3320068267904747238
 GameObject:
   m_ObjectHideFlags: 0
@@ -2023,6 +2024,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NameSystem: mine
+  GaugeList: []
 --- !u!1 &3320068267932557579
 GameObject:
   m_ObjectHideFlags: 0
@@ -2210,6 +2212,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NameSystem: drone
+  GaugeList: []
 --- !u!1 &3320068267977950302
 GameObject:
   m_ObjectHideFlags: 0
@@ -2355,7 +2358,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.5333192, g: 0.58431375, b: 0.16470589, a: 0.39215687}
     m_PressedColor: {r: 0.3356638, g: 0.3679245, b: 0.10239409, a: 0.39607844}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -2489,7 +2492,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.5333192, g: 0.58431375, b: 0.16470589, a: 0.39215687}
     m_PressedColor: {r: 0.3356638, g: 0.3679245, b: 0.10239409, a: 0.39607844}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -2707,6 +2710,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NameSystem: torpedo
+  GaugeList: []
 --- !u!1 &3320068268538764012
 GameObject:
   m_ObjectHideFlags: 0
@@ -2759,6 +2763,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NameSystem: scenario
+  GaugeList: []
 --- !u!1 &3320068268539155565
 GameObject:
   m_ObjectHideFlags: 0
@@ -2811,6 +2816,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NameSystem: silence
+  GaugeList: []
 --- !u!1 &3320068268636068407
 GameObject:
   m_ObjectHideFlags: 0
@@ -2914,7 +2920,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.5333192, g: 0.58431375, b: 0.16470589, a: 0.39215687}
     m_PressedColor: {r: 0.3356638, g: 0.3679245, b: 0.10239409, a: 0.39607844}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
