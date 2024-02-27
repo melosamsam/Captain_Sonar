@@ -208,6 +208,7 @@ public class Captain : Role
 
         // OpenPositionNotification();
         yield return new WaitForSeconds(3f);
+        _submarine.SetPosition(new Position(5, 5));
         // yield return new WaitUntil(() => _isInitialPositionChosen); // when UI is done
         // ClosePositionNotification();
 

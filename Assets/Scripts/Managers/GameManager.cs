@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     bool _isGameOver;
 
     [SerializeField] int _mapNumber;
-    Map _mainMap;
+    [SerializeField] Map _mainMap;
 
     // constants
     readonly string[] ROLE_ORDER = { "Captain", "First Mate", "Engineer" };
@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
 
             InstantiatePlayer();
         }
-        //StartGame();
+        StartGame();
     }
 
     private void Update()
@@ -147,6 +147,8 @@ public class GameManager : MonoBehaviour
                 player.EnableCamera();
             }
         }
+
+        _mainMap = new Map(_mapNumber, !_isTurnBased);
 
         // randomly chooses which team starts first
         _currentSubmarine = _submarines[UnityEngine.Random.Range(0, 2)];
@@ -242,6 +244,9 @@ public class GameManager : MonoBehaviour
         _isNormalMode = true;
         _isGameOver = true;
         _mainMap = new(_mapNumber, !_isTurnBased);
+
+        foreach (Submarine sub in _submarines)
+            sub.GameMap = _mainMap;
     }
 
     IEnumerator ProcessTurnByTurn()

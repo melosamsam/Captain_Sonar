@@ -24,7 +24,7 @@ public class Submarine : MonoBehaviour
     private int[,] _trail;
 
     // shared variables
-    private Map _gameMap; // taken from the GameManager or another GameObject
+    [SerializeField] private Map _gameMap; // taken from the GameManager or another GameObject
 
     #endregion
 
@@ -61,8 +61,14 @@ public class Submarine : MonoBehaviour
     public Position CurrentPosition { get => _currentPosition; } // readonly, moving the Submarine should only be executed within the class
 
     /// <summary>
+    /// 
+    /// </summary>
+    public Map GameMap { get { return _gameMap; } set { _gameMap = value; } }
+
+    /// <summary>
     /// The amount of health the submarine currently has
     /// </summary>
+    /// 
     public int Health { get { return _health; } }
 
     /// <summary>
@@ -112,7 +118,6 @@ public class Submarine : MonoBehaviour
             _color              = gameObject.name.Split(' ')[0];
             _players            = GetComponentsInChildren<Player>().ToList(); // take the players chosen from the lobby available right before
             _nbOfTurnsSurfaced  = 0;
-            _gameMap            = GameManager.Instance.MainMap;
 
             if (_gameMap != null)
                 _trail = new int[_gameMap.GetMap().GetLength(0), _gameMap.GetMap().GetLength(1)];
