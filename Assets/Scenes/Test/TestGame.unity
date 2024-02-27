@@ -824,7 +824,7 @@ Camera:
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 7
+  m_TargetDisplay: 3
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
@@ -917,7 +917,7 @@ Camera:
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 2
+  m_TargetDisplay: 6
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
@@ -1112,7 +1112,7 @@ Camera:
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 1
+  m_TargetDisplay: 4
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
@@ -1611,8 +1611,8 @@ MonoBehaviour:
   _currentPlayer: {fileID: 0}
   _currentRole: {fileID: 0}
   _mapNumber: 3
-  submarinePrefab: {fileID: 0}
-  playerPrefab: {fileID: 0}
+  submarinePrefab: {fileID: 253613566024484363, guid: 406a01ea732196b4bb94978dbd95cbb7, type: 3}
+  playerPrefab: {fileID: 5466067253858239676, guid: 5f2da028edf3af74ab1a6886939da2f6, type: 3}
 --- !u!4 &1122364612
 Transform:
   m_ObjectHideFlags: 0
@@ -1688,7 +1688,7 @@ Camera:
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
+  m_TargetDisplay: 1
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
@@ -1899,7 +1899,7 @@ Camera:
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
+  m_TargetDisplay: 2
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
@@ -2192,7 +2192,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 409484310069003737, guid: a9dff42fab6785c4891fb0ae20c60ccb, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 11375853
+      value: 11452687
       objectReference: {fileID: 0}
     - target: {fileID: 838193802056887876, guid: a9dff42fab6785c4891fb0ae20c60ccb, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2309,7 +2309,7 @@ Camera:
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 3
+  m_TargetDisplay: 7
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
@@ -2628,7 +2628,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 409484310069003737, guid: a9dff42fab6785c4891fb0ae20c60ccb, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 11740637
+      value: 11817471
       objectReference: {fileID: 0}
     - target: {fileID: 838193802056887876, guid: a9dff42fab6785c4891fb0ae20c60ccb, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2745,7 +2745,7 @@ Camera:
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 1
+  m_TargetDisplay: 5
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1

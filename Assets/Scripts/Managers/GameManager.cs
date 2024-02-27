@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -82,25 +83,27 @@ public class GameManager : MonoBehaviour
     // Awake is called when an enabled script instance is being loaded
     void Awake()
     {
-        if (_instance == null)
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("TestGame"))
         {
-            _instance = this;
-            DontDestroyOnLoad(gameObject);
-            gameObject.GetComponent<GameManager>().enabled = true;
+            if (_instance == null)
+            {
+                _instance = this;
+                DontDestroyOnLoad(gameObject);
+                gameObject.GetComponent<GameManager>().enabled = true;
+            }
+            else
+            {
+                Destroy(gameObject);
+                Debug.LogWarning("More than one GameManager in the scene");
+                return;
+            }
+            AwakeGame();
         }
-        else
-        {
-            Destroy(gameObject);
-            Debug.LogWarning("More than one GameManager in the scene");
-            return;
-        }
-        InitializeGame();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        _cameras = FindObjectsOfType<Camera>().ToList();
         if (PhotonNetwork.IsMasterClient)
         {
             // Instantiate submarines and add them to the _submarines list
@@ -117,16 +120,20 @@ public class GameManager : MonoBehaviour
 
             InstantiatePlayer();
         }
-        StartGame();
+
+        InitializeGame();
     }
 
     private void Update()
     {
-        if (!_currentSubmarine.IsSubmerged)
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("TestGame"))
         {
-            _currentSubmarine.TurnsSurfaced++;
-            _currentPlayer = null;
-            SwitchToNextTeam();
+            if (!_currentSubmarine.IsSubmerged)
+            {
+                _currentSubmarine.TurnsSurfaced++;
+                _currentPlayer = null;
+                SwitchToNextTeam();
+            }
         }
     }
 
@@ -149,17 +156,10 @@ public class GameManager : MonoBehaviour
         }
 
         _mainMap = new Map(_mapNumber, !_isTurnBased);
-
+        Debug.Log(_submarines[0]);
         // randomly chooses which team starts first
-        _currentSubmarine = _submarines[UnityEngine.Random.Range(0, 2)];
-
-        InitializeBoards();
-
-        // start the game
-        _isGameOver = false;
-
-        // Captains choose their initial position before the game
-        StartCoroutine(ChooseInitialPositions());
+        print("YOLO");
+        
     }
 
     public void EndGame()
@@ -171,6 +171,20 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Private methods
+
+    void InitializeGame()
+    {
+        StartGame();
+        _currentSubmarine = _submarines[UnityEngine.Random.Range(0, 2)];
+
+        InitializeBoards();
+
+        // start the game
+        _isGameOver = false;
+
+        // Captains choose their initial position before the game
+        StartCoroutine(ChooseInitialPositions());
+    }
 
     IEnumerator ChooseInitialPositions()
     {
@@ -200,6 +214,13 @@ public class GameManager : MonoBehaviour
             camera.enabled = false;
 
         Debug.Log("All cameras disabled");
+
+        foreach (Submarine sub in _submarines)
+            foreach (Player player in sub.Players)
+            {
+                player.Cameras[0].enabled = true;
+                player.Display = player.Cameras[0].targetDisplay;
+            }
     }
 
     void DistributeCameras()
@@ -234,7 +255,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void InitializeGame()
+    void AwakeGame()
     {
         _submarines = FindObjectsOfType<Submarine>().ToList();
         _currentSubmarine = null;
@@ -244,6 +265,7 @@ public class GameManager : MonoBehaviour
         _isNormalMode = true;
         _isGameOver = true;
         _mainMap = new(_mapNumber, !_isTurnBased);
+        _cameras = FindObjectsOfType<Camera>().ToList();
 
         foreach (Submarine sub in _submarines)
             sub.GameMap = _mainMap;
