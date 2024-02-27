@@ -29,29 +29,6 @@ public class Board : MonoBehaviour
 
     #endregion
 
-    #region Constructor
-
-    public Board (string boardName, bool realTime)
-    {
-        this.boardName = boardName;
-        this.realTime = realTime;
-        if (boardName == "captain")
-        {
-            //Initialize_captainmap(realTime, chosenMap)
-            //chosenMap choisi dans le script du jeu (main)
-        }
-        else if (boardName == "firstMate") Initialize_firstMateBoard();
-        else if (boardName == "engineer") Initialize_engineerBoard(realTime);
-        else if (boardName=="detector")
-        {
-            Initialize_SeeThrough();
-            //Initialize_captainmap(realTime, chosenMap)
-            //chosenMap choisi dans le script du jeu (main)
-        }
-    }
-
-    #endregion
-
     #region Public methods
 
     /// <summary>
@@ -89,12 +66,6 @@ public class Board : MonoBehaviour
     #region Private methods
 
     //sert à distribuer la carte / initialiser le visuel
-    static void Initialize_captainmap(int chosenMap, bool gameMode)
-    {
-        //Avoir une database des maps avec iles avant
-        Map currentMap = new Map(chosenMap, gameMode);
-    }
-
     static public void InitializeCaptainBoard(Map map, string team, Captain role)
     {
         // the board to assign to the player
@@ -126,12 +97,6 @@ public class Board : MonoBehaviour
         UpdateUIEvents(renderCamera.GetChild(0).gameObject, role);
     }
 
-    static void Initialize_firstMateBoard()
-    {
-        //Créer les systèmes et jauges avant
-        //sert à distribuer la carte / initialiser le visuel
-    }
-
     static void InitializeFirstMateBoard(string team, FirstMate role)
     {
         // the board to assign to the player
@@ -147,13 +112,6 @@ public class Board : MonoBehaviour
         UpdateUIEvents(firstMateBoard.transform.parent.gameObject, role);
     }
 
-    static void Initialize_engineerBoard(bool gameMode)
-    {
-        //Créer les élements (radioactivité,…) avant
-        //Le gameMode influe que pour faire surface je crois, ce serait bien de trouver autre chose qu'entourer le bateau parce que c'est pas pratique avec la souris
-
-    }
-
     static void InitializeEngineerBoard(string team, Engineer role)
     {
         // the board to assign to the player
@@ -167,12 +125,6 @@ public class Board : MonoBehaviour
         engineerBoard.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
 
         UpdateUIEvents(engineerBoard.transform.parent.gameObject, role);
-    }
-
-    static void Initialize_SeeThrough()
-    {
-        //Dimension x4 taille de la map ou juste très grand 
-        //Avec même quadrillage que map, option d’effacement/dessin/...
     }
 
     static void InitializeRadioDetector(Map map, string team, RadioDetector role)
