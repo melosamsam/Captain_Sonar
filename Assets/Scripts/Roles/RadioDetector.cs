@@ -79,7 +79,6 @@ public class RadioDetector : Role
         _isSeeThroughOpen = false;
         _isGridOpen = false;
         _isDotOpen = false;
-        _Grid.transform.localScale = Vector3.zero;
     }
 
     // Update is called once per frame
