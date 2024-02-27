@@ -43,8 +43,7 @@ public class RadioDetector : Role
     {
         Name = "Radio Detector";
         Description =
-            "The captain is the central element of the entire crew.\n" +
-            "In addition to being responsible for the trajectory taken by the submarine, they must be the link between all other posts."
+            "The radio detector is responsible for listening very precisely to the opposing captain in order to locate the enemy's submarine."
             ;
     }
 
