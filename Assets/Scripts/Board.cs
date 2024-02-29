@@ -157,7 +157,8 @@ public class Board : MonoBehaviour
                 GameObject captainLogo = actions.transform.GetChild(0).gameObject;
                 GameObject windRose = actions.transform.GetChild(1).gameObject;
                 GameObject overlay = actions.transform.GetChild(2).gameObject;
-
+                GameObject tilegrid2 = actions.transform.GetChild(3).gameObject;
+                CaptainGridManager gridmanager2 = actions.transform.GetChild(4).GetComponent<CaptainGridManager>();
 
                 // configuring "Captain_logo" events
                 UnityEngine.UI.Button logo = captainLogo.GetComponent<UnityEngine.UI.Button>();
@@ -182,6 +183,9 @@ public class Board : MonoBehaviour
                 // configuring the "Close" button
                 UnityEngine.UI.Button closeBtn = overlay.transform.Find("Close").GetComponent<UnityEngine.UI.Button>();
                 closeBtn.onClick.AddListener(() => captain.ToggleOverlay());
+
+                // Generate the grid
+                gridmanager2.GenerateGrid(tilegrid2);
 
                 break;
 
