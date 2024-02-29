@@ -43,9 +43,9 @@ public class LogManager : MonoBehaviour
     void Start()
     {
         _editMode = false;
-        _inputField = GameObject.Find("Log Input").GetComponent<TMP_InputField>();
-        _logContainer = GameObject.Find("Log Panel").GetComponent<Transform>();
-        _scrollRect = GameObject.Find("Scroll").GetComponent<ScrollRect>();
+        _inputField = transform.GetChild(1).Find("Log Input").GetComponent<TMP_InputField>();
+        _logContainer = transform.GetChild(0).Find("Log Panel").GetComponent<Transform>();
+        _scrollRect = transform.Find("Scroll").GetComponent<ScrollRect>();
 
         _currentLogItem = null;
     }
