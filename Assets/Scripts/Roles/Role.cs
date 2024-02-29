@@ -5,7 +5,7 @@ public abstract class Role : MonoBehaviour
 {
     #region Attributes
 
-    private bool _isTurnOver = true;
+    bool _isTurnOver = false;
 
     protected Submarine _submarine;
 
@@ -70,6 +70,9 @@ public abstract class Role : MonoBehaviour
         ToggleUI();
     }
 
+    /// <summary>
+    /// Method enabling/disabling the UI elements used to perform role actions according to whether the turn is done or not.
+    /// </summary>
     protected abstract void ToggleUI();
 
     public void ToggleTurn()

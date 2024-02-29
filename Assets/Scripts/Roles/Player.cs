@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using Unity.VisualScripting;
+using System.Linq;
 
 public class Player : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] private List<Camera> _cameras;
     private Camera _currentCamera;
+    private int _display;
 
     #endregion
 
@@ -38,6 +40,10 @@ public class Player : MonoBehaviour
     /// </summary>
     public Submarine AssignedSubmarine { get { return _submarine; } }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    public int Display { get { return _display; } set { _display = value; } }
 
     #endregion
 
@@ -169,13 +175,18 @@ public class Player : MonoBehaviour
         int newIndex = index + direction;
 
         _currentCamera.enabled = false; // deactivate current camera
+        _currentCamera.targetDisplay = _display + 1;
+
 
         if (newIndex < 0) _currentCamera = _cameras[^1];
         else if (!(newIndex < _cameras.Count)) _currentCamera = _cameras[0];
         else _currentCamera = _cameras[newIndex];
 
+
+        _currentCamera.targetDisplay = _display;
         _currentCamera.enabled = true; // activate new camera
     }
+
     /// <summary>
     /// Assigns the chosen submarine to the player, used in team choice at the beginning or in the event of a swap.
     /// </summary>

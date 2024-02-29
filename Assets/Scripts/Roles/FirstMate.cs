@@ -8,7 +8,7 @@ public class FirstMate : Role
 {
     #region Attributes
 
-    [SerializeField] private List<string> _filledGauges = new();
+    List<string> _filledGauges = new();
 
     #endregion
 
@@ -17,13 +17,7 @@ public class FirstMate : Role
     // Awake is called when an enabled script instance is being loaded
     private void Awake()
     {
-        SetDescription();        
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        // PerformRoleAction();
+        SetDescription();
     }
 
     private void Update()
@@ -72,7 +66,9 @@ public class FirstMate : Role
     protected override void ToggleUI()
     {
         // Hide UI if turn is over, show it otherwise
-        GameObject.Find("Systems").transform.localScale = IsTurnOver ? new Vector3(0,0,0) : new Vector3(1,1,1);
+        UnityEngine.UI.Button[] ui_buttons = _board.GetComponentsInChildren<UnityEngine.UI.Button>();
+        foreach (UnityEngine.UI.Button system in ui_buttons)
+            system.interactable = !IsTurnOver;
     }
 
     #endregion

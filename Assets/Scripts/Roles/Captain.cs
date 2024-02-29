@@ -10,11 +10,11 @@ public class Captain : Role
 
     #region Attributes
 
-    private bool _isInitialPositionChosen;
-    private bool _isOverlayOpen;
+    bool _isInitialPositionChosen;
+    bool _isOverlayOpen;
 
-    private TMP_Dropdown _systemDropdown;
-    private GameObject _notification;
+    TMP_Dropdown _systemDropdown;
+    GameObject _notification;
 
     #endregion
 
@@ -74,10 +74,6 @@ public class Captain : Role
     #endregion
 
     #region Overridden methods
-
-    /// <summary>
-    /// Method called when the turn of the Captain finishes or ends.
-    /// </summary>
     protected override void OnActionStatusChanged()
     {
         ToggleUI();
@@ -92,9 +88,6 @@ public class Captain : Role
             ;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public override void FinishTurn()
     {
         // closes the overlay if it is still opened
@@ -104,16 +97,12 @@ public class Captain : Role
         ToggleTurn();
     }
 
-    /// <summary>
-    /// Method enabling/disabling the UI elements used to perform role actions according to whether the turn is done or not.
-    /// </summary>
     protected override void ToggleUI()
     {
-        GameObject ui = GameObject.Find("Actions");
+        Transform ui = _board.Find("Actions");
 
-        ui.transform.localScale = !IsTurnOver ? Vector3.one: Vector3.zero;
+        ui.localScale = !IsTurnOver ? Vector3.one: Vector3.zero;
     }
-
 
     #endregion
 
@@ -137,11 +126,17 @@ public class Captain : Role
         FinishTurn();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void OpenPositionNotification()
     {
         _notification.transform.localScale = Vector3.one;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void ClosePositionNotification()
     {
         _notification.transform.localScale = Vector3.zero;
@@ -149,8 +144,7 @@ public class Captain : Role
 
     public void ChooseInitialPosition()
     {
-        TMP_InputField inputField = _notification.GetComponentInChildren<TMP_InputField>();
-        string input = inputField.text;
+        // To do once the grid is functional
     }
 
     /// <summary>
@@ -202,6 +196,10 @@ public class Captain : Role
         FinishTurn();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator SelectSubmarinePosition()
     {
         _isInitialPositionChosen = false;
@@ -214,7 +212,6 @@ public class Captain : Role
 
         _isInitialPositionChosen = true;
     }
-
 
     /// <summary>
     /// Opens/closes the overlay displaying more of the Captain's actions

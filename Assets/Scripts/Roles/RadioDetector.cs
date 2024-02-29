@@ -6,13 +6,13 @@ public class RadioDetector : Role
 
     #region Attributes
 
-    private bool _isSeeThroughOpen;
-    private bool _isGridOpen;
-    private bool _isDotOpen;
+    bool _isSeeThroughOpen;
+    bool _isGridOpen;
+    bool _isDotOpen;
 
-    [SerializeField] private GameObject _seeThrough;
-    [SerializeField] private GameObject _Grid;
-    [SerializeField] private GameObject _Dot;
+    [SerializeField] GameObject _seeThrough;
+    [SerializeField] GameObject _Grid;
+    [SerializeField] GameObject _Dot;
 
     #endregion
 
@@ -52,8 +52,7 @@ public class RadioDetector : Role
     /// </summary>
     protected override void ToggleUI()
     {
-        GameObject canvas = GameObject.Find("Canvas");
-        canvas.transform.localScale = !IsTurnOver ? Vector3.one : Vector3.zero;
+        // we do nothing because the Detector's UI is always available
     }
 
 
