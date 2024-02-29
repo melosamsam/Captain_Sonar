@@ -3114,7 +3114,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 11950461}
+  m_AnchoredPosition: {x: 0, y: 17003666}
   m_SizeDelta: {x: 0, y: 28}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &409484310103111673
@@ -3312,8 +3312,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0115100e401b5104fa85ee0e7b1f272f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _width: 10
-  _height: 10
+  _width: 8
+  _height: 8
   _tilePrefab: {fileID: 7706785123795290270, guid: 0d74bb4b857a6ee4285dee908262778e, type: 3}
   _tileHPrefab: {fileID: 1350246738688665362, guid: 0f8c70a0d0514c047818e171d88f2c5c, type: 3}
 --- !u!1 &1549335943295305170
