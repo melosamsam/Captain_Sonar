@@ -86,14 +86,6 @@ public class Board : MonoBehaviour
         // set the overlay background to correspond the team's color
         overlay.transform.Find("Background").GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(overlayBgPath);
 
-        // set the notification GameObject
-        role.Notification = notification;
-        role.Notification.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(overlayBgPath);
-
-        // add event listener to input field
-        TMP_InputField inputField = role.Notification.GetComponentInChildren<TMP_InputField>();
-        inputField.onEndEdit.AddListener((value) => role.ChooseInitialPosition());
-
         UpdateUIEvents(renderCamera.GetChild(0).gameObject, role);
     }
 

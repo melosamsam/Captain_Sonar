@@ -6,10 +6,10 @@ public class Map
 {
     //create class for maps :
     #region attributs
-    private string nameMap;
-    private int numberMap;
-    private int[,] map; // Either 10x10 or 15x15 (4 or 9 sectors per map of size 5x5)
-    private bool realTime; //True if realtime, false if turn by turn
+     string nameMap;
+     int numberMap;
+     int[,] map; // Either 10x10 or 15x15 (4 or 9 sectors per map of size 5x5)
+     bool realTime; //True if realtime, false if turn by turn
     #endregion
 
     #region Get

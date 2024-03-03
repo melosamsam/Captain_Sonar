@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,23 +9,24 @@ public class Submarine : MonoBehaviour
     #region Attributes
 
     // state of submarine
-    private int _health;
-    private bool _isSubmerged;
-    [SerializeField] private int _maxHealth;
-    private int _nbOfTurnsSurfaced;
+    int _health;
+    bool _isSubmerged;
+    [SerializeField] int _maxHealth;
+    int _nbOfTurnsSurfaced;
 
     // state of the submarine's crew
-    private string _name;
-    private string _color;
-    [SerializeField] private List<Player> _players;
+    string _name;
+    string _color;
+    [SerializeField] Timer _timer;
+    [SerializeField] List<Player> _players;
 
     // positions of the submarine
-    private Direction _currentCourse;
-    private Position _currentPosition;
-    private int[,] _trail;
+    Direction _currentCourse;
+    Position _currentPosition;
+    int[,] _trail;
 
     // shared variables
-    [SerializeField] private Map _gameMap; // taken from the GameManager or another GameObject
+    [SerializeField] Map _gameMap; // taken from the GameManager or another GameObject
 
     #endregion
 
@@ -92,6 +94,11 @@ public class Submarine : MonoBehaviour
     public List<Player> Players { get => _players; } // readonly, there shouldn't be any reason to change the formation of the team mid-game
 
     /// <summary>
+    /// 
+    /// </summary>
+    public Timer Timer { get => _timer; set { _timer = value; } }
+
+    /// <summary>
     /// Matrix representing where the submarine has already gone within the game's Map 
     /// </summary>
     public int[,] Trail { get => _trail; }
@@ -118,6 +125,7 @@ public class Submarine : MonoBehaviour
             _color              = gameObject.name.Split(' ')[0];
             _players            = GetComponentsInChildren<Player>().ToList(); // take the players chosen from the lobby available right before
             _nbOfTurnsSurfaced  = 0;
+            _timer = GetComponent<Timer>();
 
             if (_gameMap != null)
                 _trail = new int[_gameMap.GetMap().GetLength(0), _gameMap.GetMap().GetLength(1)];

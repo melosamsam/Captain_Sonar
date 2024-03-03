@@ -7,13 +7,13 @@ public class DragObject : MonoBehaviour
 {
     #region Attributes
 
-    private Canvas canvas;
+     Canvas canvas;
 
     #endregion
 
     #region Unity methods
 
-    private void Awake()
+     void Awake()
     {
         canvas = transform.parent.parent.GetComponent<Canvas>();
     }

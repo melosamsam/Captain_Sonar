@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
@@ -26,6 +27,8 @@ public class GameManager : MonoBehaviour
 
     // game settings
     bool _isTurnBased;
+    float _timePerTeam;
+
     bool _isNormalMode;
     bool _isGameOver;
 
@@ -246,6 +249,10 @@ public class GameManager : MonoBehaviour
                 foreach (Role role in player.Role)
                 {
                     Board.Initialize(_mainMap, submarine, role);
+
+                    Transform board = role.Board;
+                    submarine.Timer.timerText.Add(board.Find("Timer").GetComponentInChildren<TMP_Text>());
+                    submarine.Timer.SetStartingTime(_timePerTeam);
                 }
             }
         }
@@ -260,6 +267,8 @@ public class GameManager : MonoBehaviour
         _isTurnBased = true;
         _isNormalMode = true;
         _isGameOver = true;
+        _timePerTeam = 45;
+
         _mainMap = new(_mapNumber, !_isTurnBased);
         _cameras = FindObjectsOfType<Camera>().ToList();
 
@@ -279,6 +288,7 @@ public class GameManager : MonoBehaviour
 
         while (!_isGameOver)
         {
+            _currentSubmarine.Timer.StartCountdown();
             SwitchToNextRole();
             Debug.Log($"{_currentSubmarine.Color} team's {_currentRole.Name}, player {_currentPlayer.Name}, is playing.");
             yield return _currentRole.PerformRoleAction();
@@ -289,8 +299,11 @@ public class GameManager : MonoBehaviour
 
     void SwitchToNextTeam()
     {
+        _currentSubmarine.Timer.StopCountdown(); // stop the countdown before switching teams
         int index = _submarines.IndexOf(_currentSubmarine);
-        _currentSubmarine = index == 0 ? _submarines[index++] : _submarines[0];
+        _currentSubmarine = index == 0 ? _submarines[1] : _submarines[0];
+
+        _currentSubmarine.Timer.StartCountdown(); // start the new team's countdown
         SwitchToNextRole();
     }
 
