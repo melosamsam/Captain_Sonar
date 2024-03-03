@@ -7,12 +7,12 @@ using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Add Team Manager methods, variables and sync -> sub1 and sub2 in _submarines, no current player and add role management.
+/// Only one player per scene can join submarines
+/// </summary>
 public class GameManager : MonoBehaviour
 {
-    /// <summary>
-    /// Add Team Manager methods, variables and sync -> sub1 and sub2 in _submarines, no current player and add role management.
-    /// Only one player per scene can join submarines
-    /// </summary>
     #region Attributes
 
     static GameManager _instance;
@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
 
     List<Camera> _cameras;
 
-    // game settings
+    // Game settings
     bool _isTurnBased;
     float _timePerTeam;
 
@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] int _mapNumber;
     [SerializeField] Map _mainMap;
 
-    // constants
+    // Constants
     readonly string[] ROLE_ORDER = { "Captain", "First Mate", "Engineer" };
 
     public GameObject submarinePrefab;
@@ -46,39 +46,39 @@ public class GameManager : MonoBehaviour
     #region Properties
 
     /// <summary>
-    /// Singleton
+    /// Singleton instance of GameManager.
     /// </summary>
-    static public GameManager Instance { get { return _instance; } }
+    static public GameManager Instance { get => _instance; }
 
     /// <summary>
-    /// 
+    /// The current player in the game.
     /// </summary>
-    public Player CurrentPlayer { get { return _currentPlayer; } }
+    public Player CurrentPlayer { get => _currentPlayer; }
+    
+    /// <summary>
+    /// The current role in the game.
+    /// </summary>
+    public Role CurrentRole { get => _currentRole; }
 
     /// <summary>
-    /// 
+    /// Indicates whether the game is over.
     /// </summary>
-    public Role CurrentRole { get { return _currentRole; } }
+    public bool IsGameOver {  get => _isGameOver; }
 
     /// <summary>
-    /// 
+    /// Indicates whether the game is in normal mode.
     /// </summary>
-    public bool IsGameOver {  get { return _isGameOver; } }
+    public bool IsNormalMode {  get => _isNormalMode; }
 
     /// <summary>
-    /// 
-    /// </summary>
-    public bool IsNormalMode {  get { return _isNormalMode; } }
-
-    /// <summary>
-    /// 
+    /// Indicates whether the game is turn-based.
     /// </summary>
     public bool IsTurnBased {  get { return _isTurnBased; } }
 
     /// <summary>
-    /// 
+    /// The main map used in the game.
     /// </summary>
-    public Map MainMap { get { return _mainMap; } }
+    public Map MainMap { get => _mainMap; }
 
     #endregion
 
@@ -87,64 +87,28 @@ public class GameManager : MonoBehaviour
     // Awake is called when an enabled script instance is being loaded
     void Awake()
     {
-        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("TestGame"))
-        {
-            if (_instance == null)
-            {
-                _instance = this;
-                DontDestroyOnLoad(gameObject);
-                gameObject.GetComponent<GameManager>().enabled = true;
-            }
-            else
-            {
-                Destroy(gameObject);
-                Debug.LogWarning("More than one GameManager in the scene");
-                return;
-            }
-            AwakeGame();
-        }
+        InitializeSingleton();
+        AwakeGame();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            // Instantiate submarines and add them to the _submarines list
-            GameObject submarine1Object = PhotonNetwork.Instantiate(submarinePrefab.name,
-                Vector3.zero, Quaternion.identity);
-            submarine1Object.name = "RedTeam";
-            submarine1Object.GetComponent<Submarine>().Name = "RedTeam";
-            _submarines.Add(submarine1Object.GetComponent<Submarine>());
-
-            GameObject submarine2Object = PhotonNetwork.Instantiate(submarinePrefab.name, Vector3.zero, Quaternion.identity);
-            submarine2Object.name = "BlueTeam";
-            submarine2Object.GetComponent<Submarine>().Name = "BlueTeam";
-            _submarines.Add(submarine2Object.GetComponent<Submarine>());
-
-            InstantiatePlayer();
-        }
-
-        if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("TestGame"))) InitializeGame();
+        InitializeGame();
     }
 
     private void Update()
     {
-        if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("TestGame")))
-        {
-            if (!_currentSubmarine.IsSubmerged)
-            {
-                _currentSubmarine.TurnsSurfaced++;
-                _currentPlayer = null;
-                SwitchToNextTeam();
-            }
-        }
+        UpdateGameLogic();
     }
 
     #endregion
 
     #region Public methods
 
+    /// <summary>
+    /// Starts the game and initializes necessary components.
+    /// </summary>
     public void StartGame()
     {
         DistributeCameras();
@@ -162,6 +126,9 @@ public class GameManager : MonoBehaviour
         _mainMap = new Map(_mapNumber, !_isTurnBased);
     }
 
+    /// <summary>
+    /// Ends the game and determines the losing team.
+    /// </summary>
     public void EndGame()
     {
         _isGameOver = true;
@@ -174,18 +141,22 @@ public class GameManager : MonoBehaviour
 
     #region Private methods
 
-    void InitializeGame()
+    void AwakeGame()
     {
-        StartGame();
-        _currentSubmarine = _submarines[UnityEngine.Random.Range(0, 2)];
+        _submarines = FindObjectsOfType<Submarine>().ToList();
+        _currentSubmarine = null;
+        _currentPlayer = null;
+        _currentRole = null;
+        _isTurnBased = true;
+        _isNormalMode = true;
+        _isGameOver = true;
+        _timePerTeam = 45;
 
-        InitializeBoards();
+        _mainMap = new(_mapNumber, !_isTurnBased);
+        _cameras = FindObjectsOfType<Camera>().ToList();
 
-        // start the game
-        _isGameOver = false;
-
-        // Captains choose their initial position before the game
-        StartCoroutine(ChooseInitialPositions());
+        foreach (Submarine sub in _submarines)
+            sub.GameMap = _mainMap;
     }
 
     IEnumerator ChooseInitialPositions()
@@ -202,8 +173,8 @@ public class GameManager : MonoBehaviour
                 Debug.Log($"{submarine.Color} Captain, player {_currentPlayer.Name}, has chosen the submarine position!");
             }
         }
-        _currentPlayer  = null;
-        _currentRole    = null;
+        _currentPlayer = null;
+        _currentRole = null;
 
         if (_isTurnBased) StartCoroutine(ProcessTurnByTurn());
         //else ProcessRealTime();
@@ -227,7 +198,7 @@ public class GameManager : MonoBehaviour
 
     void DistributeCameras()
     {
-        foreach(Submarine submarine in _submarines)
+        foreach (Submarine submarine in _submarines)
         {
             foreach (Player player in submarine.Players)
             {
@@ -261,22 +232,72 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void AwakeGame()
+    void InitializeGame()
     {
-        _submarines = FindObjectsOfType<Submarine>().ToList();
-        _currentSubmarine = null;
-        _currentPlayer = null;
-        _currentRole = null;
-        _isTurnBased = true;
-        _isNormalMode = true;
-        _isGameOver = true;
-        _timePerTeam = 45;
+        if (PhotonNetwork.IsMasterClient)
+        {
+            InstantiateSubmarines();
+            InstantiatePlayer();
+        }
 
-        _mainMap = new(_mapNumber, !_isTurnBased);
-        _cameras = FindObjectsOfType<Camera>().ToList();
+        if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("TestGame"))) 
+            InitializeGameLogic();
 
-        foreach (Submarine sub in _submarines)
-            sub.GameMap = _mainMap;
+    }
+
+    void InitializeGameLogic()
+    {
+        StartGame();
+        _currentSubmarine = _submarines[UnityEngine.Random.Range(0, 2)];
+
+        InitializeBoards();
+
+        // start the game
+        _isGameOver = false;
+
+        // Captains choose their initial position before the game
+        StartCoroutine(ChooseInitialPositions());
+    }
+
+    void InitializeSingleton()
+    {
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("TestGame"))
+        {
+            if (_instance == null)
+            {
+                _instance = this;
+                DontDestroyOnLoad(gameObject);
+                gameObject.GetComponent<GameManager>().enabled = true;
+            }
+            else
+            {
+                Destroy(gameObject);
+                Debug.LogWarning("More than one GameManager in the scene");
+                return;
+            }
+        }
+    }
+
+    void InstantiatePlayer()
+    {
+        GameObject playerObject = PhotonNetwork.Instantiate(playerPrefab.name, Vector3.zero, Quaternion.identity);
+        Player playerScript = playerObject.GetComponent<Player>();
+        playerScript.Name = "SomePlayerName";
+    }
+
+    void InstantiateSubmarines()
+    {
+        // Instantiate submarines and add them to the _submarines list
+        GameObject submarine1Object = PhotonNetwork.Instantiate(submarinePrefab.name,
+            Vector3.zero, Quaternion.identity);
+        submarine1Object.name = "RedTeam";
+        submarine1Object.GetComponent<Submarine>().Name = "RedTeam";
+        _submarines.Add(submarine1Object.GetComponent<Submarine>());
+
+        GameObject submarine2Object = PhotonNetwork.Instantiate(submarinePrefab.name, Vector3.zero, Quaternion.identity);
+        submarine2Object.name = "BlueTeam";
+        submarine2Object.GetComponent<Submarine>().Name = "BlueTeam";
+        _submarines.Add(submarine2Object.GetComponent<Submarine>());
     }
 
     IEnumerator ProcessTurnByTurn()
@@ -298,16 +319,6 @@ public class GameManager : MonoBehaviour
         }
 
         Debug.Log("Game is over!");
-    }
-
-    void SwitchToNextTeam()
-    {
-        _currentSubmarine.Timer.StopCountdown(); // stop the countdown before switching teams
-        int index = _submarines.IndexOf(_currentSubmarine);
-        _currentSubmarine = index == 0 ? _submarines[1] : _submarines[0];
-
-        _currentSubmarine.Timer.StartCountdown(); // start the new team's countdown
-        SwitchToNextRole();
     }
 
     void SwitchToNextRole()
@@ -339,11 +350,27 @@ public class GameManager : MonoBehaviour
         GetPlayerFromRole();
     }
 
-    void InstantiatePlayer()
+    void SwitchToNextTeam()
     {
-        GameObject playerObject = PhotonNetwork.Instantiate(playerPrefab.name, Vector3.zero, Quaternion.identity);
-        Player playerScript = playerObject.GetComponent<Player>();
-        playerScript.Name = "SomePlayerName";
+        _currentSubmarine.Timer.StopCountdown(); // stop the countdown before switching teams
+        int index = _submarines.IndexOf(_currentSubmarine);
+        _currentSubmarine = index == 0 ? _submarines[1] : _submarines[0];
+
+        _currentSubmarine.Timer.StartCountdown(); // start the new team's countdown
+        SwitchToNextRole();
+    }
+
+    void UpdateGameLogic()
+    {
+        if (SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("TestGame")))
+        {
+            if (!_currentSubmarine.IsSubmerged)
+            {
+                _currentSubmarine.TurnsSurfaced++;
+                _currentPlayer = null;
+                SwitchToNextTeam();
+            }
+        }
     }
 
     #endregion

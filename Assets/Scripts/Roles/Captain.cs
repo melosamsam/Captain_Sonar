@@ -3,11 +3,23 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public enum Direction { North, East, South, West, None }
+/// <summary>
+/// Enum representing cardinal directions and none.
+/// </summary>
+public enum Direction 
+{ 
+    North, 
+    East, 
+    South, 
+    West, 
+    None 
+}
 
+/// <summary>
+/// Represents the role of Captain in the game.
+/// </summary>
 public class Captain : Role
 {
-
     #region Attributes
 
     bool _isInitialPositionChosen;
@@ -21,24 +33,19 @@ public class Captain : Role
     #region Properties
 
     /// <summary>
-    /// 
-    /// </summary>
-    public bool IsInitialPositionChosen { get => _isInitialPositionChosen; }
-
-    /// <summary>
-    /// 
+    /// Gets or sets the chosen course for the submarine's movement.
     /// </summary>
     public Direction ChosenCourse { get; private set; }
 
     /// <summary>
-    /// 
+    /// Gets a value indicating whether the initial position has been chosen by the Captain.
     /// </summary>
-    public TMP_Dropdown SystemDropdown { get => _systemDropdown; set => _systemDropdown = value; }
+    public bool IsInitialPositionChosen { get => _isInitialPositionChosen; }
 
     /// <summary>
-    /// GameObject that displays when the Captain has to choose the initial position of their Submarine
+    /// Gets or sets the dropdown UI element for selecting submarine systems.
     /// </summary>
-    public GameObject Notification { get => _notification; set => _notification = value; }
+    public TMP_Dropdown SystemDropdown { get => _systemDropdown; set => _systemDropdown = value; }
   
     #endregion
 
@@ -62,23 +69,36 @@ public class Captain : Role
     // Update is called once per frame
     void Update()
     {
-        if (!IsTurnOver)
-        {
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                FinishTurn();
-            }
-        }
+        HandleInput();
     }
 
     #endregion
 
     #region Overridden methods
+
+    /// <summary>
+    /// Finishes the Captain's turn, closing the overlay if open.
+    /// </summary>
+    public override void FinishTurn()
+    {
+        // Closes the overlay if it is still opened
+        if (_isOverlayOpen) ToggleOverlay();
+
+        // Then finishes the turn
+        ToggleTurn();
+    }
+
+    /// <summary>
+    /// Handles the change in action status by toggling UI elements.
+    /// </summary>
     protected override void OnActionStatusChanged()
     {
         ToggleUI();
     }
 
+    /// <summary>
+    /// Sets the description and name of the Captain role.
+    /// </summary>
     protected override void SetDescription()
     {
         Name = "Captain";
@@ -88,15 +108,9 @@ public class Captain : Role
             ;
     }
 
-    public override void FinishTurn()
-    {
-        // closes the overlay if it is still opened
-        if (_isOverlayOpen) ToggleOverlay();
-
-        // then finishes the turn
-        ToggleTurn();
-    }
-
+    /// <summary>
+    /// Toggles the visibility of UI elements based on the Captain's turn status.
+    /// </summary>
     protected override void ToggleUI()
     {
         Transform ui = _board.Find("Actions");
@@ -109,9 +123,8 @@ public class Captain : Role
     #region Public methods
 
     /// <summary>
-    /// Activates the selected system if it is ready
+    /// Activates the selected system if it is ready.
     /// </summary>
-    /// <param name="system">Name of the system to activate</param>
     public void ActivateSystem()
     {
         string system = "";
@@ -120,28 +133,15 @@ public class Captain : Role
         if (_systemDropdown.value != 0)
             system = systems[_systemDropdown.value];
 
-        // switch() for each case of chosen system
-        // verification made in Systems.cs
+        // Switch statement for each case of the chosen system
+        // Verification made in Systems.cs
         Debug.Log($"{system} activated.");
         FinishTurn();
     }
 
     /// <summary>
-    /// 
+    /// Chooses the initial position of the submarine.
     /// </summary>
-    public void OpenPositionNotification()
-    {
-        _notification.transform.localScale = Vector3.one;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public void ClosePositionNotification()
-    {
-        _notification.transform.localScale = Vector3.zero;
-    }
-
     public void ChooseInitialPosition()
     {
         // To do once the grid is functional
@@ -150,7 +150,7 @@ public class Captain : Role
     /// <summary>
     /// Updates the Captain's given course to direct the whereabouts of the submarine.
     /// </summary>
-    /// <param name="courseChar">The letter indicating which direction to go</param>
+    /// <param name="courseChar">The letter indicating which direction to go.</param>
     public void OrderSubmarineCourse(string courseChar)
     {
         Direction course = Direction.None;
@@ -184,37 +184,35 @@ public class Captain : Role
     }
 
     /// <summary>
-    /// Calling the submarine to surface before doing anything else
+    /// Orders the submarine to surface before performing any other action.
     /// </summary>
     public void OrderSurface()
     {
         Debug.Log("Surface ordered");
 
-        // call the MakeSurface() method in the Submarine class
+        // Call the MakeSurface() method in the Submarine class
         _submarine.MakeSurface();
 
         FinishTurn();
     }
 
     /// <summary>
-    /// 
+    /// Selects the submarine's initial position with a delay;
     /// </summary>
-    /// <returns></returns>
+    /// <returns>An IEnumerator for coroutine use.</returns>
     public IEnumerator SelectSubmarinePosition()
     {
         _isInitialPositionChosen = false;
 
-        // OpenPositionNotification();
         yield return new WaitForSeconds(3f);
         _submarine.SetPosition(new Position(5, 5));
         // yield return new WaitUntil(() => _isInitialPositionChosen); // when UI is done
-        // ClosePositionNotification();
 
         _isInitialPositionChosen = true;
     }
 
     /// <summary>
-    /// Opens/closes the overlay displaying more of the Captain's actions
+    /// Toggles the overlay displaying more of the Captain's actions.
     /// </summary>
     public void ToggleOverlay()
     {
@@ -225,11 +223,25 @@ public class Captain : Role
         else if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("TestGame"))
             overlay = _board.GetChild(3).GetChild(2).gameObject;
 
-        //switch the status of the overlay
+        // Switch the status of the overlay
         _isOverlayOpen = !_isOverlayOpen;
         overlay.transform.localScale = _isOverlayOpen ? Vector3.one : Vector3.zero;
     }
 
     #endregion
 
+    #region Private methods
+
+    void HandleInput()
+    {
+        if (!IsTurnOver)
+        {
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                FinishTurn();
+            }
+        }
+    }
+
+    #endregion
 }
