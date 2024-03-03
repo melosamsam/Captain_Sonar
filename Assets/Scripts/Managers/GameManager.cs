@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] List<Submarine> _submarines;
     [SerializeField] Submarine _currentSubmarine;
+    Submarine _losingSubmarine = null;
 
     [SerializeField] Player _currentPlayer;
     [SerializeField] Role _currentRole;
@@ -164,6 +165,8 @@ public class GameManager : MonoBehaviour
     public void EndGame()
     {
         _isGameOver = true;
+        _losingSubmarine = _currentSubmarine;
+        Debug.Log($"The {_losingSubmarine.Color} team lost the game!");
         // lead to a recap scene maybe and offer to go back to lobby 
     }
 
@@ -251,8 +254,8 @@ public class GameManager : MonoBehaviour
                     Board.Initialize(_mainMap, submarine, role);
 
                     Transform board = role.Board;
-                    submarine.Timer.timerText.Add(board.Find("Timer").GetComponentInChildren<TMP_Text>());
-                    submarine.Timer.SetStartingTime(_timePerTeam);
+                    submarine.Timer.TimerText.Add(board.Find("Timer").GetComponentInChildren<TMP_Text>());
+                    submarine.Timer.SetStartingTime(_timePerTeam * 60);
                 }
             }
         }

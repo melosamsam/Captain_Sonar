@@ -143,7 +143,7 @@ public class Submarine : MonoBehaviour
                 ToggleSubmersion();
             }
 
-            if (_health <= 0) Die();
+            if (_health <= 0 || _timer.IsTimeElapsed) Die();
         }
     }
 
@@ -227,7 +227,7 @@ public class Submarine : MonoBehaviour
 
     void Die()
     {
-        Debug.Log("The submarine has been killed");
+        Debug.Log($"The {_color} submarine has been killed");
         GameManager.Instance.EndGame();
     }
    
