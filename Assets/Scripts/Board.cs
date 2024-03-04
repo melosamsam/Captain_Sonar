@@ -7,7 +7,7 @@ public class Board : MonoBehaviour
 {
     #region Attributes
 
-    private const string BOARD_PATH = "Assets/UI/Boards/";
+    private const string BOARD_PATH = "UI/Boards/";
     static private string mapName;
 
     public string boardName;
@@ -74,16 +74,16 @@ public class Board : MonoBehaviour
         GameObject overlay = renderCamera.GetChild(0).Find("Actions").Find("Overlay").gameObject;
 
         // the path where the correct sprite is
-        string spritePath = $"{BOARD_PATH}Captain/{map.GetNameMap()}_Captain_{team}_{gameMode}.png";
+        string spritePath = $"{BOARD_PATH}Captain/{map.GetNameMap()}_Captain_{team}_{gameMode}";
 
         // path for the overlay background
-        string overlayBgPath = $"Assets/UI/Buttons/Background_{ team.ToLower() }.png";
+        string overlayBgPath = $"UI/Buttons/Background_{ team.ToLower() }";
 
         // replace the default sprite by the correct sprite according to the game's settings and the Role
-        capBoard.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
+        capBoard.GetComponent<Image>().sprite = Resources.Load<Sprite>(spritePath);
 
         // set the overlay background to correspond the team's color
-        overlay.transform.Find("Background").GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(overlayBgPath);
+        overlay.transform.Find("Background").GetComponent<Image>().sprite = Resources.Load<Sprite>(overlayBgPath);
 
         UpdateUIEvents(renderCamera.GetChild(0).gameObject, role);
     }
@@ -95,10 +95,10 @@ public class Board : MonoBehaviour
         GameObject firstMateBoard = renderCamera.GetChild(0).Find("Board").gameObject;
 
         // the path where the correct sprite is
-        string spritePath = $"{BOARD_PATH}First_Mate/First_Mate_{team}_{gameMode}.png";
+        string spritePath = $"{BOARD_PATH}First_Mate/First_Mate_{team}_{gameMode}";
 
         // replace the default sprite by the correct sprite according to the game's settings and the Role
-        firstMateBoard.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
+        firstMateBoard.GetComponent<Image>().sprite = Resources.Load<Sprite>(spritePath);
 
         UpdateUIEvents(firstMateBoard.transform.parent.gameObject, role);
     }
@@ -110,10 +110,10 @@ public class Board : MonoBehaviour
         GameObject engineerBoard = renderCamera.GetChild(0).Find("Board").gameObject;
 
         // the path where the correct sprite is
-        string spritePath = $"{BOARD_PATH}Engineer/Engineer_{team}_{gameMode}.png";
+        string spritePath = $"{BOARD_PATH}Engineer/Engineer_{team}_{gameMode}";
 
         // replace the default sprite by the correct sprite according to the game's settings and the Role
-        engineerBoard.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
+        engineerBoard.GetComponent<Image>().sprite = Resources.Load<Sprite>(spritePath);
 
         UpdateUIEvents(engineerBoard.transform.parent.gameObject, role);
     }
@@ -125,10 +125,10 @@ public class Board : MonoBehaviour
         GameObject detectorBoard = renderCamera.GetChild(0).Find("Board").gameObject;
 
         // the path where the correct sprite is
-        string spritePath = $"{BOARD_PATH}Radio_Detector/{map.GetNameMap()}_Detector_{team}_{gameMode}.png";
+        string spritePath = $"{BOARD_PATH}Radio_Detector/{map.GetNameMap()}_Detector_{team}_{gameMode}";
 
         // replace the default sprite by the correct sprite according to the game's settings and the Role
-        detectorBoard.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
+        detectorBoard.GetComponent<Image>().sprite = Resources.Load<Sprite>(spritePath);
 
         UpdateUIEvents(renderCamera.GetChild(0).gameObject, role);
     }
