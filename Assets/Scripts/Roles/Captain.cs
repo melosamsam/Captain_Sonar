@@ -158,6 +158,7 @@ public class Captain : Role
         {
             case "N":
                 course = Direction.North;
+
                 break;
 
             case "S":
@@ -217,15 +218,25 @@ public class Captain : Role
     public void ToggleOverlay()
     {
         GameObject overlay = null;
+        GameObject grid = null;
 
         if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("TestCaptain"))
-             overlay = GameObject.Find("Overlay");
+        {
+            overlay = GameObject.Find("Overlay");
+            grid = GameObject.Find("TileGrid");
+        }
         else if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("TestGame"))
+        {
             overlay = _board.Find("Actions").Find("Overlay").gameObject;
+            grid = _board.Find("Actions").Find("TileGrid").gameObject;
+        }
+            
 
         // Switch the status of the overlay
         _isOverlayOpen = !_isOverlayOpen;
         overlay.transform.localScale = _isOverlayOpen ? Vector3.one : Vector3.zero;
+        grid.transform.localScale = _isOverlayOpen ? Vector3.zero : Vector3.one;
+
     }
 
     #endregion
