@@ -115,8 +115,6 @@ public class FirstMate : Role
                     if (!currentSystem.GaugeFull())
                     {
                         _filledGauges.Add(system); // mark the system as filled in our List
-                        int toFill = Array.IndexOf(newGauge, 0); // get the 1st case that hasn't been filled yet
-                        newGauge[toFill] = 1; // fill up the new gauge by 1
                         currentSystem.FillGauge(); // set the new gauge as the system's one
                         Debug.Log($"{system} has been filled by 1");
                     }
@@ -135,8 +133,6 @@ public class FirstMate : Role
             }
             else if (_filledGauges.Contains(system)) // if the gauge has already been filled
             {
-                int toRemove = Array.LastIndexOf(newGauge, 1);
-                newGauge[toRemove] = 0;
                 currentSystem.EmptyGauge();
                 _filledGauges.Remove(system);
                 Debug.Log($"{system} has been decremented by 1");
