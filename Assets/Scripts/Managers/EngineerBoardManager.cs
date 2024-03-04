@@ -31,7 +31,7 @@ public class EngineerBoardManager : MonoBehaviour
     private void InitializeBoard(EngineerDialData dialData)
     {
         // reference to panel's GameObject
-        GameObject panel = GameObject.Find($"{dialData.name}Panel");
+        GameObject panel = transform.Find($"{dialData.name}Panel").gameObject;
         UnityEngine.UI.Button[] buttons = panel.GetComponentsInChildren<UnityEngine.UI.Button>();
         dialButtonsDictionary[dialData] = buttons;
 
