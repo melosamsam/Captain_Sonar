@@ -221,7 +221,7 @@ public class Captain : Role
         if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("TestCaptain"))
              overlay = GameObject.Find("Overlay");
         else if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("TestGame"))
-            overlay = _board.GetChild(3).GetChild(2).gameObject;
+            overlay = _board.Find("Actions").Find("Overlay").gameObject;
 
         // Switch the status of the overlay
         _isOverlayOpen = !_isOverlayOpen;

@@ -71,8 +71,7 @@ public class Board : MonoBehaviour
         // the board to assign to the player
         Transform renderCamera = GameObject.Find($"{team} Captain").transform;
         GameObject capBoard = renderCamera.GetChild(0).Find("Board").gameObject;
-        GameObject overlay = capBoard.transform.parent.GetChild(3).GetChild(2).gameObject;
-        GameObject notification = capBoard.transform.parent.GetChild(4).gameObject;
+        GameObject overlay = renderCamera.GetChild(0).Find("Actions").Find("Overlay").gameObject;
 
         // the path where the correct sprite is
         string spritePath = $"{BOARD_PATH}Captain/{map.GetNameMap()}_Captain_{team}_{gameMode}.png";
@@ -146,11 +145,11 @@ public class Board : MonoBehaviour
                 // getting the interactable elements of the 'Actions' GameObject
                 GameObject actions = board.transform.Find("Actions").gameObject;
 
-                GameObject captainLogo = actions.transform.GetChild(0).gameObject;
-                GameObject windRose = actions.transform.GetChild(1).gameObject;
-                GameObject overlay = actions.transform.GetChild(2).gameObject;
-                GameObject tilegrid2 = actions.transform.GetChild(3).gameObject;
-                CaptainGridManager gridmanager2 = actions.transform.GetChild(4).GetComponent<CaptainGridManager>();
+                GameObject captainLogo = actions.transform.Find("CaptainLogo").gameObject;
+                GameObject windRose = actions.transform.Find("WindRose").gameObject;
+                GameObject overlay = actions.transform.Find("Overlay").gameObject;
+                GameObject tilegrid2 = actions.transform.Find("TileGrid").gameObject;
+                CaptainGridManager gridmanager2 = actions.transform.Find("GridManager").GetComponent<CaptainGridManager>();
 
                 // configuring "Captain_logo" events
                 UnityEngine.UI.Button logo = captainLogo.GetComponent<UnityEngine.UI.Button>();
