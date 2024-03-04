@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -26,6 +27,7 @@ public class EngineerBoardManager : MonoBehaviour
         InitializeBoard(engineerDialDataN);
         InitializeBoard(engineerDialDataS);
         InitializeBoard(engineerDialDataE);
+        FollowTheCourseMockUp();
     }
 
     private void InitializeBoard(EngineerDialData dialData)
@@ -88,6 +90,12 @@ public class EngineerBoardManager : MonoBehaviour
             Transform cross = crosses[dialData].GetChild(index);
             cross.gameObject.SetActive(true);
 
+            ClearThePath(1);
+            ClearThePath(2);
+            ClearThePath(3);
+            ClearOneDial();
+            FollowTheCourseMockUp();
+
 
 
             Debug.Log("Button disabled for dialData: " + dialData.name + ", index: " + index);
@@ -148,7 +156,7 @@ public class EngineerBoardManager : MonoBehaviour
                     if (dialData.tab[i].pathIndex == path)
                     {
                         dialData.tab[i].failureFlag = false;
-                        dialButtonsDictionary[dialData][i].interactable = true;
+                        //dialButtonsDictionary[dialData][i].interactable = true;
 
                         Transform cross = crosses[dialData].GetChild(i);
                         cross.gameObject.SetActive(false);
@@ -167,7 +175,7 @@ public class EngineerBoardManager : MonoBehaviour
             {
                 dialData.tab[i].failureFlag = false;
                 //enable button again
-                dialButtonsDictionary[dialData][i].interactable = true;
+                //dialButtonsDictionary[dialData][i].interactable = true;
 
                 Transform cross = crosses[dialData].GetChild(i);
                 cross.gameObject.SetActive(false);
@@ -188,7 +196,7 @@ public class EngineerBoardManager : MonoBehaviour
                 for (int i = 0; i < dialData.tab.Length; i++)
                 {
                     dialData.tab[i].failureFlag = false;
-                    dialButtonsDictionary[dialData][i].interactable = true;
+                    //dialButtonsDictionary[dialData][i].interactable = true;
 
                     Transform cross = crosses[dialData].GetChild(i);
                     cross.gameObject.SetActive(false);
@@ -231,11 +239,28 @@ public class EngineerBoardManager : MonoBehaviour
                     dialButtonsDictionary[dialData][i].interactable = false;
                 }
             }
+            else
+            {
+                for (int i = 0; i < dialData.tab.Length; i++)
+                {
+                    Transform cross = crosses[dialData].GetChild(i);
+                    if (!cross.gameObject.activeSelf)
+                    {
+                        dialButtonsDictionary[dialData][i].interactable = true;
+                    }
+                    
+                }
+            }
         }
     }
 
-    void FollowTheCourseMockUp(string course)
+    void FollowTheCourseMockUp()
     {
+        System.Random random = new System.Random();
+        string[] directions = { "North", "South", "East", "West" };
+        int randomIndex = random.Next(directions.Length);
+        string course = directions[randomIndex];
+
         foreach (var dialData in new[] { engineerDialDataW, engineerDialDataE, engineerDialDataS, engineerDialDataN })
         {
             if (dialData.name.ToLower() != course.ToLower())
@@ -245,7 +270,20 @@ public class EngineerBoardManager : MonoBehaviour
                     dialButtonsDictionary[dialData][i].interactable = false;
                 }
             }
+            else
+            {
+                for (int i = 0; i < dialData.tab.Length; i++)
+                {
+                    Transform cross = crosses[dialData].GetChild(i);
+                    if (!cross.gameObject.activeSelf)
+                    {
+                        dialButtonsDictionary[dialData][i].interactable = true;
+                    }
+
+                }
+            }
         }
+
     }
 
     private void EraseCrosses(Transform crossesFolder)
@@ -262,7 +300,6 @@ public class EngineerBoardManager : MonoBehaviour
         ClearThePath(2);
         ClearThePath(3);
         ClearOneDial();
-        FollowTheCourseMockUp("south");
     }
 
 }

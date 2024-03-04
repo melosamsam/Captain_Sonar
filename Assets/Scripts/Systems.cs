@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
 public class Systems : MonoBehaviour
@@ -9,7 +8,7 @@ public class Systems : MonoBehaviour
 
     public string NameSystem;
     private string ColourSystem; //for mechanic 
-    private int[] QuotaJauge; //if jauge full, can't fill it anymore //warn opposite team if system is ready (full)
+    [SerializeField] private int[] QuotaJauge; //if jauge full, can't fill it anymore //warn opposite team if system is ready (full)
     //I am thinking the failure attribute shouldn't be in this class
 
     [SerializeField] private List<GameObject> GaugeList;
@@ -114,7 +113,7 @@ public class Systems : MonoBehaviour
             int i = Array.IndexOf(QuotaJauge, 0, 0);
                 
             QuotaJauge[i] = 1;
-            GaugeList[i - 1].SetActive(true);
+            GaugeList[i].SetActive(true);
         }
     }
 
