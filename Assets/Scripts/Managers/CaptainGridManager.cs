@@ -7,17 +7,19 @@ public class CaptainGridManager : MonoBehaviour
 {
     #region Attributes
 
-    [SerializeField] private int _width, _height;
+    [SerializeField] private int _width, _height; //number of tiles in width and height
 
-    [SerializeField] private Tile _tilePrefab;
-    [SerializeField] private Tile _tileHPrefab;
+    [SerializeField] private Tile _tilePrefab; //the vertical tile used to generate all the other vertical tiles of the grid
+    [SerializeField] private Tile _tileHPrefab; //the horizontal tile used to generate all the other hozizontal tiles of the grid
 
     private GameObject _Parent;
 
     #endregion
 
     #region Unity methods
-
+    /// <summary>
+    /// Grid is generated upon starting
+    /// </summary>
     void Start()
     {
         if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("TestGame"))
@@ -30,7 +32,10 @@ public class CaptainGridManager : MonoBehaviour
     #endregion
 
     #region Methods
-
+    /// <summary>
+    /// Loops to generate each tile for the captain grid, last rows are done separately
+    /// </summary>
+    /// <param name="parent"></param>
     public void GenerateGrid(GameObject parent)
     {
         for (int x = 0; x < _width; x++)
