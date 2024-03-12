@@ -72,6 +72,18 @@ public class Systems : MonoBehaviour
 
         EraseCrosses();
     }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
     #endregion
 
     #region Fonctions test
@@ -100,6 +112,7 @@ public class Systems : MonoBehaviour
 
     #endregion
 
+    #region Fonctions Gauges
     public void EmptyGauge()
     {
         int index = Array.LastIndexOf(QuotaJauge, 1);
@@ -122,6 +135,7 @@ public class Systems : MonoBehaviour
         foreach (GameObject cross in GaugeList)
             cross.SetActive(false);
     }
+    #endregion
 
     #region Fonctions syst�mes
     //Je crois qu'on devrait prendre le gentil submarine en param�tre
@@ -253,17 +267,4 @@ public class Systems : MonoBehaviour
     }
     #endregion
 
-    #region Fonctions start & update
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    #endregion
 }
