@@ -2,6 +2,7 @@
 # Implementation of the board game
 
 Year 4 : annual project
+
 Develop a video game using Unity, inspired by the board game Captain Sonar. This is a school project, not meant to be commercialized.
 Developed by Ali, Auriane, Joyce & Salomé
 
